@@ -1,11 +1,11 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
 [ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
 [ext_resource type="Script" path="res://scripts/lake/lake_surface.gd" id="3_surface"]
 [ext_resource type="Script" path="res://scripts/lake/boat.gd" id="4_boat"]
 [ext_resource type="Script" path="res://scripts/ui/lake_hud.gd" id="5_hud"]
-[ext_resource type="Script" path="res://scripts/ui/sonar_placeholder.gd" id="6_sonar"]
+[ext_resource type="Script" path="res://scripts/ui/sonar.gd" id="6_sonar"]
 
 [ext_resource type="PackedScene" path="res://scenes/fishing/fishing.tscn" id="7_fishing"]
 
@@ -13,6 +13,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/depth_unlock_notice.gd" id="9_unlock"]
 [ext_resource type="PackedScene" path="res://scenes/ui/shop.tscn" id="10_shop"]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/fish_book.tscn" id="11_book"]
 
 [sub_resource type="SystemFont" id="Font_catch"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
@@ -138,11 +140,12 @@ text = "LAKE BIWA  /  MORNING"
 horizontal_alignment = 1
 
 [node name="SonarPlaceholder" type="Control" parent="HUD/Root"]
-offset_right = 108.0
-offset_bottom = 78.0
-custom_minimum_size = Vector2(108, 78)
+offset_right = 168.0
+offset_bottom = 104.0
+custom_minimum_size = Vector2(168, 104)
 mouse_filter = 2
 script = ExtResource("6_sonar")
+text_font = SubResource("Font_catch")
 
 [node name="Depth" type="Panel" parent="HUD/Root"]
 offset_right = 88.0
@@ -325,4 +328,30 @@ offset_bottom = 98.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.91, 0.55, 1)
 theme_override_font_sizes/font_size = 25
+horizontal_alignment = 1
+
+[node name="BookButton" type="Button" parent="HUD/Root"]
+offset_right = 136.0
+offset_bottom = 44.0
+focus_mode = 0
+action_mode = 0
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("Style_cast")
+theme_override_styles/hover = SubResource("Style_cast")
+theme_override_styles/pressed = SubResource("Style_cast_pressed")
+theme_override_styles/disabled = SubResource("Style_cast_disabled")
+text = "FISH BOOK"
+
+[node name="FishBook" parent="HUD/Root" instance=ExtResource("11_book")]
+
+[node name="New" type="Label" parent="HUD/Root/CatchPanel"]
+visible = false
+offset_left = 220.0
+offset_top = 15.0
+offset_right = 274.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.91, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+text = "NEW!"
 horizontal_alignment = 1

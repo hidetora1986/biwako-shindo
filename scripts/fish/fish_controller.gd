@@ -145,6 +145,7 @@ func prepare_catch_size(rng: RandomNumberGenerator) -> void:
 func set_fight_pose(value: Vector2, resistance: int) -> void:
 	state = SwimState.RUN if resistance == FishingFight.Resistance.RUN else SwimState.FIGHTING
 	position = value
+	depth_position = _depth_at_y(position.y)
 	swim_direction = -1 if resistance == FishingFight.Resistance.RUN else 1
 	sprite.speed_scale = 1.8 if resistance == FishingFight.Resistance.RUN else 0.8
 	_update_facing()

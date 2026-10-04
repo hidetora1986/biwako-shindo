@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/equipment_shop.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/ui/fish_book.gd" id="1_shop"]
 [sub_resource type="SystemFont" id="Font_jp"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
 [sub_resource type="Theme" id="Theme_shop"]
@@ -14,7 +14,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.68, 0.70, 0.43, 1)
 
-[node name="Shop" type="Control"]
+[node name="FishBook" type="Control"]
 process_mode = 3
 z_index = 1
 visible = false
@@ -37,14 +37,14 @@ offset_right = 300.0
 offset_bottom = 39.0
 theme_override_colors/font_color = Color(1, 0.91, 0.55, 1)
 theme_override_font_sizes/font_size = 22
-text = "EQUIPMENT SHOP"
+text = "FISH BOOK"
 
 [node name="Wallet" type="Label" parent="Panel"]
 offset_left = 14.0
 offset_top = 42.0
 offset_right = 400.0
 offset_bottom = 68.0
-text = "所持金  ¥0"
+text = "0 / 5 種 発見"
 
 [node name="Close" type="Button" parent="Panel"]
 offset_right = 50.0

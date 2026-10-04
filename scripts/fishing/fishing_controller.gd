@@ -5,6 +5,7 @@ enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING
 signal hook_succeeded
 signal hook_missed
 
+@export var save_path: String = "user://biwako-shindo/save.json"
 @export var random_seed: int = 2463
 @export_range(1.0, 3.0) var hook_window_seconds: float = 1.5
 @export_range(0.1, 0.5) var hit_hold_seconds: float = 0.3
@@ -38,6 +39,9 @@ var _session_caught: bool = false
 var progress := GameProgress.new()
 var _cast_serial: int = 0
 var _shop_open: bool = false
+var _book_open: bool = false
+var save_manager: SaveManager
+var anomaly := SonarAnomaly.new()
 
 func _ready() -> void:
 	_rng.seed = random_seed
@@ -49,8 +53,16 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_boat = boat
 	_fish_container = fishes
 	_hud = hud
+	save_manager = SaveManager.new(save_path)
+	save_manager.load_into(progress)
+	save_manager.bind_progress(progress)
 	_hud.get_node("CastButton").pressed.connect(request_cast)
 	_hud.get_node("ShopButton").pressed.connect(request_shop)
+	_hud.get_node("BookButton").pressed.connect(request_book)
+	_hud.get_node("FishBook").setup(progress)
+	_hud.get_node("FishBook").closed.connect(_book_closed)
+	_hud.get_node("SonarPlaceholder").setup(fishes, progress)
+	anomaly.setup(progress, _hud.get_node("SonarPlaceholder"))
 	progress.changed.connect(_progress_changed)
 	progress.depth_unlocked.connect(_hud.get_node("DepthUnlock").show_unlock)
 	_hud.get_node("Shop").setup(progress, _hud)
@@ -70,7 +82,7 @@ func configure_water(bounds: Rect2, surface_y: float, depth_m: float) -> void:
 	_refresh_ui()
 
 func request_cast() -> bool:
-	if state != State.READY or _boat == null or _shop_open:
+	if state != State.READY or _boat == null or _shop_open or _book_open:
 		return false
 	if not lure.cast_from(_boat.rod_tip_position()):
 		return false
@@ -86,10 +98,14 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
-	if _shop_open:
+	if _shop_open or _book_open:
 		return
-	if event is InputEventScreenTouch and event.pressed and _hud != null and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
+	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("ShopButton").disabled and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
 		if request_shop():
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("BookButton").disabled and _hud.get_node("BookButton").get_global_rect().has_point(event.position):
+		if request_book():
 			get_viewport().set_input_as_handled()
 		return
 	if state == State.FIGHTING:
@@ -105,7 +121,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func request_hook() -> bool:
-	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open:
+	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open or _book_open:
 		return false
 	state = State.HOOKED
 	lure.hook()
@@ -122,9 +138,11 @@ func request_hook() -> bool:
 	return true
 
 func _physics_process(delta: float) -> void:
-	if _hud == null or _shop_open:
+	if _hud == null or _shop_open or _book_open:
 		return
+	anomaly.step(delta, can_trigger_anomaly())
 	if state == State.READY:
+		_refresh_ui()
 		return
 	cast_elapsed += delta
 	lure.set_cast_origin(_boat.rod_tip_position())
@@ -226,6 +244,8 @@ func _miss() -> void:
 	hook_missed.emit()
 
 func _begin_reset() -> void:
+	if state in [State.LANDED, State.FAILED]:
+		progress.complete_normal_session()
 	state = State.RESET
 	lure.begin_reset()
 	_stop_reel()
@@ -319,6 +339,7 @@ func _show_catch() -> void:
 	_session_caught = true
 	_result_remaining = 1.5
 	last_catch = {"species_id": active_fish.fight_profile.species_id, "name": active_fish.fight_profile.display_name, "size_cm": active_fish.size_cm, "id": active_fish.fight_profile.id, "price": progress.sell_catch(active_fish.fight_profile, active_fish.size_cm, _cast_serial)}
+	last_catch["new_discovery"] = progress.last_sale_new_discovery
 	active_fish.visible = false
 	_hud.show_catch(last_catch, active_fish.sprite.sprite_frames.get_frame_texture("swim", 0))
 	_haptic(100, 0.8)
@@ -337,8 +358,9 @@ func _update_line() -> void:
 func _refresh_ui() -> void:
 	if _hud == null:
 		return
-	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open
+	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open or _book_open
 	_hud.get_node("ShopButton").disabled = not can_open_shop()
+	_hud.get_node("BookButton").disabled = not can_open_book()
 	_hud.get_node("NextUpgrade").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.show_fight(fight, state == State.FIGHTING)
@@ -347,7 +369,7 @@ func _refresh_ui() -> void:
 	_hud.show_bite(state == State.BITTEN, lure.position)
 
 func can_open_shop() -> bool:
-	return not _shop_open and state in [State.READY, State.SINKING, State.WAITING]
+	return not _shop_open and not _book_open and not anomaly.active and state in [State.READY, State.SINKING, State.WAITING]
 
 func request_shop() -> bool:
 	if not can_open_shop():
@@ -366,3 +388,31 @@ func _progress_changed() -> void:
 	lure.max_depth_m = progress.current("line").effect_value
 	if _hud != null:
 		_hud.show_progress(progress)
+
+func can_open_book() -> bool:
+	return can_open_shop()
+
+func request_book() -> bool:
+	if not can_open_book():
+		return false
+	_book_open = true
+	_stop_reel()
+	_hud.get_node("FishBook").open_book()
+	_refresh_ui()
+	return true
+
+func _book_closed() -> void:
+	_book_open = false
+	_refresh_ui()
+
+func can_trigger_anomaly() -> bool:
+	# Between fishing sessions only; cannot overlap HIT/fight/catch or a modal.
+	return state == State.READY and not _shop_open and not _book_open
+
+func debug_trigger_anomaly() -> bool:
+	# Acceptance callable; no released-game button or player-facing warning.
+	return OS.is_debug_build() and anomaly.try_trigger(can_trigger_anomaly(), true)
+
+func _exit_tree() -> void:
+	if save_manager != null:
+		save_manager.unbind_progress()

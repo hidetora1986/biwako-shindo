@@ -27,9 +27,9 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-MVP Phase 4 — 魚データ・自動売却・所持金・装備強化。Phase 1〜3の湖、CASTからHIT、短いファイトを維持し、釣果から即購入・深度解放までの成長ループを追加しています。MVP全体のAcceptanceは未完了です。
+MVP Phase 5 — 魚図鑑・永続Save・実ソナー・最初の巨大ソナー反応。Phase 1〜4の釣りと成長ループを維持し、捕獲記録と進行の保存、ソナーLvごとの実魚表示を追加しています。MVP全体のAcceptanceは未完了です。
 
-**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。魚は自動売却され、左上の所持金が増えます。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。現在の景色は15mまでです。ショップ中は釣りが停止し、×で再開します。所持金と装備は起動中のみ保持します。
+**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。魚は自動売却され、左上の所持金が増えます。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。現在の景色は15mまでです。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
 
 ## ブランチ運用
 
@@ -72,6 +72,7 @@ godot --headless --path . --script res://tests/phase1_acceptance.gd
 godot --headless --path . --script res://tests/phase2_acceptance.gd
 godot --headless --path . --script res://tests/phase3_acceptance.gd
 godot --headless --path . --script res://tests/phase4_acceptance.gd
+godot --headless --path . --script res://tests/phase5_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -83,3 +84,5 @@ Phase 2のキャスト・フッキング仕様は [Phase 2仕様](docs/game-desi
 Phase 3の操作・テンション・魚の仮設定は [Phase 3仕様](docs/game-design/phase3-fight.md)、検証結果と実機の残課題は [Phase 3 Acceptance](docs/game-design/phase3-acceptance.md) を参照してください。
 
 Phase 4の正式魚データ・経済・装備仕様は [Phase 4仕様](docs/game-design/phase4-economy.md)、10匹の連続経済ループ・回帰確認は [Phase 4 Acceptance](docs/game-design/phase4-acceptance.md) を参照してください。
+
+Phase 5の図鑑・保存・実ソナー・一度限りの反応は [Phase 5仕様](docs/game-design/phase5-save-sonar.md)、検証結果は [Phase 5 Acceptance](docs/game-design/phase5-acceptance.md) を参照してください。テストのSaveはプレイヤーのSaveから分離しています。

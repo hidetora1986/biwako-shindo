@@ -11,6 +11,8 @@ var _hud: Control
 var _fishes: Array[Node]
 var _boat: Node2D
 var _cast_times: Array[float] = []
+var _save_fixture: int = 0
+var _test_save_path: String = ""
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -81,7 +83,12 @@ func _touch(position: Vector2, index: int = 0, pressed: bool = true) -> void:
 func _new_scene() -> void:
 	if is_instance_valid(_main):
 		_main.free()
+	if not _test_save_path.is_empty():
+		DirAccess.remove_absolute(_test_save_path)
+	_save_fixture += 1
+	_test_save_path = "user://tests/regression-%d-%d.json" % [OS.get_process_id(), _save_fixture]
 	_main = load("res://scenes/main.tscn").instantiate()
+	_main.get_node("LakeScene/FishingController").save_path = _test_save_path
 	root.add_child(_main)
 	_lake = _main.get_node("LakeScene")
 	_flow = _lake.get_node("FishingController")

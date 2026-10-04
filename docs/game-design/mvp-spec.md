@@ -2,9 +2,9 @@
 
 ## ステータス
 
-MVP 開発ブランチは `feature/mvp-fishing`。現在は Phase 4 — 正式魚データ・自動売却・所持金・装備強化を実装しています。
+MVP 開発ブランチは `feature/mvp-fishing`。現在は Phase 5 — 図鑑・永続保存・実ソナー・最初の巨大ソナー反応を実装しています。
 
-Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定しました。[Phase 1仕様](phase1-lake-scene.md)と[確認結果](phase1-acceptance.md)を参照してください。Phase 2の仕様は[Phase 2仕様](phase2-casting.md)、検証結果は[Phase 2 Acceptance](phase2-acceptance.md)を参照してください。Phase 3の仕様は[Phase 3仕様](phase3-fight.md)、検証結果は[Phase 3 Acceptance](phase3-acceptance.md)を参照してください。Phase 4の仕様は[Phase 4仕様](phase4-economy.md)、検証結果は[Phase 4 Acceptance](phase4-acceptance.md)を参照してください。Phase 5以降とMVP全体の受け入れは未完了です。この文書は初期構築の記録とフェーズ別仕様の入口です。
+Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定しました。[Phase 1仕様](phase1-lake-scene.md)と[確認結果](phase1-acceptance.md)を参照してください。Phase 2の仕様は[Phase 2仕様](phase2-casting.md)、検証結果は[Phase 2 Acceptance](phase2-acceptance.md)を参照してください。Phase 3の仕様は[Phase 3仕様](phase3-fight.md)、検証結果は[Phase 3 Acceptance](phase3-acceptance.md)を参照してください。Phase 4の仕様は[Phase 4仕様](phase4-economy.md)、検証結果は[Phase 4 Acceptance](phase4-acceptance.md)を参照してください。Phase 5の仕様は[Phase 5仕様](phase5-save-sonar.md)、検証結果は[Phase 5 Acceptance](phase5-acceptance.md)を参照してください。今後の工程とMVP全体の受け入れは未完了です。この文書は初期構築の記録とフェーズ別仕様の入口です。
 
 ## ゲーム概要
 
@@ -37,8 +37,8 @@ Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定
 | REEL・テンション・スタミナ・釣り上げ | `feat: implement phase 3 fishing fight and landing` | [Phase 3](phase3-fight.md) |
 | 正式魚・経済 | `feat: implement phase 4 economy and equipment upgrades` | [Phase 4](phase4-economy.md) |
 | 装備ショップ・深度解放 | 同上 | ROD / REEL / LINE / SONAR Lv1〜3 |
-| ソナー | `feat: add sonar` | 表示のみPhase 1。魚との同期はPhase 6の指示待ち |
-| 最初の異常イベント | `feat: add first anomaly event` | 未確定 |
+| 図鑑・保存・実ソナー・最初の反応 | `feat: implement phase 5 save encyclopedia sonar and anomaly` | [Phase 5](phase5-save-sonar.md) |
+| 今後のホラー拡張 | 未定 | Phase 5のソナー反応以外は未実装 |
 
 ## 詳細仕様で確定する事項
 

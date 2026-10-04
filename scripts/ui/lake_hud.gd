@@ -27,12 +27,21 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$Money.position = core_rect.position
 	$ShopButton.size = Vector2(112, maxf(44, 44.0 * view_size.y / maxf(get_window().size.y, 1)))
 	$ShopButton.position = core_rect.position + Vector2(0, 50)
+	$BookButton.size = Vector2(136, $ShopButton.size.y)
+	$BookButton.position = $ShopButton.position + Vector2($ShopButton.size.x + 8, 0)
+	$BookButton.add_theme_font_size_override("font_size", maxi(14, int(ceil(11.0 * view_size.y / maxf(get_window().size.y, 1)))))
+	$FishBook.configure(core_rect, view_size)
 	$NextUpgrade.position = Vector2(core_rect.position.x, core_rect.end.y - $NextUpgrade.size.y)
 	$DepthUnlock.position = core_rect.get_center() - $DepthUnlock.size * 0.5
 	$Shop.configure(core_rect, view_size)
 	$SonarPlaceholder.position = Vector2(core_rect.end.x - $SonarPlaceholder.size.x, core_rect.position.y)
-	$Title.position = Vector2(core_rect.get_center().x - 120, core_rect.position.y)
-	$Subtitle.position = Vector2(core_rect.get_center().x - 120, core_rect.position.y + 20)
+	var title_left: float = $Money.position.x + $Money.size.x + 10
+	var title_right: float = $SonarPlaceholder.position.x - 10
+	var title_width: float = minf(240, title_right - title_left)
+	$Title.size.x = title_width
+	$Subtitle.size.x = title_width
+	$Title.position = Vector2((title_left + title_right - title_width) * 0.5, core_rect.position.y)
+	$Subtitle.position = $Title.position + Vector2(0, 20)
 	$Depth.position = Vector2(core_rect.get_center().x - $Depth.size.x * 0.5, clampf(surface_y + 9, safe_rect.position.y, safe_rect.end.y - $Depth.size.y))
 	# Preserve a physical 44px target even in a small 320px-wide PC preview.
 	var window_size := Vector2(get_window().size)
@@ -77,6 +86,7 @@ func show_fight(fight: FishingFight, active: bool) -> void:
 
 func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
 	$CatchPanel.visible = true
+	$CatchPanel/New.visible = result.get("new_discovery", false)
 	$CatchPanel/Name.text = result["name"]
 	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
 	$CatchPanel/Fish.texture = fish_texture

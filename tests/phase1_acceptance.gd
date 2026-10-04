@@ -15,6 +15,7 @@ func _check(condition: bool, label: String) -> void:
 
 func _run() -> void:
 	var main: Node2D = load("res://scenes/main.tscn").instantiate()
+	main.get_node("LakeScene/FishingController").save_path = "user://tests/phase1-%d.json" % OS.get_process_id()
 	root.add_child(main)
 	await process_frame
 	var lake = main.get_node("LakeScene")
