@@ -2,9 +2,9 @@
 
 ## 現在の状態
 
-ローカルの初期構成は作成済みです。接続済み GitHub アプリの認証では、`biwako-shindo` の新規作成が権限不足（HTTP 403）で拒否されたため、GitHub への作成・反映は保留です。
+GitHubリポジトリは作成済みで、`main`と`feature/mvp-fishing`の初期反映・upstream設定・HEAD一致を確認済みです。現在の開発は`feature/mvp-fishing`で行います。
 
-想定する作成先は `hidetora1986/biwako-shindo`、公開範囲は Private です。
+Repositoryは`hidetora1986/biwako-shindo`、公開範囲はPrivate、デフォルトブランチは`main`です。以下は空リポジトリへの初期反映や履歴バンドルの復元手順です。作成済みのRepositoryに初期化を重ねないでください。
 
 ## 空のリポジトリを作成する
 

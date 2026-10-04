@@ -1,0 +1,125 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
+[ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
+[ext_resource type="Script" path="res://scripts/lake/lake_surface.gd" id="3_surface"]
+[ext_resource type="Script" path="res://scripts/lake/boat.gd" id="4_boat"]
+[ext_resource type="Script" path="res://scripts/ui/lake_hud.gd" id="5_hud"]
+[ext_resource type="Script" path="res://scripts/ui/sonar_placeholder.gd" id="6_sonar"]
+
+[sub_resource type="StyleBoxFlat" id="Style_money"]
+bg_color = Color(0.08, 0.23, 0.24, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32, 0.49, 0.44, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_depth"]
+bg_color = Color(0.06, 0.20, 0.25, 0.60)
+border_width_left = 2
+border_color = Color(0.65, 0.80, 0.68, 0.70)
+
+[node name="LakeScene" type="Node2D"]
+script = ExtResource("1_lake")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="BackgroundSky" type="Node2D" parent="Background"]
+script = ExtResource("2_background")
+layer = "Sky"
+
+[node name="BackgroundMountains" type="Node2D" parent="Background"]
+script = ExtResource("2_background")
+layer = "Mountains"
+
+[node name="Underwater" type="Node2D" parent="."]
+
+[node name="WaterBackground" type="Node2D" parent="Underwater"]
+script = ExtResource("2_background")
+layer = "Underwater"
+
+[node name="FishContainer" type="Node2D" parent="Underwater"]
+z_index = 3
+
+[node name="Lake" type="Node2D" parent="."]
+
+[node name="LakeSurface" type="Node2D" parent="Lake"]
+z_index = 1
+script = ExtResource("3_surface")
+
+[node name="Boat" type="Node2D" parent="Lake"]
+z_index = 2
+script = ExtResource("4_boat")
+
+[node name="Sprite" type="Sprite2D" parent="Lake/Boat"]
+texture_filter = 1
+offset = Vector2(0, -21)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Root" type="Control" parent="HUD"]
+mouse_filter = 2
+script = ExtResource("5_hud")
+
+[node name="Money" type="Panel" parent="HUD/Root"]
+offset_right = 86.0
+offset_bottom = 44.0
+custom_minimum_size = Vector2(86, 44)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_money")
+
+[node name="Label" type="Label" parent="HUD/Root/Money"]
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 78.0
+offset_bottom = 37.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.89, 0.87, 0.66, 1)
+theme_override_font_sizes/font_size = 22
+text = "¥0"
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="HUD/Root"]
+offset_right = 240.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.13, 0.28, 0.28, 1)
+theme_override_font_sizes/font_size = 14
+text = "B I W A K O   S H I N D O"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/Root"]
+offset_right = 240.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.26, 0.40, 0.38, 1)
+theme_override_font_sizes/font_size = 8
+text = "LAKE BIWA  /  MORNING"
+horizontal_alignment = 1
+
+[node name="SonarPlaceholder" type="Control" parent="HUD/Root"]
+offset_right = 108.0
+offset_bottom = 78.0
+custom_minimum_size = Vector2(108, 78)
+mouse_filter = 2
+script = ExtResource("6_sonar")
+
+[node name="Depth" type="Panel" parent="HUD/Root"]
+offset_right = 88.0
+offset_bottom = 44.0
+custom_minimum_size = Vector2(88, 44)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_depth")
+
+[node name="Label" type="Label" parent="HUD/Root/Depth"]
+offset_left = 11.0
+offset_top = 7.0
+offset_right = 81.0
+offset_bottom = 37.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.80, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 14
+text = "0–15m"
+vertical_alignment = 1

@@ -2,9 +2,9 @@
 
 ## ステータス
 
-初期構築時点の仕様。MVP 開発ブランチは `feature/mvp-fishing`。
+MVP 開発ブランチは `feature/mvp-fishing`。現在は Phase 1 — 湖上・水中基礎シーンを実装しています。
 
-ゲームの詳細仕様と MVP の機能別 Acceptance 基準は未確定です。この文書は、今回提示されたリポジトリ構成・開発方針を記録し、詳細仕様を追記するための土台とします。
+Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定しました。[Phase 1仕様](phase1-lake-scene.md)と[確認結果](phase1-acceptance.md)を参照してください。Phase 2以降の詳細とMVP全体の受け入れは未完了です。この文書は初期構築の記録とフェーズ別仕様の入口です。
 
 ## ゲーム概要
 
@@ -23,7 +23,7 @@
 6. `scenes/`、`scripts/`、`data/`、`assets/`、`audio/`、`ui/`、`docs/` を用意する。
 7. `docs/game-design/`、`docs/fish/`、`docs/equipment/`、`docs/ui/`、`docs/horror/` に仕様を保存できる構造を用意する。
 
-起動シーンはタイトルと開発フェーズを表示する初期構築用の仮画面です。釣り機能はまだ実装していません。
+初期構築では起動確認用の仮画面を用意しました。Phase 1で湖上・水中・ボート・泳ぐ魚の画面に置き換えています。釣り操作はまだ実装していません。
 
 ## MVP 機能の実装候補
 
@@ -31,19 +31,19 @@
 
 | 機能 | コミット例 | 詳細仕様 |
 | --- | --- | --- |
-| 釣りシーン | `feat: add fishing scene` | 未確定 |
+| 湖上・水中基礎シーンと視覚的な魚の遊泳 | `feat: implement phase 1 lake and fish scene` | [Phase 1](phase1-lake-scene.md) |
 | キャスティング | `feat: implement casting` | 未確定 |
-| 魚 AI | `feat: add fish AI` | 未確定 |
+| 釣りに反応する魚 AI | `feat: add fish AI` | 未実装。視覚的な遊泳のみPhase 1に含む |
 | リール・テンション | `feat: implement reel and tension` | 未確定 |
 | 経済 | `feat: add economy` | 未確定 |
 | 装備ショップ | `feat: add equipment shop` | 未確定 |
-| ソナー | `feat: add sonar` | 未確定 |
+| ソナー | `feat: add sonar` | 表示のみPhase 1。魚との同期はPhase 6の指示待ち |
 | 最初の異常イベント | `feat: add first anomaly event` | 未確定 |
 
 ## 詳細仕様で確定する事項
 
 - MVP に含める機能とプレイの開始・終了条件。
-- スマートフォンの画面方向、基準解像度、タッチ操作。
+- スマートフォンの対象端末・OSと、Phase 2以降のタッチ操作。Phase 1の画面は横持ち640×360。
 - 魚種、出現条件、魚 AI、釣り上げ・失敗条件。
 - リール・テンションの挙動と調整値。
 - 経済・装備・ショップの対象範囲とデータ。
@@ -59,7 +59,7 @@
 - [x] 指定されたディレクトリと README が用意されている。
 - [x] キャッシュ・ローカル設定・書き出し成果物が Git の対象外になっている。
 - [x] ローカルに `main` と `feature/mvp-fishing` が存在し、プロジェクトの追加は開発ブランチにある。
-- [ ] GitHub にリポジトリと両ブランチが作成され、反映を確認している。
+- [x] GitHub にリポジトリと両ブランチが作成され、初期反映のHEAD一致を確認している。
 
 初期確認日: 2026-10-04。Godot 4.6.3 stable のインポートとヘッドレス起動、Git の除外設定、必要なディレクトリ、文書内のローカルリンクを確認済み。スマートフォンの実機確認とゲーム機能の Acceptance は未実施です。
 

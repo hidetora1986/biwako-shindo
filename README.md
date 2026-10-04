@@ -27,7 +27,7 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-初期構築 / MVP 開発準備。釣りのゲーム機能と MVP Acceptance は未完了です。
+MVP Phase 1 — 湖上・水中基礎シーン。湖上、水中断面、揺れるボート、泳ぐ7匹の仮の魚、最小HUDを実装しています。釣り操作と MVP 全体の Acceptance は未完了です。
 
 ## ブランチ運用
 
@@ -39,7 +39,7 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ```text
 project.godot            Godot プロジェクト設定
-scenes/                 シーン（main.tscn は起動確認用）
+scenes/                 メイン・湖・独立した魚のシーン
 scripts/                GDScript
 data/                   魚・装備・経済などのゲームデータ
 assets/                 ピクセルアート・フォントなど
@@ -55,7 +55,9 @@ docs/
 
 ## 初期設定
 
-Compatibility レンダラーと Nearest テクスチャフィルターを使用します。起動確認用の画面は仮の縦向き `360 × 640` です。ゲーム画面の向き、解像度、操作方法は詳細仕様の確定時に見直します。
+Compatibility レンダラーと Nearest テクスチャフィルターを使用します。横持ちの基準画面は `640 × 360`（16:9）、PCの初期ウィンドウは `1280 × 720` です。19.5:9などの横長画面では左右の景色を広げ、HUDは中央の16:9相当の範囲に収めます。iPhone / Androidでは端末のSafe Areaも考慮します。
+
+描画はすべてGodot内の自作仮素材です。魚の`fish_art`、ボートの`boat_art`、`data/lake/morning.tres`の色・表示深度を差し替えできます。現在は朝の0–15mの浅い水中を表示します。
 
 `.godot/`、キャッシュ、ローカル設定、ビルド・書き出し成果物は `.gitignore` で除外します。Godot の `*.import` と `*.uid` は参照維持のため追跡対象です。共有用の `export_presets.cfg` も追跡対象ですが、書き出し設定はまだありません。
 
@@ -64,6 +66,9 @@ Compatibility レンダラーと Nearest テクスチャフィルターを使用
 ```sh
 godot --headless --editor --path . --import
 godot --headless --path . --quit-after 5
+godot --headless --path . --script res://tests/phase1_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
+
+Phase 1の範囲と素材の交換方法は [Phase 1仕様](docs/game-design/phase1-lake-scene.md)、検証結果は [Phase 1 Acceptance](docs/game-design/phase1-acceptance.md) に記録します。
