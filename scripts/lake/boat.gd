@@ -20,3 +20,7 @@ func _physics_process(delta: float) -> void:
 
 func _refresh_position() -> void:
 	position = anchor_position + Vector2(0.0, sin(_time * TAU / bob_period) * bob_amplitude)
+
+func rod_tip_position() -> Vector2:
+	# Tip of the Phase 1 placeholder rod, relative to the boat anchor.
+	return position + Vector2(-40, -40)

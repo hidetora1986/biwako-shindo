@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fishing/lure_controller.gd" id="1_lure"]
+
+[node name="Lure" type="Node2D"]
+z_index = 5
+texture_filter = 1
+script = ExtResource("1_lure")

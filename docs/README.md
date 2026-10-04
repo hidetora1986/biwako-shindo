@@ -5,6 +5,8 @@
 | [game-design/mvp-spec.md](game-design/mvp-spec.md) | MVP の確定事項、実装候補、未確定事項、Acceptance |
 | [game-design/phase1-lake-scene.md](game-design/phase1-lake-scene.md) | Phase 1の湖上・水中・魚・素材差し替えの仕様 |
 | [game-design/phase1-acceptance.md](game-design/phase1-acceptance.md) | Phase 1の検証結果と検証範囲 |
+| [game-design/phase2-casting.md](game-design/phase2-casting.md) | Phase 2の操作・状態・調整値・Phase 3への引き継ぎ |
+| [game-design/phase2-acceptance.md](game-design/phase2-acceptance.md) | Phase 2の検証結果と検証範囲 |
 | game-design/ | ゲーム全体の設計、遊びの流れ、フェーズ計画 |
 | [fish/](fish/README.md) | 魚種、魚 AI、出現条件、パラメーター |
 | [equipment/](equipment/README.md) | ロッド、リール、ルアーなどの装備仕様 |

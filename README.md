@@ -27,7 +27,9 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-MVP Phase 1 — 湖上・水中基礎シーン。湖上、水中断面、揺れるボート、泳ぐ7匹の仮の魚、最小HUDを実装しています。釣り操作と MVP 全体の Acceptance は未完了です。
+MVP Phase 2 — キャスト・ルアー沈下・魚接近・ヒット。Phase 1の湖と7匹の魚を維持し、CASTからHITまでを実装しています。MVP全体のAcceptanceは未完了です。
+
+**操作:** 下部中央のCASTをタップ／クリック。ルアーへ魚が寄り、**!**が出たら画面をタップ／左クリックすると**HIT!**になります。1.5秒で時間切れになるとMISSですが、次の魚を待てます。HIT後はPhase 2限定のテスト処理で約1秒後にリセットし、再CASTできます。ファイト・釣り上げは次のフェーズです。
 
 ## ブランチ運用
 
@@ -39,7 +41,7 @@ MVP Phase 1 — 湖上・水中基礎シーン。湖上、水中断面、揺れ�
 
 ```text
 project.godot            Godot プロジェクト設定
-scenes/                 メイン・湖・独立した魚のシーン
+scenes/                 メイン・湖・魚・釣り・独立したルアーのシーン
 scripts/                GDScript
 data/                   魚・装備・経済などのゲームデータ
 assets/                 ピクセルアート・フォントなど
@@ -67,8 +69,11 @@ Compatibility レンダラーと Nearest テクスチャフィルターを使用
 godot --headless --editor --path . --import
 godot --headless --path . --quit-after 5
 godot --headless --path . --script res://tests/phase1_acceptance.gd
+godot --headless --path . --script res://tests/phase2_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
 
 Phase 1の範囲と素材の交換方法は [Phase 1仕様](docs/game-design/phase1-lake-scene.md)、検証結果は [Phase 1 Acceptance](docs/game-design/phase1-acceptance.md) に記録します。
+
+Phase 2の操作・調整値・Phase 3への引き継ぎは [Phase 2仕様](docs/game-design/phase2-casting.md)、検証結果は [Phase 2 Acceptance](docs/game-design/phase2-acceptance.md) を参照してください。

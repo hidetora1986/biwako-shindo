@@ -17,6 +17,7 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_refresh_layout)
 	_refresh_layout()
 	_spawn_fish()
+	$FishingController.setup($Lake/Boat, $Underwater/FishContainer, $HUD/Root)
 
 func _refresh_layout() -> void:
 	layout_for_size(get_viewport_rect().size)
@@ -35,6 +36,7 @@ func layout_for_size(size: Vector2) -> void:
 		if _previous_width > 0:
 			fish.position.x *= size.x / _previous_width
 		fish.configure_water(water_bounds, profile.displayed_depth_m)
+	$FishingController.configure_water(water_bounds, surface_y, profile.displayed_depth_m)
 	_previous_width = size.x
 
 func _spawn_fish() -> void:
