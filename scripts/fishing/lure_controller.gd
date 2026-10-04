@@ -2,7 +2,7 @@ class_name LureController
 extends Node2D
 ## Depth is measured in metres; only this scene converts it to lake pixels.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, RESET }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, RESET }
 signal landed
 
 @export var lure_art: Texture2D
@@ -30,7 +30,7 @@ func configure_water(bounds: Rect2, surface_y: float, visible_depth_m: float) ->
 	_surface_y = surface_y
 	_visible_depth_m = maxf(visible_depth_m, 0.1)
 	_splash_x = _target_x()
-	if state not in [State.READY, State.RESET, State.CASTING]:
+	if state not in [State.READY, State.RESET, State.CASTING, State.FIGHTING, State.LANDING]:
 		_update_underwater_position()
 
 func cast_from(origin: Vector2, target_fraction: float = 0.28) -> bool:
@@ -123,3 +123,14 @@ func _draw() -> void:
 		draw_line(center - Vector2(radius, 0), center + Vector2(radius, 0), tint, 1.0)
 		for direction in [-1, 1]:
 			draw_rect(Rect2(center + Vector2(direction * radius * 0.65, -sin(t * PI) * 9.0), Vector2(2, 2)), tint)
+
+func follow_fish(value: Vector2, landing: bool = false) -> void:
+	state = State.LANDING if landing else State.FIGHTING
+	position = value
+	depth_m = clampf((position.y - _surface_y) / maxf(_water.end.y - 8.0 - _surface_y, 1.0) * _visible_depth_m, 0.0, _visible_depth_m)
+
+func landing_splash(value: Vector2) -> void:
+	position = value
+	_splash_x = value.x
+	splash_remaining = 0.45
+	state = State.LANDING

@@ -6,6 +6,8 @@ extends Node2D
 
 var anchor_position := Vector2.ZERO
 var _time: float = 0.0
+var _tension: float = 0.0
+var _fighting: bool = false
 
 func _ready() -> void:
 	$Sprite.texture = boat_art if boat_art != null else PlaceholderArt.boat_texture()
@@ -23,4 +25,18 @@ func _refresh_position() -> void:
 
 func rod_tip_position() -> Vector2:
 	# Tip of the Phase 1 placeholder rod, relative to the boat anchor.
-	return position + Vector2(-40, -40)
+	return position + Vector2(-40 + _tension * 0.025, -40 + _tension * 0.065)
+
+func set_line_pull(tension: float, fighting: bool) -> void:
+	_tension = tension if fighting else 0.0
+	_fighting = fighting
+	queue_redraw()
+
+func _draw() -> void:
+	if boat_art != null:
+		return
+	# Same original rod pixels at rest, bent progressively under line pull.
+	for x in range(15, 45):
+		var bend := pow(1.0 - float(x - 15) / 29.0, 2.0)
+		var pixel := Vector2(x - 55, 5 + int(float(x - 15) * 0.57) - 45) + Vector2(_tension * 0.025, _tension * 0.065) * bend
+		draw_rect(Rect2(pixel.round(), Vector2.ONE), Color("344e4e"))

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+species_id = "biwamasu"
+display_name = "ビワマス"
+placeholder_kind = "minnow"
+max_stamina = 50.0
+pull_power = 14.0
+stamina_drain = 10.0
+reel_progress_speed = 0.23
+run_interval = 2.1
+run_duration = 0.75
+run_power = 30.0
+size_min_cm = 30.0
+size_max_cm = 60.0

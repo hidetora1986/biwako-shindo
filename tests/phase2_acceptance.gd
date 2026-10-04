@@ -43,6 +43,25 @@ func _until_bite(limit: float = 15.0) -> bool:
 		_step(1.0 / 60.0)
 	return false
 
+func _finish_fight() -> bool:
+	var caught := false
+	var holding := true
+	for tick in range(1800):
+		if _flow.state == FLOW.State.FAILED:
+			return false
+		if _flow.state == FLOW.State.LANDED:
+			caught = true
+		if _flow.state == FLOW.State.READY:
+			return caught
+		if _flow.state == FLOW.State.FIGHTING:
+			if _flow.fight.resistance == FishingFight.Resistance.RUN or _flow.fight.tension >= 76:
+				holding = false
+			elif _flow.fight.resistance != FishingFight.Resistance.RUN and _flow.fight.tension <= 45:
+				holding = true
+			_flow.set_reeling(holding)
+		_step(1.0 / 60.0)
+	return false
+
 func _mouse(position: Vector2, pressed: bool = true) -> void:
 	var event := InputEventMouseButton.new()
 	event.button_index = MOUSE_BUTTON_LEFT
@@ -70,6 +89,7 @@ func _new_scene() -> void:
 	_disable_physics(_main)
 
 func _run() -> void:
+	root.size = Vector2i(1280, 720)
 	_new_scene()
 	await process_frame
 	await process_frame
@@ -119,12 +139,12 @@ func _run() -> void:
 	_touch(Vector2(20, 180), 1)
 	_mouse(Vector2(320, 200))
 	_check(not _flow.request_hook() and not _flow.request_cast(), "Hook: duplicate touch/mouse and post-HIT input ignored")
-	_step(0.95)
-	_check(_flow.state == FLOW.State.HOOKED and _flow.active_fish.position.is_equal_approx(frozen) and _flow.lure.position.is_equal_approx(frozen_lure), "HIT: fish and lure hold for about 1 second")
-	_step(0.08)
-	_check(_flow.state == FLOW.State.RESET and not _flow.request_cast() and not _flow.request_hook(), "RESET: input locked during temporary reset")
-	_step(0.22)
-	_check(_flow.state == FLOW.State.READY and _flow.lure.state == LureController.State.READY and not _flow.line.visible and not _hud.get_node("CastButton").disabled, "Temporary Reset: CAST re-enabled")
+	_step(0.2)
+	_check(_flow.state == FLOW.State.HOOKED and _flow.active_fish.position.is_equal_approx(frozen) and _flow.lure.position.is_equal_approx(frozen_lure), "HIT: fish and lure briefly hold before the fight")
+	_step(0.15)
+	_check(_flow.state == FLOW.State.FIGHTING and not _flow.request_cast() and not _flow.request_hook(), "Phase 3: HIT hands off to FIGHTING and blocks CAST/re-hook")
+	var completed := _finish_fight()
+	_check(completed and _flow.state == FLOW.State.READY and _flow.lure.state == LureController.State.READY and not _flow.line.visible and not _hud.get_node("CastButton").disabled, "Phase 3: completed fight re-enables CAST")
 	_touch(_hud.get_node("CastButton").get_global_rect().get_center())
 	_check(_flow.state == FLOW.State.CASTING, "CAST: real screen touch starts a second cast")
 	_check(_until_bite(), "Bite: second cast can bite")
@@ -137,7 +157,7 @@ func _run() -> void:
 	_check(_until_bite(12.0) and _flow.active_fish != missed_fish, "MISS: another fish bites without recasting")
 	_mouse(Vector2(50, 220))
 	_check(_flow.state == FLOW.State.HOOKED, "Hook Success: PC left click also hooks")
-	_step(1.25)
+	_finish_fight()
 	_check(get_node_count() == node_count and _fishes.size() == 7, "Reuse: two casts and retry add no nodes or fish")
 	# Isolate the lure to verify maximum depth and future depth scales.
 	var isolated: LureController = load("res://scenes/fishing/lure.tscn").instantiate()
@@ -210,7 +230,7 @@ func _run() -> void:
 				_cast_times.append(_flow.cast_elapsed + 0.25)
 				_step(0.25)
 				_flow.request_hook()
-				_step(1.25)
+				_finish_fight()
 			else:
 				_cast_times.append(30.0)
 	var total := 0.0

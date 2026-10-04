@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+species_id = "crucian"
+display_name = "フナ"
+placeholder_kind = "bluegill"
+max_stamina = 30.0
+pull_power = 10.0
+stamina_drain = 8.7
+reel_progress_speed = 0.3
+run_interval = 2.8
+run_duration = 0.65
+run_power = 26.0
+size_min_cm = 15.0
+size_max_cm = 35.0

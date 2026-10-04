@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+species_id = "catfish"
+display_name = "ナマズ"
+placeholder_kind = "bass"
+max_stamina = 60.0
+pull_power = 16.0
+stamina_drain = 10.0
+reel_progress_speed = 0.2
+run_interval = 2.0
+run_duration = 0.85
+run_power = 32.0
+size_min_cm = 35.0
+size_max_cm = 80.0

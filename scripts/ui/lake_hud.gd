@@ -35,6 +35,13 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$CastButton.size = Vector2(maxf(136.0, 44.0 / pixel_scale), maxf(48.0, 44.0 / pixel_scale))
 	$CastButton.add_theme_font_size_override("font_size", maxi(20, int(ceil(12.0 / pixel_scale))))
 	$CastButton.position = Vector2(core_rect.get_center().x - $CastButton.size.x * 0.5, core_rect.end.y - $CastButton.size.y)
+	$ReelButton.size = Vector2(maxf(152.0, 44.0 / pixel_scale), maxf(72.0, 44.0 / pixel_scale))
+	$ReelButton.position = core_rect.end - $ReelButton.size
+	$FightHUD.size = Vector2(minf(320.0, core_rect.size.x - $ReelButton.size.x - 16.0), 72)
+	$FightHUD.position = Vector2(core_rect.position.x, core_rect.end.y - $FightHUD.size.y)
+	$CatchPanel.position = core_rect.get_center() - $CatchPanel.size * 0.5
+	$Result.size.x = minf(320.0, core_rect.size.x)
+	$Result.add_theme_font_size_override("font_size", 28 if $Result.text == "LINE BREAK" else 36)
 	$Result.position = Vector2(core_rect.get_center().x - $Result.size.x * 0.5, clampf(surface_y + 60, safe_rect.position.y, safe_rect.end.y - $Result.size.y))
 	$Depth/Label.text = "0–%dm" % int(depth_m)
 
@@ -51,5 +58,24 @@ func show_bite(active: bool, lure_position: Vector2) -> void:
 	$Bite.position.y = clampf($Bite.position.y, safe_rect.position.y, safe_rect.end.y - $Bite.size.y)
 
 func show_result(message: String) -> void:
+	$Result.add_theme_font_size_override("font_size", 28 if message == "LINE BREAK" else 36)
 	$Result.text = message
 	$Result.visible = not message.is_empty()
+
+func show_fight(fight: FishingFight, active: bool) -> void:
+	$ReelButton.visible = active
+	$ReelButton.disabled = not active
+	$ReelButton.set_pressed_no_signal(active and fight.reeling)
+	$FightHUD.visible = active
+	if active:
+		$FightHUD.display(fight)
+
+func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
+	$CatchPanel.visible = true
+	$CatchPanel/Name.text = result["name"]
+	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
+	$CatchPanel/Fish.texture = fish_texture
+
+func hide_catch() -> void:
+	$CatchPanel.visible = false
+	$CatchPanel/Fish.texture = null

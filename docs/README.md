@@ -7,6 +7,8 @@
 | [game-design/phase1-acceptance.md](game-design/phase1-acceptance.md) | Phase 1の検証結果と検証範囲 |
 | [game-design/phase2-casting.md](game-design/phase2-casting.md) | Phase 2の操作・状態・調整値・Phase 3への引き継ぎ |
 | [game-design/phase2-acceptance.md](game-design/phase2-acceptance.md) | Phase 2の検証結果と検証範囲 |
+| [game-design/phase3-fight.md](game-design/phase3-fight.md) | Phase 3のファイト・操作・5種の仮設定 |
+| [game-design/phase3-acceptance.md](game-design/phase3-acceptance.md) | Phase 3の連続ループ・検証結果・実機の残課題 |
 | game-design/ | ゲーム全体の設計、遊びの流れ、フェーズ計画 |
 | [fish/](fish/README.md) | 魚種、魚 AI、出現条件、パラメーター |
 | [equipment/](equipment/README.md) | ロッド、リール、ルアーなどの装備仕様 |

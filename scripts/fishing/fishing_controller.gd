@@ -1,13 +1,13 @@
 extends Node2D
-## Owns Phase 2 flow and input; lake drawing stays independent.
+## Owns fishing states/input. FishingFight handles only fight numbers.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, RESET }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, FAILED, RESET }
 signal hook_succeeded
 signal hook_missed
 
 @export var random_seed: int = 2463
 @export_range(1.0, 3.0) var hook_window_seconds: float = 1.5
-@export_range(0.5, 2.0) var hit_hold_seconds: float = 1.0
+@export_range(0.1, 0.5) var hit_hold_seconds: float = 0.3
 
 @onready var lure: LureController = $Lure
 @onready var line: Line2D = $Line
@@ -25,6 +25,16 @@ var _bite_remaining: float = 0.0
 var _hit_remaining: float = 0.0
 var _reset_remaining: float = 0.0
 var _message_remaining: float = 0.0
+var fight := FishingFight.new()
+var last_catch: Dictionary = {}
+var _reel_owner: int = -1 # -1 none, -2 mouse, >=0 touch index
+var _water := Rect2()
+var _surface_y: float = 0.0
+var _fight_origin_fraction := Vector2.ZERO
+var _landing_start := Vector2.ZERO
+var _landing_remaining: float = 0.0
+var _result_remaining: float = 0.0
+var _session_caught: bool = false
 
 func _ready() -> void:
 	_rng.seed = random_seed
@@ -40,9 +50,13 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_refresh_ui()
 
 func configure_water(bounds: Rect2, surface_y: float, depth_m: float) -> void:
+	_water = bounds
+	_surface_y = surface_y
 	lure.configure_water(bounds, surface_y, depth_m)
 	if _boat != null:
 		lure.set_cast_origin(_boat.rod_tip_position())
+	if state == State.FIGHTING:
+		_update_fight_pose()
 	_update_line()
 	_refresh_ui()
 
@@ -62,6 +76,9 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
+	if state == State.FIGHTING:
+		_reel_input(event)
+		return
 	if state == State.READY and event is InputEventScreenTouch and event.pressed and _hud != null:
 		if _hud.get_node("CastButton").get_global_rect().has_point(event.position):
 			if request_cast():
@@ -78,6 +95,10 @@ func request_hook() -> bool:
 	lure.hook()
 	active_fish.hook()
 	_hit_remaining = hit_hold_seconds
+	_session_caught = false
+	active_fish.prepare_catch_size(_rng)
+	fight.start(active_fish.fight_profile)
+	_fight_origin_fraction = Vector2((active_fish.position.x - _water.position.x) / _water.size.x, (active_fish.position.y - _surface_y) / (_water.end.y - _surface_y))
 	_hud.show_bite(false, lure.position)
 	_hud.show_result("HIT!")
 	hook_succeeded.emit()
@@ -92,7 +113,7 @@ func _physics_process(delta: float) -> void:
 	cast_elapsed += delta
 	lure.set_cast_origin(_boat.rod_tip_position())
 	_message_remaining = maxf(0.0, _message_remaining - delta)
-	if _message_remaining == 0.0 and state not in [State.HOOKED, State.RESET]:
+	if _message_remaining == 0.0 and state not in [State.HOOKED, State.LANDED, State.FAILED, State.RESET]:
 		_hud.show_result("")
 	match state:
 		State.CASTING:
@@ -114,6 +135,31 @@ func _physics_process(delta: float) -> void:
 		State.HOOKED:
 			_hit_remaining -= delta
 			if _hit_remaining <= 0.0:
+				state = State.FIGHTING
+				_hud.show_result("")
+		State.FIGHTING:
+			fight.step(delta)
+			active_fish.stamina = fight.stamina
+			_update_fight_pose()
+			if fight.run_started:
+				_haptic(55, 0.5)
+			if fight.danger_entered:
+				_haptic(35, 0.4)
+			if fight.failure != "":
+				_fail_fight(fight.failure)
+			elif fight.landed:
+				_begin_landing()
+		State.LANDING:
+			_landing_remaining = maxf(0.0, _landing_remaining - delta)
+			active_fish.position = _landing_start.lerp(Vector2(_boat.position.x - 25, _surface_y - 6), 1.0 - clampf((_landing_remaining - 0.2) / 0.45, 0.0, 1.0))
+			lure.follow_fish(active_fish.position + Vector2(14, 0), true)
+			if _landing_remaining <= 0.2 and lure.splash_remaining <= 0.0:
+				lure.landing_splash(Vector2(active_fish.position.x, _surface_y))
+			if _landing_remaining <= 0.0:
+				_show_catch()
+		State.LANDED, State.FAILED:
+			_result_remaining -= delta
+			if _result_remaining <= 0.0:
 				_begin_reset()
 		State.RESET:
 			_reset_remaining -= delta
@@ -163,15 +209,108 @@ func _miss() -> void:
 	hook_missed.emit()
 
 func _begin_reset() -> void:
-	# Phase 2 test reset only. Phase 3 replaces this path with FishingFight.
 	state = State.RESET
 	lure.begin_reset()
-	active_fish.release_lure(false)
+	_stop_reel()
+	if active_fish != null:
+		active_fish.finish_session(_session_caught)
 	active_fish = null
 	_reset_remaining = 0.2
+	_hud.hide_catch()
+	_boat.set_line_pull(0.0, false)
+
+func _reel_input(event: InputEvent) -> void:
+	var button_rect: Rect2 = _hud.get_node("ReelButton").get_global_rect()
+	var handled := false
+	if event is InputEventScreenTouch:
+		if event.pressed and _reel_owner == -1 and button_rect.has_point(event.position):
+			_reel_owner = event.index
+			set_reeling(true)
+			handled = true
+		elif not event.pressed and _reel_owner == event.index:
+			_stop_reel()
+			handled = true
+	elif event is InputEventScreenDrag and event.index == _reel_owner:
+		if not button_rect.has_point(event.position):
+			_stop_reel()
+			handled = true
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and _reel_owner == -1 and button_rect.has_point(event.position):
+			_reel_owner = -2
+			set_reeling(true)
+			handled = true
+		elif not event.pressed and _reel_owner == -2:
+			_stop_reel()
+			handled = true
+	elif event is InputEventMouseMotion and _reel_owner == -2 and not button_rect.has_point(event.position):
+		_stop_reel()
+		handled = true
+	if handled:
+		get_viewport().set_input_as_handled()
+
+func set_reeling(pressed: bool) -> bool:
+	if state != State.FIGHTING:
+		return false
+	fight.reeling = pressed
+	_refresh_ui()
+	return true
+
+func _stop_reel() -> void:
+	_reel_owner = -1
+	fight.reeling = false
+	if _hud != null:
+		_refresh_ui()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_stop_reel()
+
+func _update_fight_pose() -> void:
+	var origin := Vector2(_water.position.x + _fight_origin_fraction.x * _water.size.x, _surface_y + _fight_origin_fraction.y * (_water.end.y - _surface_y))
+	var target := Vector2(_boat.position.x - 24, _surface_y + 22)
+	var fish_position := origin.lerp(target, clampf(1.0 - fight.fish_distance, 0.0, 1.0))
+	if fight.resistance == FishingFight.Resistance.WARNING:
+		fish_position.y += sin(fight.elapsed * 38.0) * 2.0
+	active_fish.set_fight_pose(fish_position, fight.resistance)
+	active_fish.sprite.modulate = Color("fff0bd") if fight.resistance == FishingFight.Resistance.WARNING else Color.WHITE
+	lure.follow_fish(fish_position + Vector2(active_fish.swim_direction * 14, 0))
+	_boat.set_line_pull(fight.tension, true)
+
+func _fail_fight(message: String) -> void:
+	state = State.FAILED
+	_stop_reel()
+	active_fish.finish_session(false)
+	active_fish = null
+	lure.begin_reset()
+	_result_remaining = 1.3
+	_hud.show_result(message)
+	_boat.set_line_pull(0.0, false)
+	_haptic(130 if message == "LINE BREAK" else 60, 1.0 if message == "LINE BREAK" else 0.5)
+
+func _begin_landing() -> void:
+	state = State.LANDING
+	_stop_reel()
+	active_fish.state = FishController.SwimState.LANDING
+	_landing_start = active_fish.position
+	_landing_remaining = 0.65
+	_boat.set_line_pull(0.0, false)
+
+func _show_catch() -> void:
+	state = State.LANDED
+	_session_caught = true
+	_result_remaining = 1.5
+	last_catch = {"species_id": active_fish.fight_profile.species_id, "name": active_fish.fight_profile.display_name, "size_cm": active_fish.size_cm}
+	active_fish.visible = false
+	_hud.show_catch(last_catch, active_fish.sprite.sprite_frames.get_frame_texture("swim", 0))
+	_haptic(100, 0.8)
+
+func _haptic(duration_ms: int, amplitude: float) -> void:
+	if OS.get_name() in ["Android", "iOS"]:
+		Input.vibrate_handheld(duration_ms, amplitude)
 
 func _update_line() -> void:
-	line.visible = state not in [State.READY, State.RESET]
+	line.visible = state not in [State.READY, State.LANDED, State.FAILED, State.RESET]
+	line.default_color = Color("dfb875") if state == State.FIGHTING and fight.tension >= 70.0 else Color(0.88, 0.94, 0.81, 0.75)
 	if _boat != null and line.get_point_count() == 2:
 		line.set_point_position(0, _boat.rod_tip_position())
 		line.set_point_position(1, lure.position)
@@ -180,5 +319,8 @@ func _refresh_ui() -> void:
 	if _hud == null:
 		return
 	_hud.get_node("CastButton").disabled = state != State.READY
+	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
+	_hud.show_fight(fight, state == State.FIGHTING)
+	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.show_lure_depth(lure.depth_m, state != State.READY and state != State.RESET)
 	_hud.show_bite(state == State.BITTEN, lure.position)

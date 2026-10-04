@@ -2,9 +2,9 @@
 
 ## ステータス
 
-MVP 開発ブランチは `feature/mvp-fishing`。現在は Phase 2 — キャスト・ルアー沈下・魚接近・ヒットを実装しています。
+MVP 開発ブランチは `feature/mvp-fishing`。現在は Phase 3 — REEL・ラインテンション・魚スタミナ・釣り上げを実装しています。
 
-Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定しました。[Phase 1仕様](phase1-lake-scene.md)と[確認結果](phase1-acceptance.md)を参照してください。Phase 2の仕様は[Phase 2仕様](phase2-casting.md)、検証結果は[Phase 2 Acceptance](phase2-acceptance.md)を参照してください。Phase 3以降の詳細とMVP全体の受け入れは未完了です。この文書は初期構築の記録とフェーズ別仕様の入口です。
+Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定しました。[Phase 1仕様](phase1-lake-scene.md)と[確認結果](phase1-acceptance.md)を参照してください。Phase 2の仕様は[Phase 2仕様](phase2-casting.md)、検証結果は[Phase 2 Acceptance](phase2-acceptance.md)を参照してください。Phase 3の仕様は[Phase 3仕様](phase3-fight.md)、検証結果は[Phase 3 Acceptance](phase3-acceptance.md)を参照してください。Phase 4以降の詳細とMVP全体の受け入れは未完了です。この文書は初期構築の記録とフェーズ別仕様の入口です。
 
 ## ゲーム概要
 
@@ -34,7 +34,7 @@ Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定
 | 湖上・水中基礎シーンと視覚的な魚の遊泳 | `feat: implement phase 1 lake and fish scene` | [Phase 1](phase1-lake-scene.md) |
 | キャスト・ルアー沈下・魚接近・ヒット | `feat: implement phase 2 casting and fish bite` | [Phase 2](phase2-casting.md) |
 | 釣りに反応する魚 AI | `feat: add fish AI` | SWIMに検知・接近・BITE・HOOKEDをPhase 2で追加。正式魚データは後工程 |
-| リール・テンション | `feat: implement reel and tension` | 未確定 |
+| REEL・テンション・スタミナ・釣り上げ | `feat: implement phase 3 fishing fight and landing` | [Phase 3](phase3-fight.md) |
 | 経済 | `feat: add economy` | 未確定 |
 | 装備ショップ | `feat: add equipment shop` | 未確定 |
 | ソナー | `feat: add sonar` | 表示のみPhase 1。魚との同期はPhase 6の指示待ち |
@@ -43,7 +43,7 @@ Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定
 ## 詳細仕様で確定する事項
 
 - MVP に含める機能とプレイの開始・終了条件。
-- スマートフォンの対象端末・OSと、Phase 3以降のタッチ操作。Phase 1の画面は横持ち640×360。
+- スマートフォンの対象端末・OSと、Phase 4以降のタッチ操作。Phase 1の画面は横持ち640×360。
 - 魚種、出現条件、魚 AI、釣り上げ・失敗条件。
 - リール・テンションの挙動と調整値。
 - 経済・装備・ショップの対象範囲とデータ。

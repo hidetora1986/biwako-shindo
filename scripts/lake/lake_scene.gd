@@ -1,7 +1,7 @@
 extends Node2D
 
 const FISH_SCENE := preload("res://scenes/fish/fish.tscn")
-const PLACEHOLDER_KINDS := ["bluegill", "minnow", "bass"]
+const FIGHT_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/bluegill-fight.tres")]
 const DEPTH_FRACTIONS := [0.18, 0.44, 0.70, 0.31, 0.83, 0.54, 0.14]
 
 @export var profile: LakeProfile = preload("res://data/lake/morning.tres")
@@ -45,7 +45,8 @@ func _spawn_fish() -> void:
 	for i in range(fish_count):
 		var fish: FishController = FISH_SCENE.instantiate()
 		fish.name = "Fish%02d" % (i + 1)
-		fish.placeholder_kind = PLACEHOLDER_KINDS[i % PLACEHOLDER_KINDS.size()]
+		fish.fight_profile = FIGHT_PROFILES[i % FIGHT_PROFILES.size()]
+		fish.placeholder_kind = fish.fight_profile.placeholder_kind
 		match fish.placeholder_kind:
 			"minnow": fish.swim_speed = rng.randf_range(28.0, 34.0)
 			"bass": fish.swim_speed = rng.randf_range(11.0, 15.0)

@@ -1,5 +1,7 @@
 # MVP Phase 2 — Acceptance確認結果
 
+本書はPhase 2完成時点の記録です。現行ブランチでは[Phase 3](phase3-fight.md)でHIT後の暫定リセットをファイトへ置換済みです。
+
 確認日: 2026-10-04。Godot **4.6.3 stable**。対象ブランチ: `feature/mvp-fishing`。
 開始HEAD: `88a04f1105e8d446d08393d6164c68c624089265`。
 

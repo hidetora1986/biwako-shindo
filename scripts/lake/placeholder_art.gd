@@ -79,7 +79,7 @@ static func boat_texture() -> Texture2D:
 		return _boat_cache
 	var image := Image.create(110, 48, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
-	# Fishing skiff, stern motor, seated silhouette and static rod. No lure.
+	# Fishing skiff, stern motor and seated silhouette. Boat draws its rod.
 	_paint(image, Rect2i(12, 34, 88, 3), "e0d6b0")
 	_paint(image, Rect2i(16, 37, 80, 5), "637e73")
 	_paint(image, Rect2i(22, 42, 67, 3), "355751")
@@ -98,9 +98,6 @@ static func boat_texture() -> Texture2D:
 	_paint(image, Rect2i(46, 11, 15, 3), "324e4d")
 	_paint(image, Rect2i(50, 8, 8, 3), "46645b")
 	_paint(image, Rect2i(42, 22, 9, 3), "c7b78c")
-	for x in range(15, 45):
-		var y := 5 + int(float(x - 15) * 0.57)
-		image.set_pixel(x, y, Color("344e4e"))
 	_paint(image, Rect2i(25, 36, 6, 2), "a8aa91")
 	_paint(image, Rect2i(76, 35, 9, 2), "a8aa91")
 	_boat_cache = ImageTexture.create_from_image(image)
