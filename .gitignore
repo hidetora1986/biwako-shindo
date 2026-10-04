@@ -1,0 +1,48 @@
+# Godot 4: imported resources, shader cache, editor state, export credentials.
+.godot/
+
+# Generated translation resources; keep their source CSV/PO files.
+*.translation
+
+# Keep source metadata (*.import / *.uid) and shared export_presets.cfg tracked.
+
+# Generated builds and exports.
+/build/
+/builds/
+/dist/
+/export/
+/exports/
+/android/build/
+.gradle/
+*.apk
+*.aab
+*.ipa
+*.pck
+*.app/
+*.dSYM/
+
+# Local secrets and signing files.
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+*.provisionprofile
+
+# Local editor settings, temporary files, and logs.
+.idea/
+.vscode/
+*.code-workspace
+*.tmp
+*.bak
+*.swp
+*.swo
+*.log
+*~
+
+# Operating-system metadata.
+.DS_Store
+Thumbs.db
+Desktop.ini
