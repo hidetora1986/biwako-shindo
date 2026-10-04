@@ -35,6 +35,9 @@ var _landing_start := Vector2.ZERO
 var _landing_remaining: float = 0.0
 var _result_remaining: float = 0.0
 var _session_caught: bool = false
+var progress := GameProgress.new()
+var _cast_serial: int = 0
+var _shop_open: bool = false
 
 func _ready() -> void:
 	_rng.seed = random_seed
@@ -47,6 +50,12 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_fish_container = fishes
 	_hud = hud
 	_hud.get_node("CastButton").pressed.connect(request_cast)
+	_hud.get_node("ShopButton").pressed.connect(request_shop)
+	progress.changed.connect(_progress_changed)
+	progress.depth_unlocked.connect(_hud.get_node("DepthUnlock").show_unlock)
+	_hud.get_node("Shop").setup(progress, _hud)
+	_hud.get_node("Shop").closed.connect(_shop_closed)
+	_progress_changed()
 	_refresh_ui()
 
 func configure_water(bounds: Rect2, surface_y: float, depth_m: float) -> void:
@@ -61,11 +70,12 @@ func configure_water(bounds: Rect2, surface_y: float, depth_m: float) -> void:
 	_refresh_ui()
 
 func request_cast() -> bool:
-	if state != State.READY or _boat == null:
+	if state != State.READY or _boat == null or _shop_open:
 		return false
 	if not lure.cast_from(_boat.rod_tip_position()):
 		return false
 	state = State.CASTING
+	_cast_serial += 1
 	cast_elapsed = 0.0
 	_detection_timer = 0.0
 	_retry_delay = 0.0
@@ -76,6 +86,12 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
+	if _shop_open:
+		return
+	if event is InputEventScreenTouch and event.pressed and _hud != null and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
+		if request_shop():
+			get_viewport().set_input_as_handled()
+		return
 	if state == State.FIGHTING:
 		_reel_input(event)
 		return
@@ -89,7 +105,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func request_hook() -> bool:
-	if state != State.BITTEN or _bite_remaining <= 0.0:
+	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open:
 		return false
 	state = State.HOOKED
 	lure.hook()
@@ -97,7 +113,7 @@ func request_hook() -> bool:
 	_hit_remaining = hit_hold_seconds
 	_session_caught = false
 	active_fish.prepare_catch_size(_rng)
-	fight.start(active_fish.fight_profile)
+	fight.start(active_fish.fight_profile, progress.current("reel").effect_value, progress.current("rod").effect_value, active_fish.size_cm)
 	_fight_origin_fraction = Vector2((active_fish.position.x - _water.position.x) / _water.size.x, (active_fish.position.y - _surface_y) / (_water.end.y - _surface_y))
 	_hud.show_bite(false, lure.position)
 	_hud.show_result("HIT!")
@@ -106,7 +122,7 @@ func request_hook() -> bool:
 	return true
 
 func _physics_process(delta: float) -> void:
-	if _hud == null:
+	if _hud == null or _shop_open:
 		return
 	if state == State.READY:
 		return
@@ -176,7 +192,7 @@ func _detect_fish() -> void:
 	var distance := INF
 	for fish: FishController in _fish_container.get_children():
 		var candidate_distance := fish.position.distance_to(lure.position)
-		if fish.can_detect_lure() and candidate_distance <= fish.bite_detection_radius and candidate_distance < distance:
+		if fish.can_detect_lure() and fish.fight_profile.allows_depth(lure.depth_m) and candidate_distance <= fish.bite_detection_radius and candidate_distance < distance:
 			closest = fish
 			distance = candidate_distance
 	if closest == null:
@@ -185,6 +201,7 @@ func _detect_fish() -> void:
 	var chance := minf(1.0, closest.bite_probability + maxf(0.0, cast_elapsed - 3.0) * 0.18)
 	if _rng.randf() <= chance and closest.approach_lure(lure):
 		active_fish = closest
+		lure.pause_for_interest()
 
 func _begin_bite() -> void:
 	state = State.BITTEN
@@ -296,10 +313,12 @@ func _begin_landing() -> void:
 	_boat.set_line_pull(0.0, false)
 
 func _show_catch() -> void:
+	if state != State.LANDING or _session_caught or active_fish == null:
+		return
 	state = State.LANDED
 	_session_caught = true
 	_result_remaining = 1.5
-	last_catch = {"species_id": active_fish.fight_profile.species_id, "name": active_fish.fight_profile.display_name, "size_cm": active_fish.size_cm}
+	last_catch = {"species_id": active_fish.fight_profile.species_id, "name": active_fish.fight_profile.display_name, "size_cm": active_fish.size_cm, "id": active_fish.fight_profile.id, "price": progress.sell_catch(active_fish.fight_profile, active_fish.size_cm, _cast_serial)}
 	active_fish.visible = false
 	_hud.show_catch(last_catch, active_fish.sprite.sprite_frames.get_frame_texture("swim", 0))
 	_haptic(100, 0.8)
@@ -318,9 +337,32 @@ func _update_line() -> void:
 func _refresh_ui() -> void:
 	if _hud == null:
 		return
-	_hud.get_node("CastButton").disabled = state != State.READY
+	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open
+	_hud.get_node("ShopButton").disabled = not can_open_shop()
+	_hud.get_node("NextUpgrade").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.show_fight(fight, state == State.FIGHTING)
 	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	_hud.show_lure_depth(lure.depth_m, state != State.READY and state != State.RESET)
 	_hud.show_bite(state == State.BITTEN, lure.position)
+
+func can_open_shop() -> bool:
+	return not _shop_open and state in [State.READY, State.SINKING, State.WAITING]
+
+func request_shop() -> bool:
+	if not can_open_shop():
+		return false
+	_shop_open = true
+	_stop_reel()
+	_hud.get_node("Shop").open_shop()
+	_refresh_ui()
+	return true
+
+func _shop_closed() -> void:
+	_shop_open = false
+	_refresh_ui()
+
+func _progress_changed() -> void:
+	lure.max_depth_m = progress.current("line").effect_value
+	if _hud != null:
+		_hud.show_progress(progress)

@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/equipment_shop.gd" id="1_shop"]
+[sub_resource type="SystemFont" id="Font_jp"]
+font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
+[sub_resource type="Theme" id="Theme_shop"]
+default_font = SubResource("Font_jp")
+default_font_size = 15
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+bg_color = Color(0.06, 0.19, 0.23, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.70, 0.43, 1)
+
+[node name="Shop" type="Control"]
+process_mode = 3
+visible = false
+mouse_filter = 2
+script = ExtResource("1_shop")
+theme = SubResource("Theme_shop")
+
+[node name="Shade" type="ColorRect" parent="."]
+color = Color(0.015, 0.065, 0.08, 0.72)
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 560.0
+offset_bottom = 304.0
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Title" type="Label" parent="Panel"]
+offset_left = 14.0
+offset_top = 9.0
+offset_right = 300.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(1, 0.91, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "EQUIPMENT SHOP"
+
+[node name="Wallet" type="Label" parent="Panel"]
+offset_left = 14.0
+offset_top = 42.0
+offset_right = 400.0
+offset_bottom = 68.0
+text = "所持金  ¥0"
+
+[node name="Close" type="Button" parent="Panel"]
+offset_right = 50.0
+offset_bottom = 44.0
+focus_mode = 0
+action_mode = 0
+text = "×"
+theme_override_font_sizes/font_size = 24
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+offset_right = 532.0
+offset_bottom = 214.0
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Panel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6

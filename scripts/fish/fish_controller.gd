@@ -52,9 +52,7 @@ func configure_water(bounds: Rect2, depth_m: float) -> void:
 	water_bounds = bounds
 	_depth_m = maxf(depth_m, 0.1)
 	depth_position = clampf(depth_position, 0.0, _depth_m)
-	var top := bounds.position.y + _half_height + 1.2
-	var bottom := bounds.end.y - _half_height - 1.2
-	_base_y = lerpf(top, bottom, depth_position / _depth_m)
+	_base_y = clampf(bounds.position.y - 4.0 + depth_position / _depth_m * (bounds.size.y - 4.0), bounds.position.y + _half_height + 1.2, bounds.end.y - _half_height - 1.2)
 	position.y = _base_y
 	position.x = clampf(position.x, bounds.position.x + _half_width, bounds.end.x - _half_width)
 	if _home_fraction < 0.0:
@@ -116,9 +114,7 @@ func _follow_lure(delta: float) -> void:
 	target.x = clampf(target.x, water_bounds.position.x + _half_width, water_bounds.end.x - _half_width)
 	target.y = clampf(target.y, water_bounds.position.y + _half_height + 1.2, water_bounds.end.y - _half_height - 1.2)
 	position = position.move_toward(target, (approach_speed + swim_speed * 0.35) * delta)
-	var top := water_bounds.position.y + _half_height + 1.2
-	var bottom := water_bounds.end.y - _half_height - 1.2
-	depth_position = clampf((position.y - top) / maxf(bottom - top, 1.0) * _depth_m, 0.0, _depth_m)
+	depth_position = _depth_at_y(position.y)
 	_update_facing()
 
 func begin_bite() -> void:
@@ -135,10 +131,11 @@ func release_lure(missed: bool) -> void:
 	state = SwimState.SWIM
 	_interest_cooldown = 4.0 if missed else 1.0
 	_base_y = clampf(position.y, water_bounds.position.y + _half_height + 1.2, water_bounds.end.y - _half_height - 1.2)
-	var top := water_bounds.position.y + _half_height + 1.2
-	var bottom := water_bounds.end.y - _half_height - 1.2
-	depth_position = clampf((_base_y - top) / maxf(bottom - top, 1.0) * _depth_m, 0.0, _depth_m)
+	depth_position = _depth_at_y(_base_y)
 	_update_facing()
+
+func _depth_at_y(y: float) -> float:
+	return clampf((y - water_bounds.position.y + 4.0) / maxf(water_bounds.size.y - 4.0, 1.0) * _depth_m, 0.0, _depth_m)
 
 func prepare_catch_size(rng: RandomNumberGenerator) -> void:
 	if size_cm <= 0.0:
@@ -159,7 +156,7 @@ func finish_session(caught: bool) -> void:
 	sprite.speed_scale = clampf(swim_speed / 18.0, 0.7, 1.8)
 	visible = true
 	if caught:
-		# MVP replenishes the same placeholder node; no inventory/save/economy.
+		# MVP replenishes the same placeholder node; no inventory or persistent save.
 		depth_position = _home_depth
 		position.x = water_bounds.position.x + _home_fraction * water_bounds.size.x
 		configure_water(water_bounds, _depth_m)

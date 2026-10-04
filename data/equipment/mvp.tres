@@ -1,0 +1,140 @@
+[gd_resource type="Resource" script_class="EquipmentCatalog" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/equipment_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://scripts/economy/equipment_level.gd" id="2_level"]
+
+[sub_resource type="Resource" id="rod_1"]
+script = ExtResource("2_level")
+category = "rod"
+level = 1
+price = 0
+effect_value = 60.0
+display_name = "ロッド Lv.1"
+effect_label = "最大対応サイズ"
+effect_unit = "cm"
+capability = ""
+
+[sub_resource type="Resource" id="rod_2"]
+script = ExtResource("2_level")
+category = "rod"
+level = 2
+price = 4000
+effect_value = 100.0
+display_name = "ロッド Lv.2"
+effect_label = "最大対応サイズ"
+effect_unit = "cm"
+capability = ""
+
+[sub_resource type="Resource" id="rod_3"]
+script = ExtResource("2_level")
+category = "rod"
+level = 3
+price = 18000
+effect_value = 180.0
+display_name = "ロッド Lv.3"
+effect_label = "最大対応サイズ"
+effect_unit = "cm"
+capability = ""
+
+[sub_resource type="Resource" id="reel_1"]
+script = ExtResource("2_level")
+category = "reel"
+level = 1
+price = 0
+effect_value = 1.0
+display_name = "リール Lv.1"
+effect_label = "巻き速度"
+effect_unit = "×"
+capability = ""
+
+[sub_resource type="Resource" id="reel_2"]
+script = ExtResource("2_level")
+category = "reel"
+level = 2
+price = 3000
+effect_value = 1.15
+display_name = "リール Lv.2"
+effect_label = "巻き速度"
+effect_unit = "×"
+capability = ""
+
+[sub_resource type="Resource" id="reel_3"]
+script = ExtResource("2_level")
+category = "reel"
+level = 3
+price = 15000
+effect_value = 1.3
+display_name = "リール Lv.3"
+effect_label = "巻き速度"
+effect_unit = "×"
+capability = ""
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_level")
+category = "line"
+level = 1
+price = 0
+effect_value = 10.0
+display_name = "ライン Lv.1"
+effect_label = "最大深度"
+effect_unit = "m"
+capability = ""
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_level")
+category = "line"
+level = 2
+price = 2500
+effect_value = 25.0
+display_name = "ライン Lv.2"
+effect_label = "最大深度"
+effect_unit = "m"
+capability = ""
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_level")
+category = "line"
+level = 3
+price = 12000
+effect_value = 50.0
+display_name = "ライン Lv.3"
+effect_label = "最大深度"
+effect_unit = "m"
+capability = ""
+
+[sub_resource type="Resource" id="sonar_1"]
+script = ExtResource("2_level")
+category = "sonar"
+level = 1
+price = 0
+effect_value = 15.0
+display_name = "ソナー Lv.1"
+effect_label = "最大探知"
+effect_unit = "m"
+capability = "魚影のみ"
+
+[sub_resource type="Resource" id="sonar_2"]
+script = ExtResource("2_level")
+category = "sonar"
+level = 2
+price = 5000
+effect_value = 30.0
+display_name = "ソナー Lv.2"
+effect_label = "最大探知"
+effect_unit = "m"
+capability = "推定サイズ"
+
+[sub_resource type="Resource" id="sonar_3"]
+script = ExtResource("2_level")
+category = "sonar"
+level = 3
+price = 25000
+effect_value = 50.0
+display_name = "ソナー Lv.3"
+effect_label = "最大探知"
+effect_unit = "m"
+capability = "魚種推定"
+
+[resource]
+script = ExtResource("1_catalog")
+levels = Array[ExtResource("2_level")]([SubResource("rod_1"), SubResource("rod_2"), SubResource("rod_3"), SubResource("reel_1"), SubResource("reel_2"), SubResource("reel_3"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("sonar_1"), SubResource("sonar_2"), SubResource("sonar_3")])

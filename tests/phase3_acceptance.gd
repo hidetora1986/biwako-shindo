@@ -166,7 +166,7 @@ func _run() -> void:
 		_step(0.23)
 		repeated_ok = repeated_ok and _flow.state == FLOW.State.READY and owned_fish.visible and owned_fish.state in [FishController.SwimState.SWIM, FishController.SwimState.TURN]
 	_check(repeated_ok and get_node_count() == node_count and _fishes.size() == 7, "Repeated Loop: five CAST/HIT/FIGHT/CATCH/CAST sessions, stable nodes and fish")
-	_check(_hud.get_node("Money/Label").text == "¥0" and not _hud.get_node("ReelButton").visible, "Scope: money stays zero and fight HUD hides after reset")
+	_check(_flow.progress.money > 0 and _hud.get_node("Money/Label").text == "¥" + _hud._format_money(_flow.progress.money) and not _hud.get_node("ReelButton").visible, "Phase 4: auto-sale wallet is retained and fight HUD hides after reset")
 	var ranges := {"bluegill": Vector2(2, 4), "crucian": Vector2(3, 5), "bass": Vector2(4, 7), "biwamasu": Vector2(5, 8), "catfish": Vector2(6, 10)}
 	for species: String in ranges:
 		_check(_fight_times[species] >= ranges[species].x and _fight_times[species] <= ranges[species].y, species + ": short target fight time")

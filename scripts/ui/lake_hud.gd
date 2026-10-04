@@ -25,6 +25,11 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	var width := minf(640.0, safe_rect.size.x)
 	core_rect = Rect2(safe_rect.position + Vector2((safe_rect.size.x - width) * 0.5, 0), Vector2(width, safe_rect.size.y))
 	$Money.position = core_rect.position
+	$ShopButton.size = Vector2(112, maxf(44, 44.0 * view_size.y / maxf(get_window().size.y, 1)))
+	$ShopButton.position = core_rect.position + Vector2(0, 50)
+	$NextUpgrade.position = Vector2(core_rect.position.x, core_rect.end.y - $NextUpgrade.size.y)
+	$DepthUnlock.position = core_rect.get_center() - $DepthUnlock.size * 0.5
+	$Shop.configure(core_rect, view_size)
 	$SonarPlaceholder.position = Vector2(core_rect.end.x - $SonarPlaceholder.size.x, core_rect.position.y)
 	$Title.position = Vector2(core_rect.get_center().x - 120, core_rect.position.y)
 	$Subtitle.position = Vector2(core_rect.get_center().x - 120, core_rect.position.y + 20)
@@ -75,7 +80,22 @@ func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
 	$CatchPanel/Name.text = result["name"]
 	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
 	$CatchPanel/Fish.texture = fish_texture
+	$CatchPanel/Price.text = "+ ¥%s" % _format_money(result.get("price", 0))
 
 func hide_catch() -> void:
 	$CatchPanel.visible = false
 	$CatchPanel/Fish.texture = null
+
+func _format_money(value: int) -> String:
+	var digits := str(value)
+	var formatted := ""
+	for i in range(digits.length()):
+		if i > 0 and (digits.length() - i) % 3 == 0:
+			formatted += ","
+		formatted += digits[i]
+	return formatted
+
+func show_progress(progress: GameProgress) -> void:
+	$Money/Label.text = "¥" + _format_money(progress.money)
+	var item := progress.cheapest_next()
+	$NextUpgrade.text = "ALL EQUIPMENT MAX" if item == null else "NEXT UPGRADE  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]

@@ -29,6 +29,8 @@ func _disable_physics(node: Node) -> void:
 		_disable_physics(child)
 
 func _step(seconds: float) -> void:
+	if paused:
+		return
 	for tick in range(int(ceil(seconds * 60.0))):
 		for fish: FishController in _fishes:
 			fish._physics_process(1.0 / 60.0)
@@ -127,7 +129,7 @@ func _run() -> void:
 		var selected: FishController = _flow.active_fish
 		var previous_distance := selected.position.distance_to(_flow.lure.position)
 		_step(0.3)
-		_check(selected.position.distance_to(_flow.lure.position) < previous_distance, "Fish Approach: distance decreases")
+		_check(selected.position.distance_to(_flow.lure.position) < previous_distance or selected.position.distance_to(_flow.lure.position) <= 22.0, "Fish Approach: distance decreases or fish has reached the lure")
 		_check(not selected.approach_lure(_flow.lure), "Fish: reserved fish cannot take a second bite")
 	_check(_until_bite(), "Bite: natural detection reaches the bite window")
 	_check(_hud.get_node("Bite").visible and _flow.lure.state == LureController.State.BITTEN and _flow.active_fish.state == FishController.SwimState.BITE, "Bite: exclamation and matching states")

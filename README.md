@@ -27,9 +27,9 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-MVP Phase 3 — REEL・ラインテンション・魚スタミナ・釣り上げ。Phase 1の湖と7匹の魚、Phase 2のCASTからHITを維持し、短いファイトと釣果表示を追加しています。MVP全体のAcceptanceは未完了です。
+MVP Phase 4 — 魚データ・自動売却・所持金・装備強化。Phase 1〜3の湖、CASTからHIT、短いファイトを維持し、釣果から即購入・深度解放までの成長ループを追加しています。MVP全体のAcceptanceは未完了です。
 
-**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。売却・金額加算は未実装です。
+**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。魚は自動売却され、左上の所持金が増えます。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。現在の景色は15mまでです。ショップ中は釣りが停止し、×で再開します。所持金と装備は起動中のみ保持します。
 
 ## ブランチ運用
 
@@ -71,6 +71,7 @@ godot --headless --path . --quit-after 5
 godot --headless --path . --script res://tests/phase1_acceptance.gd
 godot --headless --path . --script res://tests/phase2_acceptance.gd
 godot --headless --path . --script res://tests/phase3_acceptance.gd
+godot --headless --path . --script res://tests/phase4_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -80,3 +81,5 @@ Phase 1の範囲と素材の交換方法は [Phase 1仕様](docs/game-design/pha
 Phase 2のキャスト・フッキング仕様は [Phase 2仕様](docs/game-design/phase2-casting.md)、検証結果は [Phase 2 Acceptance](docs/game-design/phase2-acceptance.md) を参照してください。
 
 Phase 3の操作・テンション・魚の仮設定は [Phase 3仕様](docs/game-design/phase3-fight.md)、検証結果と実機の残課題は [Phase 3 Acceptance](docs/game-design/phase3-acceptance.md) を参照してください。
+
+Phase 4の正式魚データ・経済・装備仕様は [Phase 4仕様](docs/game-design/phase4-economy.md)、10匹の連続経済ループ・回帰確認は [Phase 4 Acceptance](docs/game-design/phase4-acceptance.md) を参照してください。

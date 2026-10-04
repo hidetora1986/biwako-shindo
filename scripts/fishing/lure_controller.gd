@@ -85,6 +85,11 @@ func _target_x() -> float:
 func _update_underwater_position() -> void:
 	position = Vector2(_target_x(), _surface_y + depth_m / _visible_depth_m * (_water.end.y - 8.0 - _surface_y))
 
+func pause_for_interest() -> void:
+	# Hold the lure while a reserved fish approaches within its depth habitat.
+	if state == State.SINKING:
+		state = State.WAITING
+
 func begin_bite() -> void:
 	state = State.BITTEN
 	_wobble_time = 0.0

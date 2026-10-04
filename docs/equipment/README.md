@@ -2,4 +2,4 @@
 
 ロッド、リール、ルアーなどの装備性能、入手方法、ショップに関する仕様をこのディレクトリに保存します。
 
-現在の詳細仕様は未確定です。MVP の対象が決まったら [MVP 仕様書](../game-design/mvp-spec.md) から各文書を参照します。
+Phase 4でロッド・リール・ライン・ソナーのLv1〜3を確定し、`data/equipment/mvp.tres`で性能・価格を管理します。購入時に即装備し、ラインで10m→25m→50mを解放します。[Phase 4仕様](../game-design/phase4-economy.md)と[検証結果](../game-design/phase4-acceptance.md)を参照してください。

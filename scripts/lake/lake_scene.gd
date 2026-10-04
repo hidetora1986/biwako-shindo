@@ -1,7 +1,7 @@
 extends Node2D
 
 const FISH_SCENE := preload("res://scenes/fish/fish.tscn")
-const FIGHT_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/bluegill-fight.tres")]
+const FIGHT_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/bluegill-fight.tres")]
 const DEPTH_FRACTIONS := [0.18, 0.44, 0.70, 0.31, 0.83, 0.54, 0.14]
 
 @export var profile: LakeProfile = preload("res://data/lake/morning.tres")
@@ -52,7 +52,7 @@ func _spawn_fish() -> void:
 			"bass": fish.swim_speed = rng.randf_range(11.0, 15.0)
 			_: fish.swim_speed = rng.randf_range(17.0, 22.0)
 		fish.swim_direction = 1 if i % 2 == 0 else -1
-		fish.depth_position = clampf(DEPTH_FRACTIONS[i % DEPTH_FRACTIONS.size()] + rng.randf_range(-0.025, 0.025), 0.12, 0.88) * profile.displayed_depth_m
+		fish.depth_position = lerpf(fish.fight_profile.min_depth, fish.fight_profile.max_depth, clampf(DEPTH_FRACTIONS[i % DEPTH_FRACTIONS.size()] + rng.randf_range(-0.025, 0.025), 0.12, 0.88))
 		fish.variation_seed = spawn_seed + i * 37
 		fish.position.x = view_size.x * (0.10 + 0.80 * float(i) / maxf(1.0, fish_count - 1.0) + rng.randf_range(-0.015, 0.015))
 		$Underwater/FishContainer.add_child(fish)
