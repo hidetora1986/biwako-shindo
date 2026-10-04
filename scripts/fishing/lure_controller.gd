@@ -8,6 +8,7 @@ signal landed
 @export var lure_art: Texture2D
 @export_range(0.4, 0.7) var cast_duration: float = 0.55
 @export_range(0.1, 20.0) var sink_speed_m: float = 2.3
+@export_range(0.0, 5.0) var deep_sink_acceleration: float = 1.8
 @export_range(1.0, 150.0, 0.1, "or_greater") var max_depth_m: float = 15.0
 
 var state: State = State.READY
@@ -68,7 +69,7 @@ func _physics_process(delta: float) -> void:
 				_splash_x = position.x
 				landed.emit()
 		State.SINKING:
-			depth_m = minf(depth_m + sink_speed_m * delta, minf(max_depth_m, _visible_depth_m))
+			depth_m = minf(depth_m + (sink_speed_m + maxf(0, depth_m - 15.0) * deep_sink_acceleration) * delta, minf(max_depth_m, _visible_depth_m))
 			_update_underwater_position()
 			if depth_m >= minf(max_depth_m, _visible_depth_m):
 				state = State.WAITING

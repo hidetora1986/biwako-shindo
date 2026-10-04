@@ -140,9 +140,9 @@ text = "LAKE BIWA  /  MORNING"
 horizontal_alignment = 1
 
 [node name="SonarPlaceholder" type="Control" parent="HUD/Root"]
-offset_right = 168.0
-offset_bottom = 104.0
-custom_minimum_size = Vector2(168, 104)
+offset_right = 184.0
+offset_bottom = 120.0
+custom_minimum_size = Vector2(184, 120)
 mouse_filter = 2
 script = ExtResource("6_sonar")
 text_font = SubResource("Font_catch")
@@ -306,7 +306,7 @@ offset_bottom = 44.0
 mouse_filter = 2
 theme_override_fonts/font = SubResource("Font_catch")
 theme_override_colors/font_color = Color(0.86, 0.91, 0.76, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
 [node name="Shop" parent="HUD/Root" instance=ExtResource("10_shop")]
 

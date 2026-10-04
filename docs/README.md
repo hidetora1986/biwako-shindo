@@ -13,6 +13,7 @@
 | [game-design/phase4-acceptance.md](game-design/phase4-acceptance.md) | 10匹経済ループ・Phase 1〜3回帰・表示検証 |
 | [game-design/phase5-save-sonar.md](game-design/phase5-save-sonar.md) | 図鑑・永続Save・実ソナー・一度限りの巨大反応 |
 | [game-design/phase5-acceptance.md](game-design/phase5-acceptance.md) | 捕獲記録・Save耐性・再起動・ソナーLv・回帰確認 |
+| [game-design/phase6-mvp-acceptance.md](game-design/phase6-mvp-acceptance.md) | 正式MVP Acceptance・21捕獲＋2失敗・テンポ・スマホUI・性能の検証範囲 |
 | game-design/ | ゲーム全体の設計、遊びの流れ、フェーズ計画 |
 | [fish/](fish/README.md) | 魚種、魚 AI、出現条件、パラメーター |
 | [equipment/](equipment/README.md) | ロッド、リール、ルアーなどの装備仕様 |

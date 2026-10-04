@@ -50,8 +50,8 @@ func refresh_contacts() -> void:
 	queue_redraw()
 
 func depth_y(depth_m: float) -> float:
-	var bottom := size.y - (36 if _progress != null and _progress.levels.sonar >= 2 else 12)
-	return lerpf(29, bottom, clampf(depth_m / max_depth(), 0, 1))
+	var bottom := size.y - (42 if _progress != null and _progress.levels.sonar >= 2 else 12)
+	return lerpf(34, bottom, clampf(depth_m / max_depth(), 0, 1))
 
 func set_anomaly(enabled: bool, value: float) -> void:
 	anomaly_active = enabled
@@ -63,12 +63,12 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), Color("517d77"), false, 1)
 	var font: Font = text_font if text_font != null else ThemeDB.fallback_font
 	var level: int = 1 if _progress == null else _progress.levels.sonar
-	draw_string(font, Vector2(9, 16), "SONAR", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("d5e2c9"))
-	draw_string(font, Vector2(size.x - 66, 16), "Lv%d / %dm" % [level, max_depth()], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color("a1bcaa"))
+	draw_string(font, Vector2(9, 20), "SONAR", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("d5e2c9"))
+	draw_string(font, Vector2(size.x - 91, 20), "Lv%d / %dm" % [level, max_depth()], HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("a1bcaa"))
 	for fraction in [0.0, 0.5, 1.0]:
 		var y := depth_y(max_depth() * fraction)
 		draw_line(Vector2(9, y), Vector2(size.x - 10, y), Color("335b5d"))
-		draw_string(font, Vector2(9, y - 2), "%d" % (max_depth() * fraction), HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("7fa69b"))
+		draw_string(font, Vector2(9, y - 2), "%d" % (max_depth() * fraction), HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("a1bcaa"))
 	var focused := _focus_index % maxi(1, contacts.size())
 	for index in range(contacts.size()):
 		var contact: Dictionary = contacts[index]
@@ -77,9 +77,9 @@ func _draw() -> void:
 		if index == focused and level >= 2:
 			draw_rect(Rect2(point - Vector2(4, 3), Vector2(9, 6)), Color("80a59a"), false, 1)
 	if not contacts.is_empty() and level >= 2:
-		draw_string(font, Vector2(10, size.y - 18), contacts[focused].size_text, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 10, Color("d5e2c9"))
+		draw_string(font, Vector2(10, size.y - 22), contacts[focused].size_text + " · %.1fm" % contacts[focused].depth_m, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 14, Color("d5e2c9"))
 		if level >= 3:
-			draw_string(font, Vector2(10, size.y - 5), contacts[focused].name_text, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 10, Color("c4c18c"))
+			draw_string(font, Vector2(10, size.y - 6), contacts[focused].name_text, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 14, Color("c4c18c"))
 	if anomaly_active:
 		# 8x a normal five-pixel return. No lake sprite, text, sound or camera effects.
 		var x := lerpf(-40, size.x + 40, anomaly_progress)

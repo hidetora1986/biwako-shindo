@@ -27,7 +27,7 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-MVP Phase 5 — 魚図鑑・永続Save・実ソナー・最初の巨大ソナー反応。Phase 1〜4の釣りと成長ループを維持し、捕獲記録と進行の保存、ソナーLvごとの実魚表示を追加しています。MVP全体のAcceptanceは未完了です。
+MVP Phase 6 — テンポ・スマホUI調整と正式MVP Acceptance。Phase 1〜5の機能を維持し、21捕獲＋2失敗の反復、購入・図鑑・Save復元、16:9／19.5:9／20:9を検証済みです。PC上の自動テスト・実描画でAcceptanceはPASS。iPhone／Android実機検証と書き出しは未実施です。次はVisual Refinement Phase。mainへの統合は行いません。
 
 **操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。魚は自動売却され、左上の所持金が増えます。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。現在の景色は15mまでです。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
 
@@ -73,6 +73,7 @@ godot --headless --path . --script res://tests/phase2_acceptance.gd
 godot --headless --path . --script res://tests/phase3_acceptance.gd
 godot --headless --path . --script res://tests/phase4_acceptance.gd
 godot --headless --path . --script res://tests/phase5_acceptance.gd
+godot --headless --path . --script res://tests/mvp_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -86,3 +87,5 @@ Phase 3の操作・テンション・魚の仮設定は [Phase 3仕様](docs/gam
 Phase 4の正式魚データ・経済・装備仕様は [Phase 4仕様](docs/game-design/phase4-economy.md)、10匹の連続経済ループ・回帰確認は [Phase 4 Acceptance](docs/game-design/phase4-acceptance.md) を参照してください。
 
 Phase 5の図鑑・保存・実ソナー・一度限りの反応は [Phase 5仕様](docs/game-design/phase5-save-sonar.md)、検証結果は [Phase 5 Acceptance](docs/game-design/phase5-acceptance.md) を参照してください。テストのSaveはプレイヤーのSaveから分離しています。
+
+Phase 6の調整内容と正式MVP Acceptanceは [Phase 6 Acceptance](docs/game-design/phase6-mvp-acceptance.md) に記録しています。

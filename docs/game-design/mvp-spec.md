@@ -65,14 +65,14 @@ Phase 1の範囲・Acceptance基準はユーザーの指示に基づいて確定
 
 ## MVP Acceptance と main への統合
 
-**MVP Acceptance: 未完了。初期構築の完了は MVP の完了を意味しません。**
+**Phase 6正式MVP Acceptance: PASS（PC上の自動テスト・実描画・タッチ入力・Safe Areaシミュレーションの範囲）。**
 
-- [ ] MVP 必須機能と、機能ごとの具体的な Acceptance 基準が確定している。
-- [ ] 確定した各 Acceptance 基準を満たし、確認結果を記録している。
-- [ ] 対象スマートフォンで操作・表示・起動を確認している。
-- [ ] MVP の受け入れ完了を確認している。
+- [x] Phase 1〜6のAcceptance基準と検証結果を記録。
+- [x] 21捕獲＋2失敗、購入・図鑑・保存復元、Phase 1〜5全回帰を確認。
+- [x] 16:9／19.5:9／20:9、640×360、タッチ領域・Safe Areaを確認。
+- [ ] iPhone／Android実機の起動・操作感・性能・振動・書き出し。
 
-上記の完了後に限り、`feature/mvp-fishing` から `main` への Pull Request をレビューして統合します。現時点では統合しません。
+結果と限界は[Phase 6 Acceptance](phase6-mvp-acceptance.md)を参照。今回の指示に従い、Acceptance後もmainへMergeしない。次はVisual Refinement Phaseで、統合は別途指示を待つ。
 
 ## 将来の開発ブランチ
 

@@ -11,6 +11,7 @@ var _owns_pause: bool = false
 var _notice_visible: bool = false
 
 func _ready() -> void:
+	$Panel/Scroll/Rows.add_theme_constant_override("separation", 4)
 	$Panel/Close.pressed.connect(close_shop)
 	for category in GameProgress.CATEGORIES:
 		var row := HBoxContainer.new()
@@ -44,14 +45,14 @@ func configure(core_rect: Rect2, view_size: Vector2) -> void:
 	$Panel.position = core_rect.get_center() - $Panel.size * 0.5
 	$Panel/Close.position = Vector2($Panel.size.x - 64, 10)
 	$Panel/Wallet.size.x = $Panel.size.x - 28
-	$Panel/Scroll.position = Vector2(14, 76)
+	$Panel/Scroll.position = Vector2(14, 68)
 	$Panel/Scroll.size = $Panel.size - Vector2(28, 90)
 	var physical_scale := maxf(0.1, float(get_window().size.y) / view_size.y)
 	$Panel/Close.size = Vector2(maxf(50, 44.0 / physical_scale), maxf(44, 44.0 / physical_scale))
 	$Panel/Close.position.x = $Panel.size.x - $Panel/Close.size.x - 14
-	var scroll_top := maxf(76, $Panel/Close.size.y + 24)
+	var scroll_top := maxf(68, $Panel/Close.size.y + 16)
 	$Panel/Scroll.position.y = scroll_top
-	$Panel/Scroll.size.y = $Panel.size.y - scroll_top - 14
+	$Panel/Scroll.size.y = $Panel.size.y - scroll_top - 10
 	$Panel/Wallet.add_theme_font_size_override("font_size", maxi(15, int(ceil(11.0 / physical_scale))))
 	for category: String in _buttons:
 		var button: Button = _buttons[category]
@@ -63,6 +64,7 @@ func open_shop() -> void:
 	if visible or progress == null:
 		return
 	visible = true
+	_cooldown = 0.0
 	_owns_pause = true
 	get_tree().paused = true
 	_refresh()
@@ -113,6 +115,8 @@ func _buy(category: String) -> bool:
 	var purchased := progress.purchase(category, level)
 	if not purchased:
 		_cooldown = 0.0
+	if purchased and category != "line":
+		_hud.get_node("DepthUnlock").show_upgrade(category, level)
 	_refresh()
 	return purchased
 
@@ -130,7 +134,7 @@ func _refresh() -> void:
 			button.disabled = true
 			_expected_levels[category] = -1
 		else:
-			_labels[category].text = "%s  Lv.%d → Lv.%d\n%s  %s → %s%s" % [category.to_upper(), current.level, item.level, item.effect_label, current.effect_text(), item.effect_text(), "\n" + item.capability if category == "sonar" else ""]
+			_labels[category].text = "%s  Lv.%d → Lv.%d\n%s  %s → %s%s" % [category.to_upper(), current.level, item.level, item.effect_label, current.effect_text(), item.effect_text(), " / " + item.capability if category == "sonar" else ""]
 			button.text = "¥%s\n%s" % [_hud._format_money(item.price), "購入" if progress.money >= item.price else "所持金不足"]
 			button.disabled = not progress.can_purchase(category, item.level) or _cooldown > 0.0 or _hud.get_node("DepthUnlock").visible
 			_expected_levels[category] = item.level

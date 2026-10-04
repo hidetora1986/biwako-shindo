@@ -7,6 +7,11 @@ func show_unlock(previous: float, next: float) -> void:
 	remaining = 1.2
 	visible = true
 
+func show_upgrade(category: String, level: int) -> void:
+	$Label.text = "UPGRADE!\n%s Lv.%d" % [category.to_upper(), level]
+	remaining = 0.8
+	visible = true
+
 func _process(delta: float) -> void:
 	if not visible:
 		return

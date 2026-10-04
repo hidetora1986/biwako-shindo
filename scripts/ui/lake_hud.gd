@@ -108,4 +108,4 @@ func _format_money(value: int) -> String:
 func show_progress(progress: GameProgress) -> void:
 	$Money/Label.text = "¥" + _format_money(progress.money)
 	var item := progress.cheapest_next()
-	$NextUpgrade.text = "ALL EQUIPMENT MAX" if item == null else "NEXT UPGRADE  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]
+	$NextUpgrade.text = "ALL EQUIPMENT MAX" if item == null else "NEXT  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]

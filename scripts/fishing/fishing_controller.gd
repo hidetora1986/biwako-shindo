@@ -140,9 +140,12 @@ func request_hook() -> bool:
 func _physics_process(delta: float) -> void:
 	if _hud == null or _shop_open or _book_open:
 		return
+	var anomaly_was_active := anomaly.active
 	anomaly.step(delta, can_trigger_anomaly())
 	if state == State.READY:
-		_refresh_ui()
+		# Static HUD needs updating only when the modal eligibility changes.
+		if anomaly_was_active != anomaly.active:
+			_refresh_ui()
 		return
 	cast_elapsed += delta
 	lure.set_cast_origin(_boat.rod_tip_position())
