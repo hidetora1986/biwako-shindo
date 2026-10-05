@@ -541,6 +541,7 @@ func debug_trigger_anomaly() -> bool:
 	return OS.is_debug_build() and anomaly.try_trigger(can_trigger_anomaly(), true)
 
 func _exit_tree() -> void:
+	hull_events.stop_audio()
 	if save_manager != null:
 		save_manager.unbind_progress()
 

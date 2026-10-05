@@ -10,6 +10,8 @@ var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}
 const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres"), preload("res://data/fish/thread-jaw-fight.tres"), preload("res://data/fish/split-belly-fight.tres"), preload("res://data/fish/reverse-scale-fight.tres"), preload("res://data/fish/unknown-b-fight.tres"), preload("res://data/fish/lake-master-fight.tres")]
 var fish_records: Dictionary = {}
+var unknown_a_sold_first: bool = false
+var unknown_b_sold_first: bool = false
 var returned_unknown_a: bool = false
 var returned_unknown_b: bool = false
 var night_unlocked: bool = false
@@ -53,6 +55,10 @@ func next_level(category: String) -> EquipmentLevel:
 func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
 	if fish == null or fish.id == "00" or session_id <= _last_sold_session or (fish.is_boss and boss15_defeated):
 		return 0
+	if fish.id == "No.10" and not returned_unknown_a:
+		unknown_a_sold_first = true
+	if fish.id == "No.14" and not returned_unknown_b:
+		unknown_b_sold_first = true
 	var price := fish.sale_price(size_cm)
 	last_sale_new_discovery = record_catch(fish, size_cm, false)
 	money = mini(2147483647, money + price)
@@ -158,6 +164,8 @@ func can_encounter_boss() -> bool:
 	return lv5_unlocked() and levels.rod == 5 and levels.line == 5 and night_unlocked and not boss15_defeated
 
 func hidden_eligible() -> bool:
+	if unknown_a_sold_first or unknown_b_sold_first:
+		return false
 	if not (boss15_defeated and main_ending_seen and returned_unknown_a and returned_unknown_b and hull_knock_count >= 3 and zero_depth_contact_seen and levels.sonar == 5 and night_unlocked):
 		return false
 	for record: Dictionary in fish_records.values():

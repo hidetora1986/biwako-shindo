@@ -6,6 +6,7 @@ const MAX_INTEGER := 2147483647
 var save_path: String = "user://biwako-shindo/save.json"
 var last_error: Error = OK
 var write_count: int = 0
+var read_only_future_version: bool = false
 var _progress: GameProgress
 
 func _init(path: String = "user://biwako-shindo/save.json") -> void:
@@ -25,6 +26,9 @@ func _auto_save() -> void:
 	save_progress(_progress)
 
 func save_progress(progress: GameProgress) -> bool:
+	if read_only_future_version:
+		last_error = ERR_FILE_UNRECOGNIZED
+		return false
 	last_error = DirAccess.make_dir_recursive_absolute(save_path.get_base_dir())
 	if last_error != OK:
 		return false
@@ -54,7 +58,7 @@ func snapshot(progress: GameProgress) -> Dictionary:
 		discovered[id] = record.discovered
 		counts[id] = record.caught_count
 		best[id] = record.best_size_cm
-	return {"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
+	return {"unknown_a_sold_first":progress.unknown_a_sold_first,"unknown_b_sold_first":progress.unknown_b_sold_first,"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
 
 func load_into(progress: GameProgress) -> bool:
 	var raw: Variant = null
@@ -67,6 +71,8 @@ func load_into(progress: GameProgress) -> bool:
 			file.close()
 	var valid := raw is Dictionary
 	var data: Dictionary = raw if valid else {}
+	# Do not let an older binary overwrite a newer save after falling back.
+	read_only_future_version = _integer(data.get("save_version", VERSION), -1, 0, MAX_INTEGER) > VERSION
 	# A future migration dispatch belongs here. Unsupported versions start safely.
 	if _integer(data.get("save_version", VERSION), -1, 0, MAX_INTEGER) != VERSION:
 		data = {}
@@ -102,7 +108,7 @@ func load_into(progress: GameProgress) -> bool:
 	if not progress.lv4_unlocked():
 		for category: String in GameProgress.CATEGORIES:
 			progress.levels[category] = mini(3, progress.levels[category])
-	for field: String in ["anonymous_lure_obtained","anonymous_lure_equipped","hidden_entry_seen","no00_contacted","hidden_cut_ending_seen","hidden_contact_ending_seen"]:
+	for field: String in ["unknown_a_sold_first","unknown_b_sold_first","anonymous_lure_obtained","anonymous_lure_equipped","hidden_entry_seen","no00_contacted","hidden_cut_ending_seen","hidden_contact_ending_seen"]:
 		progress.set(field, data.get(field) is bool and data.get(field) == true)
 	progress.anonymous_lure_equipped = progress.anonymous_lure_equipped and progress.anonymous_lure_obtained
 	progress.no00_contacted = progress.hidden_contact_ending_seen

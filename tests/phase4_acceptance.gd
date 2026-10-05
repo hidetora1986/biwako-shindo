@@ -44,7 +44,7 @@ func _run() -> void:
 		sample.fight_profile = original
 		sample.size_cm = 0
 		_check(valid, "Size and Price: " + species + " one decimal, bounded, monotonic")
-	var gear := {"rod": [[0, 4000, 18000], [60, 100, 180]], "reel": [[0, 3000, 15000], [1.0, 1.15, 1.30]], "line": [[0, 2500, 12000], [10, 25, 50]], "sonar": [[0, 5000, 25000], [15, 30, 50]]}
+	var gear := {"rod": [[0, 4000, 18000], [60, 100, 180]], "reel": [[0, 3000, 15000], [1.0, 1.15, 1.30]], "line": [[0, 1800, 12000], [10, 25, 50]], "sonar": [[0, 5000, 25000], [15, 30, 50]]}
 	for category: String in gear:
 		for level in range(1, 4):
 			var item := state.catalog.find(category, level)

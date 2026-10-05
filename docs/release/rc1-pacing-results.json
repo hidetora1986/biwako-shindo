@@ -1,0 +1,210 @@
+{
+  "assumptions": {
+    "boss_retries": 2,
+    "boss_retry_cycle_s": 60,
+    "exploration_per_catch_s": 20,
+    "late_success_rate": 0.65,
+    "mid_success_rate": 0.7,
+    "new_controls_learning_min": 6,
+    "normal_success_rate": 0.85,
+    "postgame_search_min": 8,
+    "reading_and_shops_min": 6
+  },
+  "estimated_hidden_minutes": 55.4633365653865,
+  "estimated_main_minutes": 44.9858365653876,
+  "hidden_active_minutes": 20.1486111111022,
+  "hidden_catches": 30.0,
+  "human_validation": "MANUAL TEST REQUIRED",
+  "line_checkpoints": [
+    {
+      "catches": 3.0,
+      "catches_since_previous": 3.0,
+      "category": "line",
+      "level": 2.0,
+      "money_after": 1374.0,
+      "money_before": 3174.0,
+      "price": 1800.0,
+      "seconds": 54.2166666666652
+    },
+    {
+      "catches": 7.0,
+      "catches_since_previous": 1.0,
+      "category": "line",
+      "level": 3.0,
+      "money_after": 4073.0,
+      "money_before": 16073.0,
+      "price": 12000.0,
+      "seconds": 150.35000000001
+    },
+    {
+      "catches": 13.0,
+      "catches_since_previous": 2.0,
+      "category": "line",
+      "level": 4.0,
+      "money_after": 33359.0,
+      "money_before": 98359.0,
+      "price": 65000.0,
+      "seconds": 334.200000000021
+    },
+    {
+      "catches": 19.0,
+      "catches_since_previous": 3.0,
+      "category": "line",
+      "level": 5.0,
+      "money_after": 28755.0,
+      "money_before": 328755.0,
+      "price": 300000.0,
+      "seconds": 608.166666666523
+    }
+  ],
+  "low_value_equipment_route": [
+    {
+      "catches_since_previous": 9,
+      "category": "line",
+      "level": 2,
+      "money_after": 0,
+      "price": 1800
+    },
+    {
+      "catches_since_previous": 1,
+      "category": "sonar",
+      "level": 2,
+      "money_after": 1000,
+      "price": 5000
+    },
+    {
+      "catches_since_previous": 1,
+      "category": "reel",
+      "level": 2,
+      "money_after": 4000,
+      "price": 3000
+    },
+    {
+      "catches_since_previous": 0,
+      "category": "rod",
+      "level": 2,
+      "money_after": 0,
+      "price": 4000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "line",
+      "level": 3,
+      "money_after": 0,
+      "price": 12000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "reel",
+      "level": 3,
+      "money_after": 9000,
+      "price": 15000
+    },
+    {
+      "catches_since_previous": 1,
+      "category": "rod",
+      "level": 3,
+      "money_after": 3000,
+      "price": 18000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "sonar",
+      "level": 3,
+      "money_after": 2000,
+      "price": 25000
+    },
+    {
+      "catches_since_previous": 6,
+      "category": "line",
+      "level": 4,
+      "money_after": 9000,
+      "price": 65000
+    },
+    {
+      "catches_since_previous": 1,
+      "category": "reel",
+      "level": 4,
+      "money_after": 14000,
+      "price": 75000
+    },
+    {
+      "catches_since_previous": 1,
+      "category": "rod",
+      "level": 4,
+      "money_after": 4000,
+      "price": 90000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "sonar",
+      "level": 4,
+      "money_after": 44000,
+      "price": 120000
+    },
+    {
+      "catches_since_previous": 4,
+      "category": "line",
+      "level": 5,
+      "money_after": 64000,
+      "price": 300000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "reel",
+      "level": 5,
+      "money_after": 64000,
+      "price": 360000
+    },
+    {
+      "catches_since_previous": 2,
+      "category": "rod",
+      "level": 5,
+      "money_after": 4000,
+      "price": 420000
+    },
+    {
+      "catches_since_previous": 3,
+      "category": "sonar",
+      "level": 5,
+      "money_after": 44000,
+      "price": 500000
+    }
+  ],
+  "low_value_equipment_worst_stall": 9,
+  "low_value_worst_stall": 9,
+  "main_active_minutes": 18.5044444444367,
+  "main_catches": 28.0,
+  "minimum_line_route": [
+    {
+      "catches_for_purchase": 9,
+      "line_level": 2,
+      "minimum_fish": "No.01",
+      "money_after": 0,
+      "price": 1800
+    },
+    {
+      "catches_for_purchase": 2,
+      "line_level": 3,
+      "minimum_fish": "No.06",
+      "money_after": 0,
+      "price": 12000
+    },
+    {
+      "catches_for_purchase": 6,
+      "line_level": 4,
+      "minimum_fish": "No.09",
+      "money_after": 7000,
+      "price": 65000
+    },
+    {
+      "catches_for_purchase": 8,
+      "line_level": 5,
+      "minimum_fish": "No.11",
+      "money_after": 27000,
+      "price": 300000
+    }
+  ],
+  "normal_worst_stall": 3.0,
+  "pacing_target_met": false
+}

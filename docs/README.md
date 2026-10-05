@@ -19,6 +19,10 @@
 | [game-design/lategame-depth-v1.md](game-design/lategame-depth-v1.md) | 50〜100m・No.11〜14・夕方／夜・ノック・Lv5・検証と画面例 |
 | [game-design/boss-v1.md](game-design/boss-v1.md) | 100〜120m・No.15・3段階Fight・Main Ending・Continue・Save互換 |
 | [game-design/hidden-boss-v1.md](game-design/hidden-boss-v1.md) | No.00・専用異常深度・船の耐久戦・2つのHidden Ending・保存互換・検証 |
+| [release/rc1-acceptance.md](release/rc1-acceptance.md) | RC1全編・保存・100回Stress・Mobile QA・NOT READY判定 |
+| [release/rc1-pacing.md](release/rc1-pacing.md) | 推定時間・Catch数・全購入・低額経済モデル |
+| [release/known-issues.md](release/known-issues.md) | Blocker・未検証・Placeholder |
+| [release/asset-audit.md](release/asset-audit.md) | アセット出所・Secret監査 |
 | game-design/ | ゲーム全体の設計、遊びの流れ、フェーズ計画 |
 | [fish/](fish/README.md) | 魚種、魚 AI、出現条件、パラメーター |
 | [equipment/](equipment/README.md) | ロッド、リール、ルアーなどの装備仕様 |

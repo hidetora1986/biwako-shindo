@@ -67,3 +67,5 @@ git status --short
 初期構築の段階では `main` へ統合しません。
 
 Hidden Phaseは `dd80cf37` からの `feature/hidden-boss-v1` のみで実施。main・MVP・Visual・Midgame・Lategame・Bossの既存6ブランチへコミット／マージ／force pushしません。
+
+RC1は `7eeafafa` からの `release/rc1` のみで実施。既存Feature 6種とmainを保持し、force push／Merge／Store公開をしません。RC1はペーシング目標未達のためNOT READY。

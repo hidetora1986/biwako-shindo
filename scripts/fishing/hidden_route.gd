@@ -138,10 +138,12 @@ func layout() -> void:
 
 func refresh_lure() -> void:
 	if lure_button == null: return
-	if not flow.progress.anonymous_lure_obtained and not lure_button.visible and not night_button.visible: return
-	lure_button.visible = flow.progress.anonymous_lure_obtained and stage == Stage.INACTIVE and flow.state == flow.State.READY
+	var postgame_night: bool = flow.progress.main_ending_seen and flow.progress.night_unlocked
+	if not flow.progress.anonymous_lure_obtained and not lure_button.visible and not night_button.visible and not postgame_night: return
+	var idle: bool = stage == Stage.INACTIVE and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open
+	lure_button.visible = flow.progress.anonymous_lure_obtained and idle
 	lure_button.text = ("無名ルアー ✓" if flow.progress.anonymous_lure_equipped else "無名ルアー") + "\n所持品に入っていた。"
-	night_button.visible = lure_button.visible
+	night_button.visible = postgame_night and idle
 	night_button.text = "MORNING" if _night_selected else "NIGHT"
 	lure_button.tooltip_text = "所持品に入っていた。"
 
@@ -195,7 +197,7 @@ func _enter(next: Stage) -> void:
 	tension_bar.visible = next == Stage.FIGHT
 	pull_bar.visible = next == Stage.FIGHT
 	line_sound.stop()
-	if next == Stage.REEL_UP: line_sound.play()
+	if next == Stage.REEL_UP and DisplayServer.get_name() != "headless": line_sound.play()
 	meters.visible = next == Stage.FIGHT
 	cut.visible = next == Stage.CHOICE
 	lift.visible = next == Stage.CHOICE
@@ -322,6 +324,7 @@ func _restore(title: bool) -> void:
 
 func _input(event: InputEvent) -> void:
 	if stage == Stage.INACTIVE:
+		if flow._shop_open or flow._book_open: return
 		if event is InputEventScreenTouch and event.pressed and lure_button.visible and lure_button.get_global_rect().has_point(event.position):
 			toggle_lure(); get_viewport().set_input_as_handled()
 		elif event is InputEventScreenTouch and event.pressed and night_button.visible and night_button.get_global_rect().has_point(event.position):
@@ -349,6 +352,8 @@ func debug_setup() -> bool:
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES: flow.progress.record_catch(fish,fish.min_size_cm,false)
 	flow.progress.boss15_defeated = true
 	flow.progress.main_ending_seen = true
+	flow.progress.unknown_a_sold_first = false
+	flow.progress.unknown_b_sold_first = false
 	flow.progress.returned_unknown_a = true
 	flow.progress.returned_unknown_b = true
 	flow.progress.hull_knock_count = 3
@@ -395,3 +400,8 @@ func debug_stage(target: Stage) -> bool:
 	visual.amount = 1
 	depth_display = "---"
 	return true
+
+func _exit_tree() -> void:
+	if is_instance_valid(line_sound):
+		line_sound.stop()
+		line_sound.stream = null

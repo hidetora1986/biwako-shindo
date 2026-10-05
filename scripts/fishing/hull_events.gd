@@ -92,7 +92,9 @@ func step(delta: float, can_start: bool, time_value: float) -> void:
 func _strike() -> void:
 	strike_count += 1
 	_boat.hull_knock()
-	_audio.play()
+	# Device-free headless QA advances the same logical beats without audio voices.
+	if DisplayServer.get_name() != "headless":
+		_audio.play()
 	if OS.get_name() in ["Android","iOS"]:
 		Input.vibrate_handheld(35,0.22)
 
@@ -101,3 +103,8 @@ func _finish() -> void:
 	zero_active = false
 	stage = 0
 	_delay = 3.0
+
+func stop_audio() -> void:
+	if is_instance_valid(_audio):
+		_audio.stop()
+		_audio.stream = null

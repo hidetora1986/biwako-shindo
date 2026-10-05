@@ -1,0 +1,2351 @@
+{
+  "status": "NOT READY",
+  "release_blockers": 1,
+  "known_non_blockers": 4,
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "version": "0.9.0-rc1",
+  "base": "7eeafafa912a6abbe1039e0e3aaa5fc79f338553",
+  "branch": "release/rc1",
+  "tests": {
+    "phase1_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE1_ACCEPTANCE {\"failures\":[],\"fish_count\":7,\"phase\":1,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase2_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE2_ACCEPTANCE {\"average_cast_to_hit_s\":5.26666666666665,\"casts\":36,\"checks\":57,\"failures\":[],\"longest_cast_to_hit_s\":5.26666666666665,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase3_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE3_ACCEPTANCE {\"checks\":109,\"consecutive_catches\":5,\"failures\":[],\"fight_seconds\":{\"bass\":4.81666666666665,\"biwamasu\":5.74999999999998,\"bluegill\":2.68333333333333,\"catfish\":8.16666666666665,\"crucian\":4.13333333333332},\"guided_catches\":18,\"guided_sessions\":20,\"longest_guided_s\":9.93333333333341,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase4_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE4_ACCEPTANCE {\"catches\":[{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":true,\"price\":1402,\"size_cm\":41.2,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1203,\"size_cm\":36.6,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1341,\"size_cm\":39.8,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1653,\"size_cm\":47.0,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1008,\"size_cm\":32.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1177,\"size_cm\":36.0,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":791,\"size_cm\":27.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":921,\"size_cm\":30.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1164,\"size_cm\":35.7,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":930,\"size_cm\":30.3,\"species_id\":\"bass\"}],\"checks\":196,\"consecutive_catches\":10,\"failures\":[],\"first_upgrade_catch\":2,\"result\":\"PASS\",\"upgrades\":3}"
+      ]
+    },
+    "phase5_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE5_ACCEPTANCE {\"anomaly_duration_s\":0.6,\"checks\":105,\"failures\":[],\"result\":\"PASS\",\"save_version\":1}"
+      ]
+    },
+    "mvp_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "MVP_ACCEPTANCE {\"checks\":316,\"cycle_seconds\":[12.5166666666669,12.5166666666669,12.5166666666669,12.5166666666669,12.0000000000002,15.1500000000003,12.0000000000002,10.0500000000001,10.0500000000001,10.7166666666668,12.0000000000002,12.0000000000002,15.2833333333337,10.7166666666668,10.0500000000001,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002],\"failures\":[],\"fight_seconds\":[4.79999999999999,4.79999999999999,4.79999999999999,4.79999999999999,4.28333333333332,7.43333333333331,4.28333333333332,2.33333333333333,2.33333333333333,2.99999999999999,4.28333333333332,4.28333333333332,7.56666666666665,2.99999999999999,2.33333333333333,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332],\"first_upgrade_catch\":2,\"future_50m_sink_s\":8.41666666666666,\"purchases\":[\"line\",\"reel\",\"sonar\",\"rod\"],\"real_catches\":21,\"result\":\"PASS\"}"
+      ]
+    },
+    "visual_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "VISUAL_ACCEPTANCE {\"checks\":65,\"failures\":[],\"fish_species\":5,\"mountain_layers\":3,\"result\":\"PASS\"}"
+      ]
+    },
+    "midgame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "MIDGAME_ACCEPTANCE {\"checks\":380,\"deep_catches\":[{\"cycle_s\":19.1000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":12480},{\"cycle_s\":15.5500000000003,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":12656},{\"cycle_s\":18.6833333333336,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":12412},{\"cycle_s\":19.3000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":8000},{\"cycle_s\":18.9000000000003,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":26470},{\"cycle_s\":18.966666666667,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":14248},{\"cycle_s\":19.3000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":13980},{\"cycle_s\":16.3500000000003,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":17552},{\"cycle_s\":18.7500000000003,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16606},{\"cycle_s\":15.8166666666669,\"depth\":20.1585139661307,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":8864},{\"cycle_s\":19.3500000000003,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":13042},{\"cycle_s\":18.9833333333336,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16426},{\"cycle_s\":14.7666666666669,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":14160},{\"cycle_s\":19.2333333333336,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57013},{\"cycle_s\":19.3833333333336,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":36267},{\"cycle_s\":18.516666666667,\"depth\":35.3475119384523,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":30453},{\"cycle_s\":20.4000000000002,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":50240},{\"cycle_s\":20.0833333333336,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":47413},{\"cycle_s\":13.5000000000002,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":18360},{\"cycle_s\":18.766666666667,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59787},{\"cycle_s\":20.7166666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59040},{\"cycle_s\":13.5333333333335,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":17280},{\"cycle_s\":18.7833333333336,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57600},{\"cycle_s\":19.7166666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57760}],\"failures\":[],\"money_earned\":621096,\"result\":\"PASS\",\"returns\":1,\"species\":[\"No.06\",\"No.07\",\"No.08\",\"No.09\",\"No.10\"],\"unknown_sales\":8}"
+      ]
+    },
+    "lategame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "LATEGAME_ACCEPTANCE {\"checks\":460,\"cycles\":[{\"cycle_s\":21.6666666666668,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":69700},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":80164},{\"cycle_s\":22.8833333333334,\"depth\":65.0,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":63729},{\"cycle_s\":21.6166666666668,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":49193},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":114429},{\"cycle_s\":21.5833333333335,\"depth\":65.0,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":52964},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":146625},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":159750},{\"cycle_s\":23.9833333333333,\"depth\":85.0,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":116750},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":87125},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":96875},{\"cycle_s\":28.6833333333331,\"depth\":85.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":265500},{\"cycle_s\":27.4999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":222000},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":397500},{\"cycle_s\":27.7333333333331,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":241800},{\"cycle_s\":27.7999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":198300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":346800},{\"cycle_s\":27.7499999999998,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":325500},{\"cycle_s\":27.4999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":306300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":418500}],\"failures\":[],\"knock_strikes\":6,\"night\":1.99999999999999,\"pre_lv5_unknown\":true,\"rare_casts\":11,\"result\":\"PASS\"}"
+      ]
+    },
+    "boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_ACCEPTANCE {\"actions\":[0,2,1],\"checks\":74,\"encounters\":3,\"failures\":[],\"fight_s\":53.2499999999983,\"phases\":[1,2,3],\"result\":\"PASS\",\"reward\":1069000,\"warnings_s\":[0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001]}"
+      ]
+    },
+    "hidden_boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_ACCEPTANCE {\"checks\":99,\"failures\":[],\"fight_seconds\":50,\"ratios\":[\"16:9\",\"19.5:9\",\"20:9\",\"640x360\"]}"
+      ]
+    },
+    "full-game-contact": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":86,\"failures\":[],\"hidden_catches\":30,\"hidden_s\":1208.91666666613,\"main_catches\":28,\"main_s\":1110.2666666662,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "full-game-cut": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":86,\"failures\":[],\"hidden_catches\":30,\"hidden_s\":1208.91666666613,\"main_catches\":28,\"main_s\":1110.2666666662,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "full-game-sell": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":62,\"failures\":[],\"hidden_catches\":21,\"hidden_s\":771.583333333094,\"main_catches\":21,\"main_s\":771.583333333094,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "pacing_simulation": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PACING_SIMULATION {\"assumptions\":{\"boss_retries\":2,\"boss_retry_cycle_s\":60,\"exploration_per_catch_s\":20,\"late_success_rate\":0.65,\"mid_success_rate\":0.7,\"new_controls_learning_min\":6,\"normal_success_rate\":0.85,\"postgame_search_min\":8,\"reading_and_shops_min\":6},\"estimated_hidden_minutes\":55.4633365653865,\"estimated_main_minutes\":44.9858365653876,\"hidden_active_minutes\":20.1486111111022,\"hidden_catches\":30.0,\"human_validation\":\"MANUAL TEST REQUIRED\",\"line_checkpoints\":[{\"catches\":3.0,\"catches_since_previous\":3.0,\"category\":\"line\",\"level\":2.0,\"money_after\":1374.0,\"money_before\":3174.0,\"price\":1800.0,\"seconds\":54.2166666666652},{\"catches\":7.0,\"catches_since_previous\":1.0,\"category\":\"line\",\"level\":3.0,\"money_after\":4073.0,\"money_before\":16073.0,\"price\":12000.0,\"seconds\":150.35000000001},{\"catches\":13.0,\"catches_since_previous\":2.0,\"category\":\"line\",\"level\":4.0,\"money_after\":33359.0,\"money_before\":98359.0,\"price\":65000.0,\"seconds\":334.200000000021},{\"catches\":19.0,\"catches_since_previous\":3.0,\"category\":\"line\",\"level\":5.0,\"money_after\":28755.0,\"money_before\":328755.0,\"price\":300000.0,\"seconds\":608.166666666523}],\"low_value_equipment_route\":[{\"catches_since_previous\":9,\"category\":\"line\",\"level\":2,\"money_after\":0,\"price\":1800},{\"catches_since_previous\":1,\"category\":\"sonar\",\"level\":2,\"money_after\":1000,\"price\":5000},{\"catches_since_previous\":1,\"category\":\"reel\",\"level\":2,\"money_after\":4000,\"price\":3000},{\"catches_since_previous\":0,\"category\":\"rod\",\"level\":2,\"money_after\":0,\"price\":4000},{\"catches_since_previous\":2,\"category\":\"line\",\"level\":3,\"money_after\":0,\"price\":12000},{\"catches_since_previous\":2,\"category\":\"reel\",\"level\":3,\"money_after\":9000,\"price\":15000},{\"catches_since_previous\":1,\"category\":\"rod\",\"level\":3,\"money_after\":3000,\"price\":18000},{\"catches_since_previous\":2,\"category\":\"sonar\",\"level\":3,\"money_after\":2000,\"price\":25000},{\"catches_since_previous\":6,\"category\":\"line\",\"level\":4,\"money_after\":9000,\"price\":65000},{\"catches_since_previous\":1,\"category\":\"reel\",\"level\":4,\"money_after\":14000,\"price\":75000},{\"catches_since_previous\":1,\"category\":\"rod\",\"level\":4,\"money_after\":4000,\"price\":90000},{\"catches_since_previous\":2,\"category\":\"sonar\",\"level\":4,\"money_after\":44000,\"price\":120000},{\"catches_since_previous\":4,\"category\":\"line\",\"level\":5,\"money_after\":64000,\"price\":300000},{\"catches_since_previous\":2,\"category\":\"reel\",\"level\":5,\"money_after\":64000,\"price\":360000},{\"catches_since_previous\":2,\"category\":\"rod\",\"level\":5,\"money_after\":4000,\"price\":420000},{\"catches_since_previous\":3,\"category\":\"sonar\",\"level\":5,\"money_after\":44000,\"price\":500000}],\"low_value_equipment_worst_stall\":9,\"low_value_worst_stall\":9,\"main_active_minutes\":18.5044444444367,\"main_catches\":28.0,\"minimum_line_route\":[{\"catches_for_purchase\":9,\"line_level\":2,\"minimum_fish\":\"No.01\",\"money_after\":0,\"price\":1800},{\"catches_for_purchase\":2,\"line_level\":3,\"minimum_fish\":\"No.06\",\"money_after\":0,\"price\":12000},{\"catches_for_purchase\":6,\"line_level\":4,\"minimum_fish\":\"No.09\",\"money_after\":7000,\"price\":65000},{\"catches_for_purchase\":8,\"line_level\":5,\"minimum_fish\":\"No.11\",\"money_after\":27000,\"price\":300000}],\"normal_worst_stall\":3.0,\"pacing_target_met\":false}"
+      ]
+    },
+    "full_game_stress": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_STRESS {\"catches\":90,\"checks\":1139,\"cycles\":100,\"failed_fights\":10,\"failures\":[],\"modal_opens\":600,\"money\":106875,\"nodes\":182,\"result\":\"PASS\"}"
+      ]
+    },
+    "rc1_save_stress": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "RC1_SAVE_STRESS PASS 138"
+      ]
+    },
+    "rc1_postgame_recovery": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    },
+    "hidden-restart-cut-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS false"
+      ]
+    },
+    "hidden-restart-cut-read": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS false"
+      ]
+    },
+    "hidden-restart-contact-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS true"
+      ]
+    },
+    "hidden-restart-contact-read": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS true"
+      ]
+    },
+    "boss-restart-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_WRITE PASS"
+      ]
+    },
+    "boss-restart-interrupt": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_INTERRUPTED_DAWN PASS"
+      ]
+    },
+    "boss-restart-finish": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_FINISH PASS"
+      ]
+    },
+    "boss-restart-postgame": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_POSTGAME_CONTINUE PASS"
+      ]
+    },
+    "import": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    },
+    "headless": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    }
+  },
+  "full_routes": {
+    "contact": {
+      "checkpoints": [
+        {
+          "catches": 3,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 2,
+          "money_after": 1374,
+          "money_before": 3174,
+          "price": 1800,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catches": 5,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 2,
+          "money_after": 1377,
+          "money_before": 6377,
+          "price": 5000,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 2,
+          "money_after": 8777,
+          "money_before": 11777,
+          "price": 3000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 2,
+          "money_after": 4777,
+          "money_before": 8777,
+          "price": 4000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 7,
+          "catches_since_previous": 1,
+          "category": "line",
+          "level": 3,
+          "money_after": 4073,
+          "money_before": 16073,
+          "price": 12000,
+          "seconds": 150.35000000001
+        },
+        {
+          "catches": 9,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 3,
+          "money_after": 10065,
+          "money_before": 35065,
+          "price": 25000,
+          "seconds": 192.800000000035
+        },
+        {
+          "catches": 11,
+          "catches_since_previous": 2,
+          "category": "reel",
+          "level": 3,
+          "money_after": 44132,
+          "money_before": 59132,
+          "price": 15000,
+          "seconds": 258.016666666744
+        },
+        {
+          "catches": 11,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 3,
+          "money_after": 26132,
+          "money_before": 44132,
+          "price": 18000,
+          "seconds": 258.016666666744
+        },
+        {
+          "catches": 13,
+          "catches_since_previous": 2,
+          "category": "line",
+          "level": 4,
+          "money_after": 33359,
+          "money_before": 98359,
+          "price": 65000,
+          "seconds": 334.200000000021
+        },
+        {
+          "catches": 14,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 4,
+          "money_after": 26409,
+          "money_before": 101409,
+          "price": 75000,
+          "seconds": 373.683333333335
+        },
+        {
+          "catches": 15,
+          "catches_since_previous": 1,
+          "category": "rod",
+          "level": 4,
+          "money_after": 7380,
+          "money_before": 97380,
+          "price": 90000,
+          "seconds": 408.449999999982
+        },
+        {
+          "catches": 16,
+          "catches_since_previous": 1,
+          "category": "sonar",
+          "level": 4,
+          "money_after": 9255,
+          "money_before": 129255,
+          "price": 120000,
+          "seconds": 444.26666666663
+        },
+        {
+          "catches": 19,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 5,
+          "money_after": 28755,
+          "money_before": 328755,
+          "price": 300000,
+          "seconds": 608.166666666523
+        },
+        {
+          "catches": 22,
+          "catches_since_previous": 3,
+          "category": "reel",
+          "level": 5,
+          "money_after": 37005,
+          "money_before": 397005,
+          "price": 360000,
+          "seconds": 764.783333333091
+        },
+        {
+          "catches": 25,
+          "catches_since_previous": 3,
+          "category": "sonar",
+          "level": 5,
+          "money_after": 29005,
+          "money_before": 529005,
+          "price": 500000,
+          "seconds": 918.566666666325
+        },
+        {
+          "catches": 27,
+          "catches_since_previous": 2,
+          "category": "rod",
+          "level": 5,
+          "money_after": 97780,
+          "money_before": 517780,
+          "price": 420000,
+          "seconds": 1025.19999999959
+        }
+      ],
+      "checks": 86,
+      "failures": [],
+      "hidden_catches": 30,
+      "hidden_play_seconds": 1208.91666666613,
+      "journey": [
+        {
+          "catch": 1,
+          "depth": 0.0,
+          "earned": 335,
+          "fight_s": 2.66666666666666,
+          "id": "No.01",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 335,
+          "price": 335,
+          "seconds": 13.4500000000002
+        },
+        {
+          "catch": 2,
+          "depth": 0.0,
+          "earned": 1538,
+          "fight_s": 4.79999999999999,
+          "id": "No.02",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1538,
+          "price": 1203,
+          "seconds": 29.6333333333329
+        },
+        {
+          "catch": 3,
+          "depth": 0.0,
+          "earned": 3174,
+          "fight_s": 8.21666666666665,
+          "id": "No.04",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 3174,
+          "price": 1636,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catch": 4,
+          "depth": 0.0,
+          "earned": 3592,
+          "fight_s": 4.11666666666666,
+          "id": "No.03",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1792,
+          "price": 418,
+          "seconds": 70.9166666666646
+        },
+        {
+          "catch": 5,
+          "depth": 0.0,
+          "earned": 8177,
+          "fight_s": 5.73333333333332,
+          "id": "No.05",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 6377,
+          "price": 4585,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catch": 6,
+          "depth": 15.0,
+          "earned": 18577,
+          "fight_s": 11.6500000000002,
+          "id": "No.06",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 2
+          },
+          "money": 11777,
+          "price": 10400,
+          "seconds": 124.283333333329
+        },
+        {
+          "catch": 7,
+          "depth": 15.0,
+          "earned": 29873,
+          "fight_s": 8.28333333333332,
+          "id": "No.08",
+          "levels": {
+            "line": 2,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 16073,
+          "price": 11296,
+          "seconds": 150.35000000001
+        },
+        {
+          "catch": 8,
+          "depth": 15.0,
+          "earned": 44305,
+          "fight_s": 4.91666666666665,
+          "id": "No.07",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 18505,
+          "price": 14432,
+          "seconds": 173.633333333358
+        },
+        {
+          "catch": 9,
+          "depth": 30.0,
+          "earned": 60865,
+          "fight_s": 2.33333333333333,
+          "id": "No.09",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 35065,
+          "price": 16560,
+          "seconds": 192.800000000035
+        },
+        {
+          "catch": 10,
+          "depth": 30.0,
+          "earned": 60865,
+          "fight_s": 8.46666666666667,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 3
+          },
+          "money": 10065,
+          "price": 0,
+          "seconds": 217.783333333384
+        },
+        {
+          "catch": 11,
+          "depth": 30.0,
+          "earned": 109932,
+          "fight_s": 8.55,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 3
+          },
+          "money": 59132,
+          "price": 49067,
+          "seconds": 258.016666666744
+        },
+        {
+          "catch": 12,
+          "depth": 30.0,
+          "earned": 129252,
+          "fight_s": 2.06666666666666,
+          "id": "No.09",
+          "levels": {
+            "line": 3,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 45452,
+          "price": 19320,
+          "seconds": 292.750000000052
+        },
+        {
+          "catch": 13,
+          "depth": 30.0,
+          "earned": 182159,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 98359,
+          "price": 52907,
+          "seconds": 334.200000000021
+        },
+        {
+          "catch": 14,
+          "depth": 50.0,
+          "earned": 250209,
+          "fight_s": 11.6166666666668,
+          "id": "No.11",
+          "levels": {
+            "line": 4,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 101409,
+          "price": 68050,
+          "seconds": 373.683333333335
+        },
+        {
+          "catch": 15,
+          "depth": 50.0,
+          "earned": 321180,
+          "fight_s": 10.8666666666668,
+          "id": "No.12",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 97380,
+          "price": 70971,
+          "seconds": 408.449999999982
+        },
+        {
+          "catch": 16,
+          "depth": 65.0,
+          "earned": 443055,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 3
+          },
+          "money": 129255,
+          "price": 121875,
+          "seconds": 444.26666666663
+        },
+        {
+          "catch": 17,
+          "depth": 65.0,
+          "earned": 614930,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 181130,
+          "price": 171875,
+          "seconds": 498.016666666594
+        },
+        {
+          "catch": 18,
+          "depth": 65.0,
+          "earned": 762555,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 328755,
+          "price": 147625,
+          "seconds": 549.949999999895
+        },
+        {
+          "catch": 19,
+          "depth": 65.0,
+          "earned": 762555,
+          "fight_s": 15.416666666667,
+          "id": "No.14",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 328755,
+          "price": 0,
+          "seconds": 608.166666666523
+        },
+        {
+          "catch": 20,
+          "depth": 65.0,
+          "earned": 931305,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 197505,
+          "price": 168750,
+          "seconds": 661.16666666649
+        },
+        {
+          "catch": 21,
+          "depth": 65.0,
+          "earned": 1042555,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 308755,
+          "price": 111250,
+          "seconds": 714.783333333124
+        },
+        {
+          "catch": 22,
+          "depth": 65.0,
+          "earned": 1130805,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 397005,
+          "price": 88250,
+          "seconds": 764.783333333091
+        },
+        {
+          "catch": 23,
+          "depth": 65.0,
+          "earned": 1272680,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 178880,
+          "price": 141875,
+          "seconds": 814.399999999726
+        },
+        {
+          "catch": 24,
+          "depth": 65.0,
+          "earned": 1457180,
+          "fight_s": 13.2666666666669,
+          "id": "No.14",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 363380,
+          "price": 184500,
+          "seconds": 867.749999999691
+        },
+        {
+          "catch": 25,
+          "depth": 65.0,
+          "earned": 1622805,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 529005,
+          "price": 165625,
+          "seconds": 918.566666666325
+        },
+        {
+          "catch": 26,
+          "depth": 65.0,
+          "earned": 1761180,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 5
+          },
+          "money": 167380,
+          "price": 138375,
+          "seconds": 969.98333333296
+        },
+        {
+          "catch": 27,
+          "depth": 65.0,
+          "earned": 2111580,
+          "fight_s": 13.2666666666669,
+          "id": "No.14",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 5
+          },
+          "money": 517780,
+          "price": 350400,
+          "seconds": 1025.19999999959
+        },
+        {
+          "catch": 28,
+          "depth": 100.0,
+          "earned": 4208580,
+          "fight_s": 43.7499999999988,
+          "id": "No.15",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2194780,
+          "price": 2097000,
+          "seconds": 1110.2666666662
+        },
+        {
+          "catch": 29,
+          "depth": 0.0,
+          "earned": 4209995,
+          "fight_s": 2.36666666666666,
+          "id": "No.02",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2196195,
+          "price": 1415,
+          "seconds": 1120.4166666662
+        },
+        {
+          "catch": 30,
+          "depth": 0.0,
+          "earned": 4211765,
+          "fight_s": 2.36666666666666,
+          "id": "No.02",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2197965,
+          "price": 1770,
+          "seconds": 1130.56666666619
+        }
+      ],
+      "main_catches": 28,
+      "main_play_seconds": 1110.2666666662,
+      "result": "PASS",
+      "worst_economy_stall": 3
+    },
+    "cut": {
+      "checkpoints": [
+        {
+          "catches": 3,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 2,
+          "money_after": 1374,
+          "money_before": 3174,
+          "price": 1800,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catches": 5,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 2,
+          "money_after": 1377,
+          "money_before": 6377,
+          "price": 5000,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 2,
+          "money_after": 8777,
+          "money_before": 11777,
+          "price": 3000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 2,
+          "money_after": 4777,
+          "money_before": 8777,
+          "price": 4000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 7,
+          "catches_since_previous": 1,
+          "category": "line",
+          "level": 3,
+          "money_after": 4073,
+          "money_before": 16073,
+          "price": 12000,
+          "seconds": 150.35000000001
+        },
+        {
+          "catches": 9,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 3,
+          "money_after": 10065,
+          "money_before": 35065,
+          "price": 25000,
+          "seconds": 192.800000000035
+        },
+        {
+          "catches": 11,
+          "catches_since_previous": 2,
+          "category": "reel",
+          "level": 3,
+          "money_after": 44132,
+          "money_before": 59132,
+          "price": 15000,
+          "seconds": 258.016666666744
+        },
+        {
+          "catches": 11,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 3,
+          "money_after": 26132,
+          "money_before": 44132,
+          "price": 18000,
+          "seconds": 258.016666666744
+        },
+        {
+          "catches": 13,
+          "catches_since_previous": 2,
+          "category": "line",
+          "level": 4,
+          "money_after": 33359,
+          "money_before": 98359,
+          "price": 65000,
+          "seconds": 334.200000000021
+        },
+        {
+          "catches": 14,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 4,
+          "money_after": 26409,
+          "money_before": 101409,
+          "price": 75000,
+          "seconds": 373.683333333335
+        },
+        {
+          "catches": 15,
+          "catches_since_previous": 1,
+          "category": "rod",
+          "level": 4,
+          "money_after": 7380,
+          "money_before": 97380,
+          "price": 90000,
+          "seconds": 408.449999999982
+        },
+        {
+          "catches": 16,
+          "catches_since_previous": 1,
+          "category": "sonar",
+          "level": 4,
+          "money_after": 9255,
+          "money_before": 129255,
+          "price": 120000,
+          "seconds": 444.26666666663
+        },
+        {
+          "catches": 19,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 5,
+          "money_after": 28755,
+          "money_before": 328755,
+          "price": 300000,
+          "seconds": 608.166666666523
+        },
+        {
+          "catches": 22,
+          "catches_since_previous": 3,
+          "category": "reel",
+          "level": 5,
+          "money_after": 37005,
+          "money_before": 397005,
+          "price": 360000,
+          "seconds": 764.783333333091
+        },
+        {
+          "catches": 25,
+          "catches_since_previous": 3,
+          "category": "sonar",
+          "level": 5,
+          "money_after": 29005,
+          "money_before": 529005,
+          "price": 500000,
+          "seconds": 918.566666666325
+        },
+        {
+          "catches": 27,
+          "catches_since_previous": 2,
+          "category": "rod",
+          "level": 5,
+          "money_after": 97780,
+          "money_before": 517780,
+          "price": 420000,
+          "seconds": 1025.19999999959
+        }
+      ],
+      "checks": 86,
+      "failures": [],
+      "hidden_catches": 30,
+      "hidden_play_seconds": 1208.91666666613,
+      "journey": [
+        {
+          "catch": 1,
+          "depth": 0.0,
+          "earned": 335,
+          "fight_s": 2.66666666666666,
+          "id": "No.01",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 335,
+          "price": 335,
+          "seconds": 13.4500000000002
+        },
+        {
+          "catch": 2,
+          "depth": 0.0,
+          "earned": 1538,
+          "fight_s": 4.79999999999999,
+          "id": "No.02",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1538,
+          "price": 1203,
+          "seconds": 29.6333333333329
+        },
+        {
+          "catch": 3,
+          "depth": 0.0,
+          "earned": 3174,
+          "fight_s": 8.21666666666665,
+          "id": "No.04",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 3174,
+          "price": 1636,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catch": 4,
+          "depth": 0.0,
+          "earned": 3592,
+          "fight_s": 4.11666666666666,
+          "id": "No.03",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1792,
+          "price": 418,
+          "seconds": 70.9166666666646
+        },
+        {
+          "catch": 5,
+          "depth": 0.0,
+          "earned": 8177,
+          "fight_s": 5.73333333333332,
+          "id": "No.05",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 6377,
+          "price": 4585,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catch": 6,
+          "depth": 15.0,
+          "earned": 18577,
+          "fight_s": 11.6500000000002,
+          "id": "No.06",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 2
+          },
+          "money": 11777,
+          "price": 10400,
+          "seconds": 124.283333333329
+        },
+        {
+          "catch": 7,
+          "depth": 15.0,
+          "earned": 29873,
+          "fight_s": 8.28333333333332,
+          "id": "No.08",
+          "levels": {
+            "line": 2,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 16073,
+          "price": 11296,
+          "seconds": 150.35000000001
+        },
+        {
+          "catch": 8,
+          "depth": 15.0,
+          "earned": 44305,
+          "fight_s": 4.91666666666665,
+          "id": "No.07",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 18505,
+          "price": 14432,
+          "seconds": 173.633333333358
+        },
+        {
+          "catch": 9,
+          "depth": 30.0,
+          "earned": 60865,
+          "fight_s": 2.33333333333333,
+          "id": "No.09",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 35065,
+          "price": 16560,
+          "seconds": 192.800000000035
+        },
+        {
+          "catch": 10,
+          "depth": 30.0,
+          "earned": 60865,
+          "fight_s": 8.46666666666667,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 3
+          },
+          "money": 10065,
+          "price": 0,
+          "seconds": 217.783333333384
+        },
+        {
+          "catch": 11,
+          "depth": 30.0,
+          "earned": 109932,
+          "fight_s": 8.55,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 3
+          },
+          "money": 59132,
+          "price": 49067,
+          "seconds": 258.016666666744
+        },
+        {
+          "catch": 12,
+          "depth": 30.0,
+          "earned": 129252,
+          "fight_s": 2.06666666666666,
+          "id": "No.09",
+          "levels": {
+            "line": 3,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 45452,
+          "price": 19320,
+          "seconds": 292.750000000052
+        },
+        {
+          "catch": 13,
+          "depth": 30.0,
+          "earned": 182159,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 98359,
+          "price": 52907,
+          "seconds": 334.200000000021
+        },
+        {
+          "catch": 14,
+          "depth": 50.0,
+          "earned": 250209,
+          "fight_s": 11.6166666666668,
+          "id": "No.11",
+          "levels": {
+            "line": 4,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 101409,
+          "price": 68050,
+          "seconds": 373.683333333335
+        },
+        {
+          "catch": 15,
+          "depth": 50.0,
+          "earned": 321180,
+          "fight_s": 10.8666666666668,
+          "id": "No.12",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 97380,
+          "price": 70971,
+          "seconds": 408.449999999982
+        },
+        {
+          "catch": 16,
+          "depth": 65.0,
+          "earned": 443055,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 3
+          },
+          "money": 129255,
+          "price": 121875,
+          "seconds": 444.26666666663
+        },
+        {
+          "catch": 17,
+          "depth": 65.0,
+          "earned": 614930,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 181130,
+          "price": 171875,
+          "seconds": 498.016666666594
+        },
+        {
+          "catch": 18,
+          "depth": 65.0,
+          "earned": 762555,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 328755,
+          "price": 147625,
+          "seconds": 549.949999999895
+        },
+        {
+          "catch": 19,
+          "depth": 65.0,
+          "earned": 762555,
+          "fight_s": 15.416666666667,
+          "id": "No.14",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 328755,
+          "price": 0,
+          "seconds": 608.166666666523
+        },
+        {
+          "catch": 20,
+          "depth": 65.0,
+          "earned": 931305,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 197505,
+          "price": 168750,
+          "seconds": 661.16666666649
+        },
+        {
+          "catch": 21,
+          "depth": 65.0,
+          "earned": 1042555,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 308755,
+          "price": 111250,
+          "seconds": 714.783333333124
+        },
+        {
+          "catch": 22,
+          "depth": 65.0,
+          "earned": 1130805,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 397005,
+          "price": 88250,
+          "seconds": 764.783333333091
+        },
+        {
+          "catch": 23,
+          "depth": 65.0,
+          "earned": 1272680,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 178880,
+          "price": 141875,
+          "seconds": 814.399999999726
+        },
+        {
+          "catch": 24,
+          "depth": 65.0,
+          "earned": 1457180,
+          "fight_s": 13.2666666666669,
+          "id": "No.14",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 363380,
+          "price": 184500,
+          "seconds": 867.749999999691
+        },
+        {
+          "catch": 25,
+          "depth": 65.0,
+          "earned": 1622805,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 529005,
+          "price": 165625,
+          "seconds": 918.566666666325
+        },
+        {
+          "catch": 26,
+          "depth": 65.0,
+          "earned": 1761180,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 5
+          },
+          "money": 167380,
+          "price": 138375,
+          "seconds": 969.98333333296
+        },
+        {
+          "catch": 27,
+          "depth": 65.0,
+          "earned": 2111580,
+          "fight_s": 13.2666666666669,
+          "id": "No.14",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 5
+          },
+          "money": 517780,
+          "price": 350400,
+          "seconds": 1025.19999999959
+        },
+        {
+          "catch": 28,
+          "depth": 100.0,
+          "earned": 4208580,
+          "fight_s": 43.7499999999988,
+          "id": "No.15",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2194780,
+          "price": 2097000,
+          "seconds": 1110.2666666662
+        },
+        {
+          "catch": 29,
+          "depth": 0.0,
+          "earned": 4209995,
+          "fight_s": 2.36666666666666,
+          "id": "No.02",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2196195,
+          "price": 1415,
+          "seconds": 1120.4166666662
+        },
+        {
+          "catch": 30,
+          "depth": 0.0,
+          "earned": 4211765,
+          "fight_s": 2.36666666666666,
+          "id": "No.02",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 5
+          },
+          "money": 2197965,
+          "price": 1770,
+          "seconds": 1130.56666666619
+        }
+      ],
+      "main_catches": 28,
+      "main_play_seconds": 1110.2666666662,
+      "result": "PASS",
+      "worst_economy_stall": 3
+    },
+    "sell": {
+      "checkpoints": [
+        {
+          "catches": 3,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 2,
+          "money_after": 1374,
+          "money_before": 3174,
+          "price": 1800,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catches": 5,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 2,
+          "money_after": 1377,
+          "money_before": 6377,
+          "price": 5000,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 2,
+          "money_after": 8777,
+          "money_before": 11777,
+          "price": 3000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 6,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 2,
+          "money_after": 4777,
+          "money_before": 8777,
+          "price": 4000,
+          "seconds": 124.283333333329
+        },
+        {
+          "catches": 7,
+          "catches_since_previous": 1,
+          "category": "line",
+          "level": 3,
+          "money_after": 4073,
+          "money_before": 16073,
+          "price": 12000,
+          "seconds": 150.35000000001
+        },
+        {
+          "catches": 9,
+          "catches_since_previous": 2,
+          "category": "sonar",
+          "level": 3,
+          "money_after": 10065,
+          "money_before": 35065,
+          "price": 25000,
+          "seconds": 192.800000000035
+        },
+        {
+          "catches": 10,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 3,
+          "money_after": 33945,
+          "money_before": 48945,
+          "price": 15000,
+          "seconds": 217.783333333384
+        },
+        {
+          "catches": 10,
+          "catches_since_previous": 0,
+          "category": "rod",
+          "level": 3,
+          "money_after": 15945,
+          "money_before": 33945,
+          "price": 18000,
+          "seconds": 217.783333333384
+        },
+        {
+          "catches": 11,
+          "catches_since_previous": 1,
+          "category": "line",
+          "level": 4,
+          "money_after": 12,
+          "money_before": 65012,
+          "price": 65000,
+          "seconds": 256.550000000076
+        },
+        {
+          "catches": 12,
+          "catches_since_previous": 1,
+          "category": "reel",
+          "level": 4,
+          "money_after": 16241,
+          "money_before": 91241,
+          "price": 75000,
+          "seconds": 294.800000000056
+        },
+        {
+          "catches": 13,
+          "catches_since_previous": 1,
+          "category": "sonar",
+          "level": 4,
+          "money_after": 9184,
+          "money_before": 129184,
+          "price": 120000,
+          "seconds": 332.566666666704
+        },
+        {
+          "catches": 14,
+          "catches_since_previous": 1,
+          "category": "rod",
+          "level": 4,
+          "money_after": 19059,
+          "money_before": 109059,
+          "price": 90000,
+          "seconds": 371.383333333351
+        },
+        {
+          "catches": 17,
+          "catches_since_previous": 3,
+          "category": "line",
+          "level": 5,
+          "money_after": 362359,
+          "money_before": 662359,
+          "price": 300000,
+          "seconds": 532.049999999911
+        },
+        {
+          "catches": 17,
+          "catches_since_previous": 0,
+          "category": "reel",
+          "level": 5,
+          "money_after": 2359,
+          "money_before": 362359,
+          "price": 360000,
+          "seconds": 532.049999999911
+        },
+        {
+          "catches": 20,
+          "catches_since_previous": 3,
+          "category": "rod",
+          "level": 5,
+          "money_after": 30234,
+          "money_before": 450234,
+          "price": 420000,
+          "seconds": 686.516666666481
+        }
+      ],
+      "checks": 62,
+      "failures": [],
+      "hidden_catches": 21,
+      "hidden_play_seconds": 771.583333333094,
+      "journey": [
+        {
+          "catch": 1,
+          "depth": 0.0,
+          "earned": 335,
+          "fight_s": 2.66666666666666,
+          "id": "No.01",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 335,
+          "price": 335,
+          "seconds": 13.4500000000002
+        },
+        {
+          "catch": 2,
+          "depth": 0.0,
+          "earned": 1538,
+          "fight_s": 4.79999999999999,
+          "id": "No.02",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1538,
+          "price": 1203,
+          "seconds": 29.6333333333329
+        },
+        {
+          "catch": 3,
+          "depth": 0.0,
+          "earned": 3174,
+          "fight_s": 8.21666666666665,
+          "id": "No.04",
+          "levels": {
+            "line": 1,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 3174,
+          "price": 1636,
+          "seconds": 54.2166666666652
+        },
+        {
+          "catch": 4,
+          "depth": 0.0,
+          "earned": 3592,
+          "fight_s": 4.11666666666666,
+          "id": "No.03",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 1792,
+          "price": 418,
+          "seconds": 70.9166666666646
+        },
+        {
+          "catch": 5,
+          "depth": 0.0,
+          "earned": 8177,
+          "fight_s": 5.73333333333332,
+          "id": "No.05",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 1
+          },
+          "money": 6377,
+          "price": 4585,
+          "seconds": 95.6833333333303
+        },
+        {
+          "catch": 6,
+          "depth": 15.0,
+          "earned": 18577,
+          "fight_s": 11.6500000000002,
+          "id": "No.06",
+          "levels": {
+            "line": 2,
+            "reel": 1,
+            "rod": 1,
+            "sonar": 2
+          },
+          "money": 11777,
+          "price": 10400,
+          "seconds": 124.283333333329
+        },
+        {
+          "catch": 7,
+          "depth": 15.0,
+          "earned": 29873,
+          "fight_s": 8.28333333333332,
+          "id": "No.08",
+          "levels": {
+            "line": 2,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 16073,
+          "price": 11296,
+          "seconds": 150.35000000001
+        },
+        {
+          "catch": 8,
+          "depth": 15.0,
+          "earned": 44305,
+          "fight_s": 4.91666666666665,
+          "id": "No.07",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 18505,
+          "price": 14432,
+          "seconds": 173.633333333358
+        },
+        {
+          "catch": 9,
+          "depth": 30.0,
+          "earned": 60865,
+          "fight_s": 2.33333333333333,
+          "id": "No.09",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 2
+          },
+          "money": 35065,
+          "price": 16560,
+          "seconds": 192.800000000035
+        },
+        {
+          "catch": 10,
+          "depth": 30.0,
+          "earned": 99745,
+          "fight_s": 8.46666666666667,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 2,
+            "rod": 2,
+            "sonar": 3
+          },
+          "money": 48945,
+          "price": 38880,
+          "seconds": 217.783333333384
+        },
+        {
+          "catch": 11,
+          "depth": 30.0,
+          "earned": 148812,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "levels": {
+            "line": 3,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 65012,
+          "price": 49067,
+          "seconds": 256.550000000076
+        },
+        {
+          "catch": 12,
+          "depth": 50.0,
+          "earned": 240041,
+          "fight_s": 11.6166666666668,
+          "id": "No.11",
+          "levels": {
+            "line": 4,
+            "reel": 3,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 91241,
+          "price": 91229,
+          "seconds": 294.800000000056
+        },
+        {
+          "catch": 13,
+          "depth": 50.0,
+          "earned": 352984,
+          "fight_s": 10.8666666666668,
+          "id": "No.12",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 3,
+            "sonar": 3
+          },
+          "money": 129184,
+          "price": 112943,
+          "seconds": 332.566666666704
+        },
+        {
+          "catch": 14,
+          "depth": 65.0,
+          "earned": 452859,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 3,
+            "sonar": 4
+          },
+          "money": 109059,
+          "price": 99875,
+          "seconds": 371.383333333351
+        },
+        {
+          "catch": 15,
+          "depth": 65.0,
+          "earned": 583734,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 149934,
+          "price": 130875,
+          "seconds": 424.033333333316
+        },
+        {
+          "catch": 16,
+          "depth": 65.0,
+          "earned": 756859,
+          "fight_s": 11.2166666666668,
+          "id": "No.13",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 323059,
+          "price": 173125,
+          "seconds": 474.966666666616
+        },
+        {
+          "catch": 17,
+          "depth": 65.0,
+          "earned": 1096159,
+          "fight_s": 15.416666666667,
+          "id": "No.14",
+          "levels": {
+            "line": 4,
+            "reel": 4,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 662359,
+          "price": 339300,
+          "seconds": 532.049999999911
+        },
+        {
+          "catch": 18,
+          "depth": 65.0,
+          "earned": 1232534,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 138734,
+          "price": 136375,
+          "seconds": 582.866666666545
+        },
+        {
+          "catch": 19,
+          "depth": 65.0,
+          "earned": 1375284,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 281484,
+          "price": 142750,
+          "seconds": 634.499999999846
+        },
+        {
+          "catch": 20,
+          "depth": 65.0,
+          "earned": 1544034,
+          "fight_s": 10.2333333333334,
+          "id": "No.13",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 4,
+            "sonar": 4
+          },
+          "money": 450234,
+          "price": 168750,
+          "seconds": 686.516666666481
+        },
+        {
+          "catch": 21,
+          "depth": 100.0,
+          "earned": 3388034,
+          "fight_s": 43.7499999999988,
+          "id": "No.15",
+          "levels": {
+            "line": 5,
+            "reel": 5,
+            "rod": 5,
+            "sonar": 4
+          },
+          "money": 1874234,
+          "price": 1844000,
+          "seconds": 771.583333333094
+        }
+      ],
+      "main_catches": 21,
+      "main_play_seconds": 771.583333333094,
+      "result": "PASS",
+      "worst_economy_stall": 3
+    }
+  },
+  "pacing": {
+    "assumptions": {
+      "boss_retries": 2,
+      "boss_retry_cycle_s": 60,
+      "exploration_per_catch_s": 20,
+      "late_success_rate": 0.65,
+      "mid_success_rate": 0.7,
+      "new_controls_learning_min": 6,
+      "normal_success_rate": 0.85,
+      "postgame_search_min": 8,
+      "reading_and_shops_min": 6
+    },
+    "estimated_hidden_minutes": 55.4633365653865,
+    "estimated_main_minutes": 44.9858365653876,
+    "hidden_active_minutes": 20.1486111111022,
+    "hidden_catches": 30.0,
+    "human_validation": "MANUAL TEST REQUIRED",
+    "line_checkpoints": [
+      {
+        "catches": 3.0,
+        "catches_since_previous": 3.0,
+        "category": "line",
+        "level": 2.0,
+        "money_after": 1374.0,
+        "money_before": 3174.0,
+        "price": 1800.0,
+        "seconds": 54.2166666666652
+      },
+      {
+        "catches": 7.0,
+        "catches_since_previous": 1.0,
+        "category": "line",
+        "level": 3.0,
+        "money_after": 4073.0,
+        "money_before": 16073.0,
+        "price": 12000.0,
+        "seconds": 150.35000000001
+      },
+      {
+        "catches": 13.0,
+        "catches_since_previous": 2.0,
+        "category": "line",
+        "level": 4.0,
+        "money_after": 33359.0,
+        "money_before": 98359.0,
+        "price": 65000.0,
+        "seconds": 334.200000000021
+      },
+      {
+        "catches": 19.0,
+        "catches_since_previous": 3.0,
+        "category": "line",
+        "level": 5.0,
+        "money_after": 28755.0,
+        "money_before": 328755.0,
+        "price": 300000.0,
+        "seconds": 608.166666666523
+      }
+    ],
+    "low_value_equipment_route": [
+      {
+        "catches_since_previous": 9,
+        "category": "line",
+        "level": 2,
+        "money_after": 0,
+        "price": 1800
+      },
+      {
+        "catches_since_previous": 1,
+        "category": "sonar",
+        "level": 2,
+        "money_after": 1000,
+        "price": 5000
+      },
+      {
+        "catches_since_previous": 1,
+        "category": "reel",
+        "level": 2,
+        "money_after": 4000,
+        "price": 3000
+      },
+      {
+        "catches_since_previous": 0,
+        "category": "rod",
+        "level": 2,
+        "money_after": 0,
+        "price": 4000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "line",
+        "level": 3,
+        "money_after": 0,
+        "price": 12000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "reel",
+        "level": 3,
+        "money_after": 9000,
+        "price": 15000
+      },
+      {
+        "catches_since_previous": 1,
+        "category": "rod",
+        "level": 3,
+        "money_after": 3000,
+        "price": 18000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "sonar",
+        "level": 3,
+        "money_after": 2000,
+        "price": 25000
+      },
+      {
+        "catches_since_previous": 6,
+        "category": "line",
+        "level": 4,
+        "money_after": 9000,
+        "price": 65000
+      },
+      {
+        "catches_since_previous": 1,
+        "category": "reel",
+        "level": 4,
+        "money_after": 14000,
+        "price": 75000
+      },
+      {
+        "catches_since_previous": 1,
+        "category": "rod",
+        "level": 4,
+        "money_after": 4000,
+        "price": 90000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "sonar",
+        "level": 4,
+        "money_after": 44000,
+        "price": 120000
+      },
+      {
+        "catches_since_previous": 4,
+        "category": "line",
+        "level": 5,
+        "money_after": 64000,
+        "price": 300000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "reel",
+        "level": 5,
+        "money_after": 64000,
+        "price": 360000
+      },
+      {
+        "catches_since_previous": 2,
+        "category": "rod",
+        "level": 5,
+        "money_after": 4000,
+        "price": 420000
+      },
+      {
+        "catches_since_previous": 3,
+        "category": "sonar",
+        "level": 5,
+        "money_after": 44000,
+        "price": 500000
+      }
+    ],
+    "low_value_equipment_worst_stall": 9,
+    "low_value_worst_stall": 9,
+    "main_active_minutes": 18.5044444444367,
+    "main_catches": 28.0,
+    "minimum_line_route": [
+      {
+        "catches_for_purchase": 9,
+        "line_level": 2,
+        "minimum_fish": "No.01",
+        "money_after": 0,
+        "price": 1800
+      },
+      {
+        "catches_for_purchase": 2,
+        "line_level": 3,
+        "minimum_fish": "No.06",
+        "money_after": 0,
+        "price": 12000
+      },
+      {
+        "catches_for_purchase": 6,
+        "line_level": 4,
+        "minimum_fish": "No.09",
+        "money_after": 7000,
+        "price": 65000
+      },
+      {
+        "catches_for_purchase": 8,
+        "line_level": 5,
+        "minimum_fish": "No.11",
+        "money_after": 27000,
+        "price": 300000
+      }
+    ],
+    "normal_worst_stall": 3.0,
+    "pacing_target_met": false
+  },
+  "native": {
+    "rc1_capture": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "screenshots": 5,
+      "samples": []
+    },
+    "midgame_capture": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "screenshots": 24,
+      "samples": [
+        "IDLE_STABILITY 16x9 nodes=182 save_writes=0",
+        "IDLE_STABILITY 19_5x9 nodes=182 save_writes=0",
+        "IDLE_STABILITY 20x9 nodes=182 save_writes=0",
+        "IDLE_STABILITY 640px nodes=182 save_writes=0"
+      ]
+    },
+    "lategame_capture": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "screenshots": 40,
+      "samples": [
+        "IDLE_STABILITY 16x9 nodes=182 writes=0",
+        "IDLE_STABILITY 19_5x9 nodes=182 writes=0",
+        "IDLE_STABILITY 20x9 nodes=182 writes=0",
+        "IDLE_STABILITY 640px nodes=182 writes=0"
+      ]
+    },
+    "boss_capture": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "screenshots": 40,
+      "samples": [
+        "IDLE_STABILITY 16x9 nodes=182 writes=0",
+        "IDLE_STABILITY 19_5x9 nodes=182 writes=0",
+        "IDLE_STABILITY 20x9 nodes=182 writes=0",
+        "IDLE_STABILITY 640px nodes=182 writes=0"
+      ]
+    },
+    "hidden_capture": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "screenshots": 33,
+      "samples": [
+        "IDLE_STABILITY 16x9 nodes=182 writes=0",
+        "IDLE_STABILITY 19_5x9 nodes=182 writes=0",
+        "IDLE_STABILITY 20x9 nodes=182 writes=0"
+      ]
+    }
+  },
+  "build": {
+    "godot_version": "4.6.3",
+    "host": "Linux",
+    "export_presets_exists": false,
+    "android_sdk_available": false,
+    "java_available": true,
+    "templates_available": false,
+    "android_export": "BLOCKED",
+    "ios_export": "BLOCKED"
+  },
+  "critical_errors": 0,
+  "manual_required": [
+    "Fishing Feel",
+    "Horror Pacing",
+    "No.15 Feel",
+    "No.00 Feel",
+    "Physical mobile QA"
+  ]
+}
