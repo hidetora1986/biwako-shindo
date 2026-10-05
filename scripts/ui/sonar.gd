@@ -111,6 +111,8 @@ func _fish_contact(fish: FishController) -> Dictionary:
 	var size_text := "SMALL" if estimate < 25 else ("MEDIUM" if estimate < 50 else "LARGE")
 	var known: bool = _progress.fish_records[fish.fight_profile.id].discovered
 	var unknown := fish.fight_profile.id in ["No.10","No.14"]
+	if fish.fight_profile.is_boss:
+		return {"instance_id":fish.get_instance_id(),"depth_m":fish.depth_position,"x_fraction":clampf((fish.position.x-fish.water_bounds.position.x)/maxf(fish.water_bounds.size.x,1),0,1),"size_text":size_text if _progress.levels.sonar >= 2 else "","name_text":(fish.fight_profile.display_name if known else "???") if _progress.levels.sonar >= 3 else "","dot_width":30}
 	return {"instance_id":fish.get_instance_id(),"depth_m":fish.depth_position,"x_fraction":clampf((fish.position.x - fish.water_bounds.position.x)/maxf(fish.water_bounds.size.x,1),0,1),"size_text":size_text if _progress.levels.sonar >= 2 else "","name_text":("???" if unknown else fish.fight_profile.display_name) if _progress.levels.sonar >= 3 and (known or unknown) else "","dot_width":16 if fish.fight_profile.id == "No.14" else (8 if fish.fight_profile.id == "No.10" else 5)}
 
 func retain_catch_contact(fish: FishController) -> void:

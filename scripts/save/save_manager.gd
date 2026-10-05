@@ -54,7 +54,7 @@ func snapshot(progress: GameProgress) -> Dictionary:
 		discovered[id] = record.discovered
 		counts[id] = record.caught_count
 		best[id] = record.best_size_cm
-	return {"save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
+	return {"save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
 
 func load_into(progress: GameProgress) -> bool:
 	var raw: Variant = null
@@ -92,7 +92,9 @@ func load_into(progress: GameProgress) -> bool:
 	progress.night_unlocked = (data.get("night_unlocked") is bool and data.get("night_unlocked") == true) or progress.fish_records["No.12"].discovered
 	progress.hull_knock_count = _integer(data.get("hull_knock_count"), 0, 0, 3)
 	progress.zero_depth_contact_seen = data.get("zero_depth_contact_seen") is bool and data.get("zero_depth_contact_seen") == true
-	progress.max_depth_reached_m = _number(data.get("max_depth_reached_m"), 0, 0, 100)
+	progress.max_depth_reached_m = _number(data.get("max_depth_reached_m"), 0, 0, 120)
+	progress.boss15_defeated = (data.get("boss15_defeated") is bool and data.get("boss15_defeated") == true) or progress.fish_records["No.15"].discovered
+	progress.main_ending_seen = progress.boss15_defeated and data.get("main_ending_seen") is bool and data.get("main_ending_seen") == true
 	if not progress.lv5_unlocked():
 		for category: String in GameProgress.CATEGORIES:
 			progress.levels[category] = mini(4, progress.levels[category])

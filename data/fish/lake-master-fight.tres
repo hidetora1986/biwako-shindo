@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "No.15"
+display_name = "湖底の主"
+species_id = "lake_master"
+placeholder_kind = "catfish"
+min_depth = 100.0
+max_depth = 120.0
+min_size_cm = 300.0
+max_size_cm = 500.0
+min_price = 800000
+max_price = 2800000
+rarity = 7
+is_boss = true
+description = "湖底域で確認された最大級の個体。"
+stamina = 650.0
+pull_power = 20.0
+stamina_drain = 18.0
+reel_progress_speed = 0.045
+run_interval = 4.3
+run_duration = 1.2
+run_power = 68.0
+run_warning_seconds = 0.8
+break_grace_seconds = 1.0

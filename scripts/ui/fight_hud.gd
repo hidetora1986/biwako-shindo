@@ -6,6 +6,7 @@ var stamina_fraction: float = 1.0
 var resistance: int = 0
 var zone: String = "SAFE"
 var holding: bool = false
+var boss_hint: String = ""
 
 func display(fight: FishingFight) -> void:
 	tension = fight.tension
@@ -13,6 +14,7 @@ func display(fight: FishingFight) -> void:
 	resistance = fight.resistance
 	zone = fight.tension_zone()
 	holding = fight.reeling
+	boss_hint = fight.action_hint() if fight is BossFishingFight else ""
 	queue_redraw()
 
 func _draw() -> void:
@@ -30,6 +32,8 @@ func _draw() -> void:
 		hint = "RUN / RELEASE"
 	elif tension >= 70:
 		hint = "RELEASE"
+	if not boss_hint.is_empty():
+		hint = boss_hint
 	draw_string(font, Vector2(10, 17), "LINE TENSION", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("cee1d3"))
 	draw_string(font, Vector2(size.x - 135, 17), "%s %d" % [zone, int(tension)], HORIZONTAL_ALIGNMENT_RIGHT, 125, 12, tone)
 	var bar := Rect2(10, 24, size.x - 20, 9)

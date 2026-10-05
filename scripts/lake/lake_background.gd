@@ -92,6 +92,8 @@ func set_depth_band(origin: float, span: float) -> void:
 	queue_redraw()
 
 func color_at_depth(depth_m: float) -> Color:
+	if depth_m > 100:
+		return Color("101e30").lerp(Color("0c1926"),clampf((depth_m-100)/20,0,1))
 	if depth_m > 50:
 		return Color("23364b").lerp(Color("101e30"),clampf((depth_m-50)/50,0,1))
 	if depth_m > 15:
@@ -124,6 +126,16 @@ func _draw_underwater() -> void:
 				var y := floorf(view_size.y - 9 + sin(x * 0.016)*4)
 				draw_rect(Rect2(x,y,27,2),Color("263646").lerp(Color("1a293a"),clampf((depth_origin_m-65)/35,0,1)))
 	if depth_origin_m >= 30:
+		if depth_origin_m >= 100:
+			# Sparse mud/bedrock and one ambiguous old outline; no explanatory text.
+			for x in range(0,int(view_size.x),12):
+				var bed_y := floorf(view_size.y-18+sin(x*0.016)*4)
+				draw_rect(Rect2(x,bed_y,12,view_size.y-bed_y),Color("1a2931"))
+				draw_rect(Rect2(x,bed_y,10,2),Color("2f4047"))
+			_draw_rock(Vector2(floorf(view_size.x*0.14),view_size.y-20),1.1)
+			var outline := Vector2(floorf(view_size.x*0.79),view_size.y-36)
+			for rect in [Rect2(0,0,32,3),Rect2(0,0,3,20),Rect2(29,0,3,20),Rect2(2,17,28,2)]:
+				draw_rect(Rect2(outline+rect.position,rect.size),Color("293c45"))
 		# Open deeper water; avoid suggesting the lake floor is only 50m down.
 		return
 	_rng.seed = 3418

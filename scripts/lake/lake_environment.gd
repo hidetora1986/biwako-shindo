@@ -9,6 +9,7 @@ var target: float = 0.0
 var _lake: Node2D
 var _day: Array[Color] = []
 var _sample_timer: float = 0.0
+var transition_seconds: float = 6.0
 
 func setup(lake: Node2D, progress: GameProgress) -> void:
 	_lake = lake
@@ -24,7 +25,7 @@ func update_target(progress: GameProgress) -> void:
 func step(delta: float) -> void:
 	if _lake == null or is_equal_approx(value, target):
 		return
-	value = move_toward(value, target, delta / 6.0)
+	value = move_toward(value, target, delta / transition_seconds)
 	_sample_timer -= delta
 	if _sample_timer <= 0 or is_equal_approx(value, target):
 		_sample_timer = 0.1

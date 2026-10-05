@@ -1,7 +1,7 @@
 extends Node2D
 ## Owns fishing states/input. FishingFight handles only fight numbers.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE }
 signal hook_succeeded
 signal hook_missed
 
@@ -48,6 +48,13 @@ var hull_events := HullEvents.new()
 var selected_band: int = 0
 var seek_depth_m: float = 0.0
 var _deep_cast_count: int = 0
+var boss_encounter := BossEncounter.new()
+var ending_screen: MainEndingScreen
+var ending_elapsed: float = 0.0
+var _ending_surface_restored: bool = false
+var _cinematic_visibility: Dictionary = {}
+var _boss_bite_elapsed: float = 0.0
+var _boss_bite_start := Vector2.ZERO
 
 func _ready() -> void:
 	_rng.seed = random_seed
@@ -78,8 +85,19 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_hud.get_node("Shop").closed.connect(_shop_closed)
 	environment.setup(get_parent(), progress)
 	hull_events.setup(progress, _boat, _hud.get_node("SonarPlaceholder"), self, hull_knock_sound)
+	ending_screen = preload("res://scenes/ui/main_ending.tscn").instantiate()
+	_hud.add_child(ending_screen)
+	ending_screen.configure(_hud.size,_hud.safe_rect)
+	ending_screen.continued.connect(request_continue)
 	_progress_changed()
 	_refresh_ui()
+	if progress.boss15_defeated:
+		if progress.main_ending_seen:
+			_set_cinematic(true)
+			state = State.TITLE
+			ending_screen.show_title()
+		else:
+			_begin_ending() # Interrupted after reward: replay only the ending, never the boss/reward.
 
 func configure_water(bounds: Rect2, surface_y: float, depth_m: float, origin_m: float = 0.0) -> void:
 	_water = bounds
@@ -99,6 +117,7 @@ func request_cast() -> bool:
 		_deep_cast_count += 1
 		get_parent().populate_depth_band(selected_band, progress.current("line").effect_value, _deep_cast_count)
 		seek_depth_m = DepthBands.seek_depth(selected_band, _deep_cast_count, progress.current("line").effect_value)
+	boss_encounter.begin_cast()
 	if not lure.cast_from(_boat.rod_tip_position()):
 		return false
 	state = State.CASTING
@@ -113,7 +132,7 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
-	if _shop_open or _book_open:
+	if _shop_open or _book_open or state in [State.ENDING,State.TITLE,State.BOSS_BITE]:
 		return
 	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("ShopButton").disabled and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
 		if request_shop():
@@ -157,6 +176,7 @@ func request_hook() -> bool:
 	_hit_remaining = hit_hold_seconds
 	_session_caught = false
 	active_fish.prepare_catch_size(_rng)
+	fight = BossFishingFight.new() if active_fish.fight_profile.is_boss else FishingFight.new()
 	fight.start(active_fish.fight_profile, progress.current("reel").effect_value, progress.current("rod").effect_value, active_fish.size_cm)
 	_fight_origin_fraction = Vector2((active_fish.position.x - _water.position.x) / _water.size.x, (active_fish.position.y - _surface_y) / (_water.end.y - _surface_y))
 	_hud.show_bite(false, lure.position)
@@ -167,6 +187,11 @@ func request_hook() -> bool:
 
 func _physics_process(delta: float) -> void:
 	if _hud == null or _shop_open or _book_open:
+		return
+	if state == State.ENDING:
+		_step_ending(delta)
+		return
+	if state == State.TITLE:
 		return
 	environment.step(delta)
 	progress.note_depth(lure.depth_m)
@@ -194,11 +219,21 @@ func _physics_process(delta: float) -> void:
 				lure.pause_for_interest()
 			_retry_delay = maxf(0.0, _retry_delay - delta)
 			_detection_timer -= delta
+			if active_fish == null:
+				boss_encounter.try_spawn(get_parent(),progress,lure.depth_m)
 			if active_fish == null and lure.depth_m >= seek_depth_m and cast_elapsed >= 2.2 and _retry_delay <= 0.0 and _detection_timer <= 0.0:
 				_detection_timer = 0.45
 				_detect_fish()
 			if active_fish != null and cast_elapsed >= 5.0 and active_fish.bite_reached(lure.position):
 				_begin_bite()
+		State.BOSS_BITE:
+			_boss_bite_elapsed += delta
+			# Slow, visible line draw before the familiar generous tap window.
+			lure.position = _boss_bite_start + Vector2(0,minf(3,_boss_bite_elapsed*2.0))
+			_boat.set_line_pull(minf(35,_boss_bite_elapsed*24),true)
+			if _boss_bite_elapsed >= 1.5:
+				state = State.BITTEN
+				_bite_remaining = 1.8
 		State.BITTEN:
 			_bite_remaining = maxf(0.0, _bite_remaining - delta)
 			if _bite_remaining <= 0.0:
@@ -210,6 +245,8 @@ func _physics_process(delta: float) -> void:
 				_hud.show_result("")
 		State.FIGHTING:
 			fight.step(delta)
+			if fight is BossFishingFight and fight.telegraph_started:
+				_haptic(35,0.2)
 			active_fish.stamina = fight.stamina
 			_update_fight_pose()
 			if fight.run_started:
@@ -231,7 +268,9 @@ func _physics_process(delta: float) -> void:
 		State.LANDED, State.FAILED:
 			_result_remaining -= delta
 			if _result_remaining <= 0.0:
-				if state == State.LANDED and last_catch.get("id") in ["No.10","No.14"]:
+				if state == State.LANDED and last_catch.get("id") == "No.15" and not progress.main_ending_seen:
+					_begin_ending()
+				elif state == State.LANDED and last_catch.get("id") in ["No.10","No.14"]:
 					state = State.CHOOSING
 					_hud.show_unknown_choice(true)
 				else:
@@ -251,7 +290,7 @@ func _detect_fish() -> void:
 	var distance := INF
 	for fish: FishController in _fish_container.get_children():
 		var candidate_distance := fish.position.distance_to(lure.position)
-		if fish.can_detect_lure() and fish.fight_profile.allows_depth(lure.depth_m) and candidate_distance <= fish.bite_detection_radius and candidate_distance < distance:
+		if fish.visible and (not fish.fight_profile.is_boss or progress.can_encounter_boss()) and fish.can_detect_lure() and fish.fight_profile.allows_depth(lure.depth_m) and candidate_distance <= fish.bite_detection_radius and candidate_distance < distance:
 			closest = fish
 			distance = candidate_distance
 	if closest == null:
@@ -260,10 +299,14 @@ func _detect_fish() -> void:
 	var chance := minf(1.0, closest.bite_probability + maxf(0.0, cast_elapsed - 3.0) * 0.18)
 	if _rng.randf() <= chance and closest.approach_lure(lure):
 		active_fish = closest
+		if closest.fight_profile.is_boss:
+			boss_encounter.reserve(_fish_container)
 		lure.pause_for_interest()
 
 func _begin_bite() -> void:
-	state = State.BITTEN
+	state = State.BOSS_BITE if active_fish.fight_profile.is_boss else State.BITTEN
+	_boss_bite_elapsed = 0
+	_boss_bite_start = lure.position
 	lure.begin_bite()
 	active_fish.begin_bite()
 	_bite_remaining = hook_window_seconds
@@ -274,6 +317,9 @@ func _begin_bite() -> void:
 		Input.vibrate_handheld(60)
 
 func _miss() -> void:
+	if active_fish.fight_profile.is_boss:
+		_fail_fight("MISS")
+		return
 	active_fish.release_lure(true)
 	active_fish = null
 	lure.resume_sinking()
@@ -346,20 +392,27 @@ func _notification(what: int) -> void:
 func _update_fight_pose() -> void:
 	var origin := Vector2(_water.position.x + _fight_origin_fraction.x * _water.size.x, _surface_y + _fight_origin_fraction.y * (_water.end.y - _surface_y))
 	var target := Vector2(_boat.position.x - 24, _surface_y + 22)
+	var mouth_offset: float = active_fish._half_width * active_fish.sprite.scale.x - 6 if fight is BossFishingFight else 14.0
+	if fight is BossFishingFight:
+		target.x = _boat.position.x - mouth_offset - 10
 	var fish_position := origin.lerp(target, clampf(1.0 - fight.fish_distance, 0.0, 1.0))
 	if active_fish.fight_profile.pull_pulse_power > 0:
 		fish_position.y += sin(fight.elapsed * TAU * 2.4) * 1.2
 	if fight.resistance == FishingFight.Resistance.WARNING:
 		fish_position.y += sin(fight.elapsed * 38.0) * 2.0
+	if fight is BossFishingFight:
+		fish_position.y = minf(_water.end.y,fish_position.y+fight.depth_offset/20.0*_water.size.y)
 	active_fish.set_fight_pose(fish_position, fight.resistance)
 	active_fish.sprite.modulate = Color("fff0bd") if fight.resistance == FishingFight.Resistance.WARNING else Color.WHITE
-	lure.follow_fish(fish_position + Vector2(active_fish.swim_direction * 14, 0))
+	lure.follow_fish(fish_position + Vector2(active_fish.swim_direction * mouth_offset, 0))
 	_boat.set_line_pull(fight.tension, true)
 
 func _fail_fight(message: String) -> void:
 	state = State.FAILED
 	_stop_reel()
 	active_fish.finish_session(false)
+	if active_fish.fight_profile.is_boss:
+		boss_encounter.release(_fish_container)
 	active_fish = null
 	lure.begin_reset()
 	_result_remaining = 1.3
@@ -382,6 +435,8 @@ func _show_catch() -> void:
 	_session_caught = true
 	_result_remaining = 1.5
 	var profile: FishFightProfile = active_fish.fight_profile
+	if profile.is_boss:
+		_result_remaining = 2.2
 	var unknown := profile.id in ["No.10","No.14"]
 	last_catch = {"species_id": profile.species_id, "name": profile.display_name, "size_cm": active_fish.size_cm, "id": profile.id, "price": profile.sale_price(active_fish.size_cm) if unknown else progress.sell_catch(profile, active_fish.size_cm, _cast_serial)}
 	last_catch["new_discovery"] = not progress.fish_records[profile.id].discovered if unknown else progress.last_sale_new_discovery
@@ -396,7 +451,7 @@ func _haptic(duration_ms: int, amplitude: float) -> void:
 		Input.vibrate_handheld(duration_ms, amplitude)
 
 func _update_line() -> void:
-	line.visible = state not in [State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET]
+	line.visible = state not in [State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET, State.ENDING, State.TITLE]
 	line.default_color = Color("dfb875") if state == State.FIGHTING and fight.tension >= 70.0 else Color(0.88, 0.94, 0.81, 0.75)
 	if _boat != null and line.get_point_count() == 2:
 		line.set_point_position(0, _boat.rod_tip_position())
@@ -404,6 +459,8 @@ func _update_line() -> void:
 
 func _refresh_ui() -> void:
 	if _hud == null:
+		return
+	if state in [State.ENDING,State.TITLE]:
 		return
 	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open or _book_open
 	_hud.get_node("ShopButton").visible = state not in [State.LANDED, State.CHOOSING]
@@ -415,9 +472,9 @@ func _refresh_ui() -> void:
 	var band_button: Button = _hud.get_node("DepthBandButton")
 	band_button.visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	band_button.disabled = state != State.READY or _shop_open or _book_open or anomaly.active or hull_events.active
-	band_button.text = "DEPTH %d–%dm" % [DepthBands.STARTS[selected_band], minf(DepthBands.ENDS[selected_band], progress.current("line").effect_value)]
+	band_button.text = "ABYSS 100–120m" if selected_band == 6 else "DEPTH %d–%dm" % [DepthBands.STARTS[selected_band], minf(DepthBands.ENDS[selected_band], progress.current("line").effect_value)]
 	_hud.show_fight(fight, state == State.FIGHTING)
-	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
+	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN, State.BOSS_BITE] or (state == State.FIGHTING and fight is BossFishingFight)
 	_hud.show_lure_depth(lure.depth_m, state != State.READY and state != State.RESET)
 	_hud.show_bite(state == State.BITTEN, lure.position)
 
@@ -499,4 +556,63 @@ func resolve_unknown_catch(sell: bool) -> bool:
 			return false
 	last_catch["returned"] = not sell
 	_begin_reset()
+	return true
+
+func _set_cinematic(enabled: bool) -> void:
+	if enabled:
+		for node: Node in _hud.get_children():
+			if node is CanvasItem and node != ending_screen:
+				_cinematic_visibility[node.name] = node.visible
+				node.visible = false
+	else:
+		for node: Node in _hud.get_children():
+			if node is CanvasItem and node != ending_screen:
+				node.visible = _cinematic_visibility.get(node.name,true)
+		_cinematic_visibility.clear()
+	_hud.get_node("SonarPlaceholder").set_process(not enabled)
+
+func _begin_ending() -> void:
+	state = State.ENDING
+	_stop_reel()
+	lure.begin_reset()
+	line.visible = false
+	_hud.hide_catch()
+	active_fish = null
+	ending_elapsed = 0
+	_ending_surface_restored = false
+	_set_cinematic(true)
+	ending_screen.show_dawn(0)
+
+func _step_ending(delta: float) -> void:
+	ending_elapsed += delta
+	if ending_elapsed >= 0.6 and not _ending_surface_restored:
+		_ending_surface_restored = true
+		selected_band = 0
+		_deep_cast_count = 0
+		seek_depth_m = 0
+		get_parent().populate_depth_band(0,progress.current("line").effect_value)
+		environment.transition_seconds = 3
+		environment.target = 0
+	if _ending_surface_restored:
+		environment.step(delta)
+	ending_screen.show_dawn(ending_elapsed)
+	if ending_elapsed >= 8:
+		progress.finish_main_ending()
+		state = State.TITLE
+		ending_screen.show_title()
+
+func request_continue() -> bool:
+	if state != State.TITLE or not progress.main_ending_seen:
+		return false
+	ending_screen.visible = false
+	_set_cinematic(false)
+	state = State.READY
+	lure.finish_reset()
+	selected_band = 0
+	_deep_cast_count = 0
+	seek_depth_m = 0
+	get_parent().populate_depth_band(0,progress.current("line").effect_value)
+	environment.transition_seconds = 6
+	_boat.set_line_pull(0,false)
+	_refresh_ui()
 	return true

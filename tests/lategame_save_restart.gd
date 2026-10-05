@@ -31,7 +31,7 @@ func _run() -> void:
 		assert(flow.progress.returned_unknown_a and flow.progress.returned_unknown_b and flow.progress.night_unlocked)
 		assert(flow.progress.hull_knock_count == 3 and flow.progress.zero_depth_contact_seen and flow.progress.anomaly_seen)
 		assert(flow.progress.fish_records["No.14"].caught_count == 1 and flow.progress.fish_records["No.14"].best_size_cm == 221.5)
-		assert(flow.environment.value == 2 and flow.lure.max_depth_m == 100 and flow.progress.current("line").effect_value == 120)
+		assert(flow.environment.value == 2 and flow.lure.max_depth_m == 120 and flow.progress.current("line").effect_value == 120)
 		assert(flow.select_depth_band(5))
 		assert(flow.save_manager.write_count == 0 and flow.hull_events.strike_count == 0)
 		main.free(); assert(DirAccess.remove_absolute(PATH) == OK)

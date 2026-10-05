@@ -56,7 +56,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var progress: GameProgress = _flow.progress
-	_check(GameProgress.FISH_PROFILES.size() == 14 and _hud.get_node("FishBook").entries.size() == 14, "Fourteen Resource fish / book entries")
+	_check(GameProgress.FISH_PROFILES.size() >= 14 and _hud.get_node("FishBook").entries.size() == GameProgress.FISH_PROFILES.size(), "Fourteen late-game Resource fish retained / book matches data")
 	_check(not progress.night_unlocked and progress.hull_knock_count == 0 and not progress.returned_unknown_b and not progress.zero_depth_contact_seen, "New game: all new flags default")
 	var values := [[50.0,65.0,90.0,160.0,40000,95000,5],[60.0,75.0,110.0,180.0,55000,120000,5],[70.0,85.0,130.0,210.0,80000,180000,5],[80.0,100.0,180.0,260.0,180000,420000,6]]
 	var hashes: Dictionary = {}
@@ -222,7 +222,7 @@ func _run() -> void:
 	progress.depth_unlocked.connect(func(a:float,b:float):unlocked.append([a,b]))
 	var balance: int = progress.money
 	_check(progress.purchase("line",5) and progress.money == balance-300000 and unlocked == [[85.0,120.0]], "Natural late income buys LINE5; 85→120m reward")
-	_check(_hud.get_node("DepthUnlock/Label").text.contains("85m → 120m") and _flow.lure.max_depth_m == 100, "Visible 120m unlock / current fish cap 100m")
+	_check(_hud.get_node("DepthUnlock/Label").text.contains("85m → 120m") and _flow.lure.max_depth_m == 120, "Visible 120m unlock / Boss Phase content cap 120m")
 	_check(_flow.select_depth_band(5), "85–100m now accessible")
 	for index in range(8):
 		_check(_session(), "Natural >85m No.14 session %d" % index)
@@ -246,7 +246,7 @@ func _run() -> void:
 	_check(_flow.save_manager.load_into(migrated) and migrated.money == progress.money and migrated.levels.line == 4 and migrated.returned_unknown_a and not migrated.returned_unknown_b and not migrated.night_unlocked and migrated.hull_knock_count == 0 and not migrated.zero_depth_contact_seen and not migrated.lv5_unlocked(), "Midgame v1 migration preserves money/Lv4/A; late defaults safe")
 	_check(migrated.fish_records["No.10"] == progress.fish_records["No.10"] and not migrated.fish_records["No.14"].discovered and bytes == FileAccess.get_file_as_bytes(_test_save_path), "Old records intact / No.11–14 undiscovered / read does not rewrite")
 	var invalid := old.duplicate(true)
-	invalid.merge({"returned_unknown_b":"true","night_unlocked":1,"hull_knock_count":4,"zero_depth_contact_seen":1,"max_depth_reached_m":101},true)
+	invalid.merge({"returned_unknown_b":"true","night_unlocked":1,"hull_knock_count":4,"zero_depth_contact_seen":1,"max_depth_reached_m":121},true)
 	file = FileAccess.open(_test_save_path,FileAccess.WRITE)
 	file.store_string(JSON.stringify(invalid)); file.close()
 	var invalid_progress := GameProgress.new()

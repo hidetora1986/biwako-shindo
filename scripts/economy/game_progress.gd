@@ -8,11 +8,13 @@ const CATEGORIES := ["rod", "reel", "line", "sonar"]
 var catalog: EquipmentCatalog = preload("res://data/equipment/mvp.tres")
 var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}
-const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres"), preload("res://data/fish/thread-jaw-fight.tres"), preload("res://data/fish/split-belly-fight.tres"), preload("res://data/fish/reverse-scale-fight.tres"), preload("res://data/fish/unknown-b-fight.tres")]
+const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres"), preload("res://data/fish/thread-jaw-fight.tres"), preload("res://data/fish/split-belly-fight.tres"), preload("res://data/fish/reverse-scale-fight.tres"), preload("res://data/fish/unknown-b-fight.tres"), preload("res://data/fish/lake-master-fight.tres")]
 var fish_records: Dictionary = {}
 var returned_unknown_a: bool = false
 var returned_unknown_b: bool = false
 var night_unlocked: bool = false
+var boss15_defeated: bool = false
+var main_ending_seen: bool = false
 var hull_knock_count: int = 0
 var zero_depth_contact_seen: bool = false
 var max_depth_reached_m: float = 0.0
@@ -40,11 +42,11 @@ func next_level(category: String) -> EquipmentLevel:
 	return next
 
 func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
-	if fish == null or session_id <= _last_sold_session:
+	if fish == null or session_id <= _last_sold_session or (fish.is_boss and boss15_defeated):
 		return 0
 	var price := fish.sale_price(size_cm)
 	last_sale_new_discovery = record_catch(fish, size_cm, false)
-	money += price
+	money = mini(2147483647, money + price)
 	_last_sold_session = session_id
 	changed.emit()
 	return price
@@ -95,6 +97,8 @@ func record_catch(fish: FishFightProfile, size_cm: float, notify: bool = true) -
 	record.discovered = true
 	if fish.id == "No.12":
 		night_unlocked = true
+	if fish.is_boss:
+		boss15_defeated = true
 	record.caught_count = mini(2147483647, record.caught_count + 1)
 	record.best_size_cm = maxf(record.best_size_cm, snappedf(clampf(size_cm, fish.min_size_cm, fish.max_size_cm), 0.1))
 	if notify:
@@ -115,11 +119,13 @@ func lv5_unlocked() -> bool:
 	return fish_records.get("No.14", {}).get("discovered", false)
 
 func time_of_day_target() -> float:
+	if main_ending_seen:
+		return 0.0
 	return 2.0 if night_unlocked else (1.0 if fish_records["No.11"].discovered else 0.0)
 
 func note_depth(depth_m: float) -> void:
 	var previous := max_depth_reached_m
-	max_depth_reached_m = maxf(previous, clampf(depth_m, 0, 100))
+	max_depth_reached_m = maxf(previous, clampf(depth_m, 0, 120))
 	# Persist the two event milestones, never every sinking frame.
 	if (previous < 60 and max_depth_reached_m >= 60) or (previous < 70 and max_depth_reached_m >= 70):
 		changed.emit()
@@ -133,3 +139,11 @@ func finish_zero_contact() -> void:
 	if not zero_depth_contact_seen:
 		zero_depth_contact_seen = true
 		changed.emit()
+
+func finish_main_ending() -> void:
+	if boss15_defeated and not main_ending_seen:
+		main_ending_seen = true
+		changed.emit()
+
+func can_encounter_boss() -> bool:
+	return lv5_unlocked() and levels.rod == 5 and levels.line == 5 and night_unlocked and not boss15_defeated

@@ -71,6 +71,17 @@ func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> 
 	depth_origin_m = DepthBands.STARTS[band]
 	depth_span_m = DepthBands.ENDS[band] - depth_origin_m
 	var pool := DepthBands.pool(band, line_depth)
+	if band == 6:
+		# No normal species lives below 100m. Boundary silhouettes leave on encounter.
+		var fishes := $Underwater/FishContainer.get_children()
+		for i in range(fishes.size()):
+			var fish: FishController = fishes[i]
+			fish.repopulate(GameProgress.FISH_PROFILES[13],100,view_size.x * (0.18 + 0.22 * (i % 3)))
+			fish.swim_speed = 8
+			fish.configure_water(water_bounds,depth_span_m,depth_origin_m)
+			fish.visible = i < 3
+		layout_for_size(view_size)
+		return
 	if band == 4:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = spawn_seed + cast_number * 1009

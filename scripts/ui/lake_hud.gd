@@ -61,6 +61,8 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$Result.add_theme_font_size_override("font_size", 28 if $Result.text == "LINE BREAK" else 36)
 	$Result.position = Vector2(core_rect.get_center().x - $Result.size.x * 0.5, clampf(surface_y + 60, safe_rect.position.y, safe_rect.end.y - $Result.size.y))
 	$Depth/Label.text = "0–%dm" % int(depth_m)
+	if has_node("MainEnding"):
+		$MainEnding.configure(view_size,safe_rect)
 
 func show_lure_depth(depth_m: float, active: bool) -> void:
 	if active:
@@ -93,6 +95,8 @@ func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
 	$CatchPanel/Name.text = result["name"]
 	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
 	$CatchPanel/Fish.texture = fish_texture
+	$CatchPanel/Fish.position = Vector2(16 if result.get("id") == "No.15" else 80,42)
+	$CatchPanel/Fish.size = Vector2(248 if result.get("id") == "No.15" else 120,62)
 	$CatchPanel/Price.text = ("¥" if result.get("id") in ["No.10","No.14"] else "+ ¥") + _format_money(result.get("price", 0))
 
 func hide_catch() -> void:
@@ -111,6 +115,11 @@ func _format_money(value: int) -> String:
 
 func show_progress(progress: GameProgress) -> void:
 	$Money/Label.text = "¥" + _format_money(progress.money)
+	var money_font: Font = $Money/Label.get_theme_font("font")
+	var font_size := 22
+	while font_size > 10 and money_font.get_string_size($Money/Label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size).x > $Money/Label.size.x:
+		font_size -= 1
+	$Money/Label.add_theme_font_size_override("font_size",font_size)
 	var item := progress.cheapest_next()
 	var locked := false
 	for category: String in GameProgress.CATEGORIES:

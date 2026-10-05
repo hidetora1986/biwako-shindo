@@ -2,12 +2,12 @@
 
 ## ブランチ運用
 
-`main` は安定版の統合先です。初期化コミット以降、直接機能を追加しません。今回のLate Game Phase 1は `7824109a`を基点とした `feature/lategame-depth-v1` で行います。`main`・`feature/mvp-fishing`・`feature/visual-refinement-v1`・`feature/midgame-depth-v1` は保持し、変更しません。
+`main` は安定版の統合先です。初期化コミット以降、直接機能を追加しません。今回のBoss Phaseは `4c9c3783`を基点とした `feature/boss-v1` で行います。`main`・`feature/mvp-fishing`・`feature/visual-refinement-v1`・`feature/midgame-depth-v1`・`feature/lategame-depth-v1` は保持し、変更しません。
 
 作業開始時にブランチを確認します。
 
 ```sh
-git switch feature/lategame-depth-v1
+git switch feature/boss-v1
 git status --short --branch
 ```
 
