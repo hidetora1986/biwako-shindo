@@ -1,0 +1,165 @@
+{
+  "previous_head": "8654c5112a3b524ed4ec1d01e3cbcad8eaf9f5d7",
+  "engine": "4.6.3",
+  "gameplay_changed": false,
+  "human_playtest_performed": false,
+  "human_feel": "MANUAL TEST REQUIRED",
+  "rc1_status": "NOT READY",
+  "rc1_regression": {
+    "phase1_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "phase2_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "phase3_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "phase4_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "phase5_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "mvp_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "visual_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "midgame_depth_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "lategame_depth_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "boss_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "hidden_boss_acceptance": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "full-game-contact": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "full-game-cut": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "full-game-sell": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "pacing_simulation": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "full_game_stress": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "rc1_save_stress": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "rc1_postgame_recovery": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "hidden-restart-cut-write": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "hidden-restart-cut-read": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "hidden-restart-contact-write": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "hidden-restart-contact-read": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "boss-restart-write": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "boss-restart-interrupt": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "boss-restart-finish": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "boss-restart-postgame": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "import": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    },
+    "headless": {
+      "pass": true,
+      "errors": [],
+      "warnings": []
+    }
+  },
+  "instrumentation_checks": {
+    "acceptance": [
+      "HUMAN_PLAYTEST_ACCEPTANCE {\"checks\":502,\"failures\":[],\"human_feel\":\"MANUAL TEST REQUIRED\",\"result\":\"PASS\"}"
+    ],
+    "journey": [
+      "HUMAN_PLAYTEST_JOURNEY {\"checks\":114,\"failures\":[],\"human_playtime\":\"NOT MEASURED\",\"result\":\"PASS\"}"
+    ],
+    "startup": [
+      "PASS: headless lifecycle smoke"
+    ],
+    "resume": [
+      "PASS: headless lifecycle smoke"
+    ]
+  },
+  "critical_errors": 0
+}

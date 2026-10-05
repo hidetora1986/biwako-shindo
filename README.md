@@ -124,3 +124,13 @@ godot --headless --path . --script tests/full_game_stress.gd
 godot --headless --path . --script tests/rc1_save_stress.gd
 godot --headless --path . --script tests/rc1_postgame_recovery.gd
 ```
+
+## RC1 Human Playtest
+
+ゲーム内容を変えずに計測するDebug専用の起動方法:
+
+```sh
+godot --path . -- --rc1-playtest --rc1-fresh
+```
+
+RC1専用Test Saveのみ初期化する。再開時は`--rc1-fresh`を外す。計測・評価・提出方法は[Human Playtest手順](docs/release/human-playtest.md)を参照。正式UIへ計測値は表示しない。B01／RC1 NOT READYは人間の実測が届くまで維持する。
