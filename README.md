@@ -9,10 +9,10 @@
 
 ## 起動方法
 
-現在のプロジェクトは `feature/mvp-fishing` にあります。
+今回のビジュアル改善は `feature/visual-refinement-v1` にあります。完成したMVPは `feature/mvp-fishing` に維持しています。
 
 ```sh
-git clone --branch feature/mvp-fishing https://github.com/hidetora1986/biwako-shindo.git
+git clone --branch feature/visual-refinement-v1 https://github.com/hidetora1986/biwako-shindo.git
 cd biwako-shindo
 godot --editor --path .
 ```
@@ -27,14 +27,15 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-MVP Phase 6 — テンポ・スマホUI調整と正式MVP Acceptance。Phase 1〜5の機能を維持し、21捕獲＋2失敗の反復、購入・図鑑・Save復元、16:9／19.5:9／20:9を検証済みです。PC上の自動テスト・実描画でAcceptanceはPASS。iPhone／Android実機検証と書き出しは未実施です。次はVisual Refinement Phase。mainへの統合は行いません。
+Visual Refinement Phase 1 — 湖・水中・ボート・5魚種・Pixel UIの表示を改善。釣り・経済・保存・ソナー・異常反応のMVPロジックはベースのまま維持します。専用ブランチで開発し、mainとfeature/mvp-fishingには反映しません。
 
 **操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。魚は自動売却され、左上の所持金が増えます。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。現在の景色は15mまでです。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
 
 ## ブランチ運用
 
 - `main`: 安定版。初期化後は直接開発せず、Acceptance 完了後の Pull Request で統合します。
-- `feature/mvp-fishing`: 今回の MVP 開発ブランチ。プロジェクトと仕様書はこのブランチで追加します。
+- `feature/mvp-fishing`: Phase 6完了時のMVPを保持します。今回変更しません。
+- `feature/visual-refinement-v1`: `2d3f4f3`から分岐したビジュアル改善専用ブランチ。
 - 将来の拡張: `feature/horror-phase1`、`feature/fish-expansion`、`feature/boss` など。
 
 ## ディレクトリ構成
@@ -74,6 +75,7 @@ godot --headless --path . --script res://tests/phase3_acceptance.gd
 godot --headless --path . --script res://tests/phase4_acceptance.gd
 godot --headless --path . --script res://tests/phase5_acceptance.gd
 godot --headless --path . --script res://tests/mvp_acceptance.gd
+godot --headless --path . --script res://tests/visual_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -89,3 +91,5 @@ Phase 4の正式魚データ・経済・装備仕様は [Phase 4仕様](docs/gam
 Phase 5の図鑑・保存・実ソナー・一度限りの反応は [Phase 5仕様](docs/game-design/phase5-save-sonar.md)、検証結果は [Phase 5 Acceptance](docs/game-design/phase5-acceptance.md) を参照してください。テストのSaveはプレイヤーのSaveから分離しています。
 
 Phase 6の調整内容と正式MVP Acceptanceは [Phase 6 Acceptance](docs/game-design/phase6-mvp-acceptance.md) に記録しています。
+
+ビジュアルの範囲・検証・画面例は [Visual Refinement v1](docs/visual/visual-v1-acceptance.md) を参照してください。`tests/visual_capture.gd`で通常・Fight・ショップ・図鑑・CATCHのPNGを再取得できます。

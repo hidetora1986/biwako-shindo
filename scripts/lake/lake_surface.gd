@@ -36,7 +36,7 @@ func _draw() -> void:
 	var surface := floorf(view_size.y * profile.surface_ratio)
 	var height := surface - top
 	for y in range(int(top), int(surface), 2):
-		var color := profile.surface_color.lerp(Color("488e8c"), float(y - top) / height * 0.5)
+		var color := profile.surface_color.lerp(Color("528e9c"), float(y - top) / height * 0.5)
 		draw_rect(Rect2(0, y, view_size.x, 2), color)
 	# Mountain reflections in the distant water.
 	for x in range(0, int(view_size.x), 26):
@@ -45,7 +45,11 @@ func _draw() -> void:
 		var r := _ripples[i]
 		r.position.x = floorf(r.position.x + ripple_offset(i))
 		r.position.y = floorf(r.position.y)
-		draw_rect(r, Color("b4d4bb") if i % 3 == 0 else Color("88bdb0"))
+		draw_rect(r, Color("c3e4d9") if i % 3 == 0 else Color("92c7c5"))
+	# Stepped reflection of the bright sky, broken by the same quiet ripples.
+	for strip in range(9):
+		var reflected_x := floorf(view_size.x * 0.62 + ripple_offset(strip) - 10 - strip * 2)
+		draw_rect(Rect2(reflected_x, top + 5 + strip * 3, 20 + strip * 4, 1), Color(0.90, 0.94, 0.79, 0.25 - strip * 0.018))
 	# Broken highlights at the cutaway's surface keep the waterline legible.
 	draw_rect(Rect2(0, surface, view_size.x, 2), Color("acd6be"))
 	draw_rect(Rect2(0, surface + 2, view_size.x, 2), Color("549f9a"))

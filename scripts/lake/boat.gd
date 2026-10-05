@@ -10,7 +10,9 @@ var _tension: float = 0.0
 var _fighting: bool = false
 
 func _ready() -> void:
-	$Sprite.texture = boat_art if boat_art != null else PlaceholderArt.boat_texture()
+	$Sprite.texture = boat_art if boat_art != null else RefinedPixelArt.boat_texture()
+	if boat_art == null:
+		$Sprite.offset = Vector2(0, -29)
 
 func set_anchor(value: Vector2) -> void:
 	anchor_position = value
@@ -35,6 +37,11 @@ func set_line_pull(tension: float, fighting: bool) -> void:
 func _draw() -> void:
 	if boat_art != null:
 		return
+	# Quiet contact wake and broken hull reflection; visual coordinates only.
+	for i in range(4):
+		var drift := floorf(sin(_time * 1.4 + i) * 2.0)
+		draw_rect(Rect2(-62 + i * 9 + drift, 3 + i * 3, 110 - i * 22, 1), Color(0.68, 0.85, 0.79, 0.24 - i * 0.04))
+		draw_rect(Rect2(-48 + drift, 5 + i * 3, 65 - i * 14, 2), Color(0.22, 0.42, 0.46, 0.16 - i * 0.025))
 	# Same original rod pixels at rest, bent progressively under line pull.
 	for x in range(15, 45):
 		var bend := pow(1.0 - float(x - 15) / 29.0, 2.0)
