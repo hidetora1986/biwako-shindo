@@ -21,5 +21,5 @@ min_depth = 0.0
 max_depth = 10.0
 min_price = 700
 max_price = 2000
-rarity = "common"
+rarity = 1
 description = "浅い水域で小魚を追う捕食魚。"

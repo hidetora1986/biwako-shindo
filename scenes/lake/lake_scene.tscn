@@ -245,6 +245,7 @@ mouse_filter = 2
 script = ExtResource("8_fight_hud")
 
 [node name="CatchPanel" type="Panel" parent="HUD/Root"]
+z_index = 20
 visible = false
 offset_right = 280.0
 offset_bottom = 190.0
@@ -373,3 +374,23 @@ horizontal_alignment = 1
 
 [node name="PixelVisual" type="Node" parent="HUD/Root"]
 script = ExtResource("12_ui_visual")
+
+[node name="DepthBandButton" type="Button" parent="HUD/Root"]
+layout_mode = 0
+focus_mode = 0
+action_mode = 0
+text = "DEPTH 0–10m"
+
+[node name="SellChoice" type="Button" parent="HUD/Root/CatchPanel"]
+visible = false
+layout_mode = 0
+focus_mode = 0
+action_mode = 0
+text = "売る"
+
+[node name="ReturnChoice" type="Button" parent="HUD/Root/CatchPanel"]
+visible = false
+layout_mode = 0
+focus_mode = 0
+action_mode = 0
+text = "戻す"

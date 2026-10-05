@@ -2,12 +2,12 @@
 
 ## ブランチ運用
 
-`main` は安定版の統合先です。初期化コミット以降、直接機能を追加しません。今回の初期プロジェクトと MVP 開発は `feature/mvp-fishing` で行います。
+`main` は安定版の統合先です。初期化コミット以降、直接機能を追加しません。今回のContent Expansionは `3b7ba306`を基点とした `feature/midgame-depth-v1` で行います。`feature/mvp-fishing` と `feature/visual-refinement-v1` も保持し、変更しません。
 
 作業開始時にブランチを確認します。
 
 ```sh
-git switch feature/mvp-fishing
+git switch feature/midgame-depth-v1
 git status --short --branch
 ```
 

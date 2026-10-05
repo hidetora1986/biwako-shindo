@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.07"
+species_id = "pale_biwamasu"
+display_name = "白化ビワマス"
+min_depth = 20.0
+max_depth = 30.0
+min_size_cm = 35.0
+max_size_cm = 60.0
+min_price = 8000
+max_price = 20000
+rarity = 4
+stamina = 70.0
+pull_power = 14.0
+stamina_drain = 14.0
+reel_progress_speed = 0.28
+run_interval = 1.9
+run_duration = 0.45
+run_power = 30.0
+description = "淡い体色をしたビワマス。"
+placeholder_kind = "minnow"

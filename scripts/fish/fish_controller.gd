@@ -19,6 +19,7 @@ enum SwimState { SWIM, TURN, APPROACH_LURE, BITE, HOOKED, FIGHTING, RUN, LANDING
 
 var state: SwimState = SwimState.SWIM
 var water_bounds := Rect2()
+var _depth_origin_m: float = 0.0
 var _depth_m: float = 15.0
 var _rng := RandomNumberGenerator.new()
 var _variation_timer: float = 0.0
@@ -48,11 +49,12 @@ func _ready() -> void:
 	_half_height = frame_size.y * 0.5
 	_update_facing()
 
-func configure_water(bounds: Rect2, depth_m: float) -> void:
+func configure_water(bounds: Rect2, depth_m: float, origin_m: float = 0.0) -> void:
 	water_bounds = bounds
+	_depth_origin_m = origin_m
 	_depth_m = maxf(depth_m, 0.1)
-	depth_position = clampf(depth_position, 0.0, _depth_m)
-	_base_y = clampf(bounds.position.y - 4.0 + depth_position / _depth_m * (bounds.size.y - 4.0), bounds.position.y + _half_height + 1.2, bounds.end.y - _half_height - 1.2)
+	depth_position = clampf(depth_position, _depth_origin_m, _depth_origin_m + _depth_m)
+	_base_y = clampf(bounds.position.y - 4.0 + (depth_position - _depth_origin_m) / _depth_m * (bounds.size.y - 4.0), bounds.position.y + _half_height + 1.2, bounds.end.y - _half_height - 1.2)
 	position.y = _base_y
 	position.x = clampf(position.x, bounds.position.x + _half_width, bounds.end.x - _half_width)
 	if _home_fraction < 0.0:
@@ -135,7 +137,7 @@ func release_lure(missed: bool) -> void:
 	_update_facing()
 
 func _depth_at_y(y: float) -> float:
-	return clampf((y - water_bounds.position.y + 4.0) / maxf(water_bounds.size.y - 4.0, 1.0) * _depth_m, 0.0, _depth_m)
+	return _depth_origin_m + clampf((y - water_bounds.position.y + 4.0) / maxf(water_bounds.size.y - 4.0, 1.0) * _depth_m, 0.0, _depth_m)
 
 func prepare_catch_size(rng: RandomNumberGenerator) -> void:
 	if size_cm <= 0.0:
@@ -157,8 +159,35 @@ func finish_session(caught: bool) -> void:
 	sprite.speed_scale = clampf(swim_speed / 18.0, 0.7, 1.8)
 	visible = true
 	if caught:
-		# MVP replenishes the same placeholder node; no inventory or persistent save.
+		# Reuse the lake node; wallet / persistent records belong to GameProgress.
 		depth_position = _home_depth
 		position.x = water_bounds.position.x + _home_fraction * water_bounds.size.x
-		configure_water(water_bounds, _depth_m)
+		configure_water(water_bounds, _depth_m, _depth_origin_m)
 		size_cm = 0.0
+
+func repopulate(profile: FishFightProfile, depth: float, x: float) -> void:
+	fight_profile = profile
+	placeholder_kind = profile.placeholder_kind
+	state = SwimState.SWIM
+	_lure = null
+	_interest_cooldown = 0
+	_flee_remaining = 0
+	_home_fraction = -1
+	depth_position = depth
+	position.x = x
+	size_cm = 0
+	stamina = profile.stamina
+	sprite.visible = true
+	visible = true
+	sprite.modulate = Color.WHITE
+	sprite.sprite_frames = fish_art if fish_art != null else RefinedPixelArt.fish_frames(profile.species_id)
+	var frame := sprite.sprite_frames.get_frame_texture("swim", 0)
+	_half_width = frame.get_width() * 0.5
+	_half_height = frame.get_height() * 0.5
+	sprite.play("swim")
+
+func bite_reached(lure_position: Vector2) -> bool:
+	if _half_width <= 20:
+		return position.distance_to(lure_position) <= 22
+	var mouth := position + Vector2(swim_direction * (_half_width - 6), 0)
+	return mouth.distance_to(lure_position) <= maxf(8, _half_height + 4)

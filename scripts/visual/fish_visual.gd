@@ -5,7 +5,7 @@ var _last_size: float = -1
 var _base_scale: float = 1
 
 func _ready() -> void:
-	# FishController retains its original 40×22 envelope and custom-art setup.
+	# FishController owns frame geometry and custom-art setup.
 	call_deferred("_apply_art")
 
 func _apply_art() -> void:
@@ -29,8 +29,8 @@ func _process(_delta: float) -> void:
 	if _last_size != fish.size_cm:
 		_last_size = fish.size_cm
 		var size_ratio := 0.5 if fish.size_cm <= 0 else inverse_lerp(fish.fight_profile.min_size_cm, fish.fight_profile.max_size_cm, fish.size_cm)
-		# Nearest sampling; never extend outside the AI's unchanged frame bounds.
+		# Nearest sampling; never extend outside the AI's configured frame bounds.
 		var factor := clampf(_base_scale * lerpf(0.94, 1.0, clampf(size_ratio, 0, 1)), 0.7, 1.0)
 		scale = Vector2.ONE * snappedf(factor, 0.025)
-	var depth_tint := clampf(fish.depth_position / 15.0, 0, 1)
+	var depth_tint := clampf(fish.depth_position / 50.0, 0, 1)
 	self_modulate = Color(1.0 - depth_tint * 0.12, 1.0 - depth_tint * 0.05, 1.0, 1.0)

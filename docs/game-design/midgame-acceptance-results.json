@@ -1,0 +1,421 @@
+{
+  "base_head": "3b7ba3060377c924dcc00c9ec08bfb04e896059d",
+  "godot": "4.6.3.stable.official.7d41c59c4",
+  "acceptance": {
+    "phase1": {
+      "failures": [],
+      "fish_count": 7,
+      "phase": 1,
+      "result": "PASS"
+    },
+    "phase2": {
+      "average_cast_to_hit_s": 5.26666666666665,
+      "casts": 36,
+      "checks": 57,
+      "failures": [],
+      "longest_cast_to_hit_s": 5.26666666666665,
+      "result": "PASS"
+    },
+    "phase3": {
+      "checks": 109,
+      "consecutive_catches": 5,
+      "failures": [],
+      "fight_seconds": {
+        "bass": 4.81666666666665,
+        "biwamasu": 5.74999999999998,
+        "bluegill": 2.68333333333333,
+        "catfish": 8.16666666666665,
+        "crucian": 4.13333333333332
+      },
+      "guided_catches": 18,
+      "guided_sessions": 20,
+      "longest_guided_s": 9.93333333333341,
+      "result": "PASS"
+    },
+    "phase4": {
+      "catches": [
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": true,
+          "price": 1402,
+          "size_cm": 41.2,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1203,
+          "size_cm": 36.6,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1341,
+          "size_cm": 39.8,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1653,
+          "size_cm": 47.0,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1008,
+          "size_cm": 32.1,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1177,
+          "size_cm": 36.0,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 791,
+          "size_cm": 27.1,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 921,
+          "size_cm": 30.1,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 1164,
+          "size_cm": 35.7,
+          "species_id": "bass"
+        },
+        {
+          "id": "No.02",
+          "name": "ブラックバス",
+          "new_discovery": false,
+          "price": 930,
+          "size_cm": 30.3,
+          "species_id": "bass"
+        }
+      ],
+      "checks": 196,
+      "consecutive_catches": 10,
+      "failures": [],
+      "first_upgrade_catch": 2,
+      "result": "PASS",
+      "upgrades": 3
+    },
+    "phase5": {
+      "anomaly_duration_s": 0.6,
+      "checks": 105,
+      "failures": [],
+      "result": "PASS",
+      "save_version": 1
+    },
+    "mvp": {
+      "checks": 316,
+      "cycle_seconds": [
+        12.5166666666669,
+        12.5166666666669,
+        12.5166666666669,
+        12.5166666666669,
+        12.0000000000002,
+        15.1500000000003,
+        12.0000000000002,
+        10.0500000000001,
+        10.0500000000001,
+        10.7166666666668,
+        12.0000000000002,
+        12.0000000000002,
+        15.2833333333337,
+        10.7166666666668,
+        10.0500000000001,
+        12.0000000000002,
+        12.0000000000002,
+        12.0000000000002,
+        12.0000000000002,
+        12.0000000000002,
+        12.0000000000002
+      ],
+      "failures": [],
+      "fight_seconds": [
+        4.79999999999999,
+        4.79999999999999,
+        4.79999999999999,
+        4.79999999999999,
+        4.28333333333332,
+        7.43333333333331,
+        4.28333333333332,
+        2.33333333333333,
+        2.33333333333333,
+        2.99999999999999,
+        4.28333333333332,
+        4.28333333333332,
+        7.56666666666665,
+        2.99999999999999,
+        2.33333333333333,
+        4.28333333333332,
+        4.28333333333332,
+        4.28333333333332,
+        4.28333333333332,
+        4.28333333333332,
+        4.28333333333332
+      ],
+      "first_upgrade_catch": 2,
+      "future_50m_sink_s": 8.41666666666666,
+      "purchases": [
+        "line",
+        "reel",
+        "sonar",
+        "rod"
+      ],
+      "real_catches": 21,
+      "result": "PASS"
+    },
+    "visual": {
+      "checks": 65,
+      "failures": [],
+      "fish_species": 5,
+      "mountain_layers": 3,
+      "result": "PASS"
+    },
+    "depth": {
+      "checks": 380,
+      "deep_catches": [
+        {
+          "cycle_s": 19.1000000000003,
+          "depth": 20.1585139661307,
+          "fight_s": 8.26666666666666,
+          "id": "No.06",
+          "price": 12480
+        },
+        {
+          "cycle_s": 15.5500000000003,
+          "depth": 25.008298754536,
+          "fight_s": 4.43333333333332,
+          "id": "No.07",
+          "price": 12656
+        },
+        {
+          "cycle_s": 18.6833333333336,
+          "depth": 28.0190863096082,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 12412
+        },
+        {
+          "cycle_s": 19.3000000000003,
+          "depth": 20.1585139661307,
+          "fight_s": 8.26666666666666,
+          "id": "No.06",
+          "price": 8000
+        },
+        {
+          "cycle_s": 18.9000000000003,
+          "depth": 25.008298754536,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 26470
+        },
+        {
+          "cycle_s": 18.966666666667,
+          "depth": 28.0190863096082,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 14248
+        },
+        {
+          "cycle_s": 19.3000000000003,
+          "depth": 20.1585139661307,
+          "fight_s": 8.26666666666666,
+          "id": "No.06",
+          "price": 13980
+        },
+        {
+          "cycle_s": 16.3500000000003,
+          "depth": 25.008298754536,
+          "fight_s": 4.43333333333332,
+          "id": "No.07",
+          "price": 17552
+        },
+        {
+          "cycle_s": 18.7500000000003,
+          "depth": 28.0190863096082,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 16606
+        },
+        {
+          "cycle_s": 15.8166666666669,
+          "depth": 20.1585139661307,
+          "fight_s": 4.43333333333332,
+          "id": "No.07",
+          "price": 8864
+        },
+        {
+          "cycle_s": 19.3500000000003,
+          "depth": 25.008298754536,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 13042
+        },
+        {
+          "cycle_s": 18.9833333333336,
+          "depth": 28.0190863096082,
+          "fight_s": 7.51666666666665,
+          "id": "No.08",
+          "price": 16426
+        },
+        {
+          "cycle_s": 14.7666666666669,
+          "depth": 35.3475119384523,
+          "fight_s": 2.06666666666666,
+          "id": "No.09",
+          "price": 14160
+        },
+        {
+          "cycle_s": 19.2333333333336,
+          "depth": 40.3186008764548,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 57013
+        },
+        {
+          "cycle_s": 19.3833333333336,
+          "depth": 50.0,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 36267
+        },
+        {
+          "cycle_s": 18.516666666667,
+          "depth": 35.3475119384523,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 30453
+        },
+        {
+          "cycle_s": 20.4000000000002,
+          "depth": 40.3186008764548,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 50240
+        },
+        {
+          "cycle_s": 20.0833333333336,
+          "depth": 50.0,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 47413
+        },
+        {
+          "cycle_s": 13.5000000000002,
+          "depth": 35.3475119384523,
+          "fight_s": 2.06666666666666,
+          "id": "No.09",
+          "price": 18360
+        },
+        {
+          "cycle_s": 18.766666666667,
+          "depth": 40.3186008764548,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 59787
+        },
+        {
+          "cycle_s": 20.7166666666669,
+          "depth": 50.0,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 59040
+        },
+        {
+          "cycle_s": 13.5333333333335,
+          "depth": 35.3475119384523,
+          "fight_s": 2.06666666666666,
+          "id": "No.09",
+          "price": 17280
+        },
+        {
+          "cycle_s": 18.7833333333336,
+          "depth": 40.3186008764548,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 57600
+        },
+        {
+          "cycle_s": 19.7166666666669,
+          "depth": 50.0,
+          "fight_s": 7.08333333333331,
+          "id": "No.10",
+          "price": 57760
+        }
+      ],
+      "failures": [],
+      "money_earned": 621096,
+      "result": "PASS",
+      "returns": 1,
+      "species": [
+        "No.06",
+        "No.07",
+        "No.08",
+        "No.09",
+        "No.10"
+      ],
+      "unknown_sales": 8
+    }
+  },
+  "restart_write": "PASS",
+  "restart_read": "PASS",
+  "import": "PASS",
+  "headless_launch": "PASS",
+  "critical_errors": 0,
+  "native_capture": "PASS",
+  "ratios": [
+    "16:9",
+    "19.5:9",
+    "20:9",
+    "640x360"
+  ],
+  "renderer": "Linux Xvfb / Mesa llvmpipe / Compatibility",
+  "native_input": [
+    "touch return",
+    "mouse sell",
+    "book scroll"
+  ],
+  "idle_nodes": 141,
+  "idle_save_writes": 0,
+  "captures": [
+    "16x9-15_30m",
+    "16x9-30_50m",
+    "16x9-fight",
+    "16x9-choice",
+    "20x9-lv4-shop",
+    "640px-book-no10",
+    "19_5x9-choice",
+    "20x9-choice",
+    "640px-choice"
+  ],
+  "limitations": [
+    "iPhone/Android physical device testing pending",
+    "Beginner success rate and subjective tempo not measured"
+  ],
+  "optional_new_anomaly": "omitted"
+}

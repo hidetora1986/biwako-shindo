@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.08"
+species_id = "long_eel"
+display_name = "長体ウナギ"
+min_depth = 20.0
+max_depth = 35.0
+min_size_cm = 120.0
+max_size_cm = 220.0
+min_price = 10000
+max_price = 28000
+rarity = 4
+stamina = 110.0
+pull_power = 14.0
+stamina_drain = 14.0
+reel_progress_speed = 0.22
+run_interval = 5.0
+run_duration = 0.75
+run_power = 22.0
+description = "長い体を静かにくねらせる。"
+placeholder_kind = "bass"

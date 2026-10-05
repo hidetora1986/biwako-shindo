@@ -54,7 +54,7 @@ func _run() -> void:
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES:
 		var text: String = book.entries[fish.id].text
 		hidden_ok = hidden_ok and text.contains("???") and text.contains("未発見") and not text.contains(fish.display_name) and not text.contains("BEST") and not text.contains(fish.description)
-	_check(hidden_ok and book.entries.size() == 5, "Undiscovered Fish: five entries hide name/details/BEST")
+	_check(hidden_ok and book.entries.size() == GameProgress.FISH_PROFILES.size(), "Undiscovered Fish: data-backed entries hide name/details/BEST")
 	_touch(_hud.get_node("BookButton").get_global_rect().get_center())
 	_check(book.visible and paused and not _flow.request_cast() and not _flow.request_shop() and not _flow.request_hook() and not _flow.set_reeling(true), "Fish Book Open: touch opens and blocks all fishing/shop inputs")
 	var before: Vector2 = _fishes[1].position

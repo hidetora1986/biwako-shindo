@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.09"
+species_id = "blind_isaza"
+display_name = "盲目イサザ"
+min_depth = 30.0
+max_depth = 40.0
+min_size_cm = 18.0
+max_size_cm = 28.0
+min_price = 12000
+max_price = 24000
+rarity = 5
+stamina = 24.0
+pull_power = 9.0
+stamina_drain = 9.0
+reel_progress_speed = 0.36
+run_interval = 3.5
+run_duration = 0.45
+run_power = 20.0
+description = "薄い体色で、目が小さい。"
+placeholder_kind = "bluegill"

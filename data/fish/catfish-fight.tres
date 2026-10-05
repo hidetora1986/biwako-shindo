@@ -21,5 +21,5 @@ min_depth = 5.0
 max_depth = 15.0
 min_price = 1200
 max_price = 3800
-rarity = "uncommon"
+rarity = 2
 description = "底近くをゆっくり泳ぐ、大きく力強い魚。"

@@ -7,7 +7,7 @@ extends Resource
 @export var max_depth: float = 5.0
 @export var min_price: int = 200
 @export var max_price: int = 450
-@export_enum("common", "uncommon") var rarity: String = "common"
+@export_range(1, 5) var rarity: int = 1
 @export_multiline var description: String = "湖岸の浅い水に多い小型魚。"
 @export var species_id: String = "bluegill"
 @export var display_name: String = "ブルーギル"

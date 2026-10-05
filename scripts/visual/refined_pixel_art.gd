@@ -1,7 +1,7 @@
 class_name RefinedPixelArt
 extends RefCounted
 ## Original, cached pixel sprites. No external art, game RNG or fish data mutation.
-## All fish use the original 40×22 frame envelope; AI geometry stays unchanged.
+## Shallow sprites retain 40×22 frames; midgame fish have explicit larger envelopes.
 static var _fish_cache: Dictionary = {}
 static var _boat_cache: Texture2D
 
@@ -17,6 +17,8 @@ static func fish_frames(species: String) -> SpriteFrames:
 	return frames
 
 static func fish_texture(species: String, phase: int = 1) -> Texture2D:
+	if species in ["giant_catfish", "pale_biwamasu", "long_eel", "blind_isaza", "unknown_a"]:
+		return _midgame_texture(species, phase)
 	var image := Image.create(40, 22, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
 	var body := Color("849a72")
@@ -172,3 +174,64 @@ static func boat_texture() -> Texture2D:
 
 static func _paint(image: Image, rect: Rect2i, color: String) -> void:
 	image.fill_rect(rect, Color(color))
+
+static func _midgame_texture(species: String, phase: int) -> Texture2D:
+	if species == "pale_biwamasu":
+		var image := fish_texture("biwamasu", phase).get_image()
+		for x in range(image.get_width()):
+			for y in range(image.get_height()):
+				var color := image.get_pixel(x, y)
+				if color.a > 0:
+					image.set_pixel(x, y, color.lerp(Color("e2e7d8"), 0.72))
+		return ImageTexture.create_from_image(image)
+	var width := 88 if species == "long_eel" else (28 if species == "blind_isaza" else 60)
+	var height := 18 if species == "long_eel" else (18 if species == "blind_isaza" else 26)
+	var image := Image.create(width, height, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	var center := height / 2
+	var body := Color("a5a597")
+	var back := Color("687f7a")
+	var belly := Color("cbd0b9")
+	if species == "long_eel":
+		body = Color("a6a287")
+		back = Color("5e7975")
+	elif species == "blind_isaza":
+		body = Color("c7d4c7")
+		back = Color("9cbbb6")
+		belly = Color("e1e7cc")
+	elif species == "unknown_a":
+		body = Color("9eafa2")
+		back = Color("547779")
+		belly = Color("c3cdb6")
+	for x in range(3, width - 3):
+		var u := float(x - 3) / (width - 6)
+		var radius := maxi(1, int(lerpf(1, 5, u)))
+		if species == "blind_isaza":
+			radius = maxi(1, int(sin(u * PI) * 4))
+		elif species == "unknown_a":
+			radius = maxi(1, int(sin(u * PI) * 6))
+		var wiggle := int(round(sin(u * 5 + phase * 0.7))) if species == "long_eel" else 0
+		for y in range(center - radius + wiggle, center + radius + wiggle + 1):
+			image.set_pixel(x, clampi(y, 0, height - 1), back if y < center - radius + 2 else (belly if y > center + 1 else body))
+		if species == "long_eel" and x > 8:
+			image.set_pixel(x, center - radius - 1 + wiggle, back)
+		if x < 9:
+			var tail := (9 - x) / 2 + 1
+			for y in range(center - tail + phase - 1, center + tail + phase):
+				image.set_pixel(x, clampi(y, 0, height - 1), back)
+	if species == "giant_catfish":
+		for x in range(width - 13, width):
+			image.set_pixel(x, center + 3 + (x - width + 13) / 5, belly)
+		for x in range(12, width - 18):
+			image.set_pixel(x, center + 5, back)
+	elif species == "unknown_a":
+		# Slightly long lower jaw and uneven fins, without teeth or horror accents.
+		_paint(image, Rect2i(width - 11, center + 2, 10, 2), "c3cdb6")
+		_paint(image, Rect2i(18, center - 8, 6, 2), "6e9188")
+		_paint(image, Rect2i(29, center + 6, 4, 2), "829b8c")
+	if species != "blind_isaza":
+		image.set_pixel(width - 8, center - 2, Color("426365"))
+	else:
+		# Reduced eye stays close to the pale body palette.
+		image.set_pixel(width - 7, center - 1, Color("afc3b6"))
+	return ImageTexture.create_from_image(image)

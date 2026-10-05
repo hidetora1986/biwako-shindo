@@ -54,7 +54,7 @@ func snapshot(progress: GameProgress) -> Dictionary:
 		discovered[id] = record.discovered
 		counts[id] = record.caught_count
 		best[id] = record.best_size_cm
-	return {"save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions}
+	return {"save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a}
 
 func load_into(progress: GameProgress) -> bool:
 	var raw: Variant = null
@@ -87,6 +87,11 @@ func load_into(progress: GameProgress) -> bool:
 		progress.fish_records[fish.id] = {"discovered": found, "caught_count": count, "best_size_cm": snappedf(size, 0.1) if found else 0.0}
 	progress.anomaly_seen = data.get("anomaly_seen") is bool and data.get("anomaly_seen") == true
 	progress.sonar_sessions = _integer(data.get("sonar_sessions"), 0, 0, 3)
+	progress.returned_unknown_a = data.get("returned_unknown_a") is bool and data.get("returned_unknown_a") == true
+	# Additive v1 migration: absent new records/flag default, existing progress stays.
+	if not progress.lv4_unlocked():
+		for category: String in GameProgress.CATEGORIES:
+			progress.levels[category] = mini(3, progress.levels[category])
 	return valid
 
 func _dictionary(value: Variant) -> Dictionary:

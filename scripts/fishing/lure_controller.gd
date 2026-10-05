@@ -12,6 +12,7 @@ signal landed
 @export_range(1.0, 150.0, 0.1, "or_greater") var max_depth_m: float = 15.0
 
 var state: State = State.READY
+var depth_origin_m: float = 0.0
 var depth_m: float = 0.0
 var splash_remaining: float = 0.0
 var _surface_y: float = 136.0
@@ -26,9 +27,10 @@ var _splash_x: float = 0.0
 func _ready() -> void:
 	visible = false
 
-func configure_water(bounds: Rect2, surface_y: float, visible_depth_m: float) -> void:
+func configure_water(bounds: Rect2, surface_y: float, visible_depth_m: float, origin_m: float = 0.0) -> void:
 	_water = bounds
 	_surface_y = surface_y
+	depth_origin_m = origin_m
 	_visible_depth_m = maxf(visible_depth_m, 0.1)
 	_splash_x = _target_x()
 	if state not in [State.READY, State.RESET, State.CASTING, State.FIGHTING, State.LANDING]:
@@ -69,9 +71,9 @@ func _physics_process(delta: float) -> void:
 				_splash_x = position.x
 				landed.emit()
 		State.SINKING:
-			depth_m = minf(depth_m + (sink_speed_m + maxf(0, depth_m - 15.0) * deep_sink_acceleration) * delta, minf(max_depth_m, _visible_depth_m))
+			depth_m = minf(depth_m + (sink_speed_m + maxf(0, depth_m - 15.0) * deep_sink_acceleration) * delta, minf(max_depth_m, depth_origin_m + _visible_depth_m))
 			_update_underwater_position()
-			if depth_m >= minf(max_depth_m, _visible_depth_m):
+			if depth_m >= minf(max_depth_m, depth_origin_m + _visible_depth_m):
 				state = State.WAITING
 		State.BITTEN:
 			_wobble_time += delta
@@ -84,7 +86,7 @@ func _target_x() -> float:
 	return _water.position.x + _water.size.x * _x_fraction
 
 func _update_underwater_position() -> void:
-	position = Vector2(_target_x(), _surface_y + depth_m / _visible_depth_m * (_water.end.y - 8.0 - _surface_y))
+	position = Vector2(_target_x(), _surface_y + clampf((depth_m - depth_origin_m) / _visible_depth_m, 0.0, 1.0) * (_water.end.y - 8.0 - _surface_y))
 
 func pause_for_interest() -> void:
 	# Hold the lure while a reserved fish approaches within its depth habitat.
@@ -99,7 +101,7 @@ func hook() -> void:
 	state = State.HOOKED
 
 func resume_sinking() -> void:
-	state = State.WAITING if depth_m >= minf(max_depth_m, _visible_depth_m) else State.SINKING
+	state = State.WAITING if depth_m >= minf(max_depth_m, depth_origin_m + _visible_depth_m) else State.SINKING
 	_update_underwater_position()
 
 func begin_reset() -> void:
@@ -133,7 +135,7 @@ func _draw() -> void:
 func follow_fish(value: Vector2, landing: bool = false) -> void:
 	state = State.LANDING if landing else State.FIGHTING
 	position = value
-	depth_m = clampf((position.y - _surface_y) / maxf(_water.end.y - 8.0 - _surface_y, 1.0) * _visible_depth_m, 0.0, _visible_depth_m)
+	depth_m = depth_origin_m + clampf((position.y - _surface_y) / maxf(_water.end.y - 8.0 - _surface_y, 1.0) * _visible_depth_m, 0.0, _visible_depth_m)
 
 func landing_splash(value: Vector2) -> void:
 	position = value

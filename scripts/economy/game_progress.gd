@@ -8,8 +8,9 @@ const CATEGORIES := ["rod", "reel", "line", "sonar"]
 var catalog: EquipmentCatalog = preload("res://data/equipment/mvp.tres")
 var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}
-const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres")]
+const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres")]
 var fish_records: Dictionary = {}
+var returned_unknown_a: bool = false
 var anomaly_seen: bool = false
 var sonar_sessions: int = 0
 var last_sale_new_discovery: bool = false
@@ -19,13 +20,17 @@ func _init() -> void:
 	for fish: FishFightProfile in FISH_PROFILES:
 		fish_records[fish.id] = {"discovered": false, "caught_count": 0, "best_size_cm": 0.0}
 
+func lv4_unlocked() -> bool:
+	return fish_records.get("No.10", {}).get("discovered", false)
+
 func current(category: String) -> EquipmentLevel:
 	return catalog.find(category, int(levels.get(category, 1)))
 
 func next_level(category: String) -> EquipmentLevel:
 	if not levels.has(category):
 		return null
-	return catalog.find(category, int(levels[category]) + 1)
+	var next := catalog.find(category, int(levels[category]) + 1)
+	return null if next != null and next.level >= 4 and not lv4_unlocked() else next
 
 func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
 	if fish == null or session_id <= _last_sold_session:
@@ -36,6 +41,15 @@ func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
 	_last_sold_session = session_id
 	changed.emit()
 	return price
+
+func return_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> bool:
+	if fish == null or fish.id != "No.10" or session_id <= _last_sold_session:
+		return false
+	last_sale_new_discovery = record_catch(fish, size_cm, false)
+	returned_unknown_a = true
+	_last_sold_session = session_id
+	changed.emit()
+	return true
 
 func can_purchase(category: String, expected_level: int) -> bool:
 	var item := next_level(category)

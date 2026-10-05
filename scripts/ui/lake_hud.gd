@@ -5,6 +5,7 @@ const BASE_MARGIN := 16.0
 var safe_rect := Rect2()
 var core_rect := Rect2()
 var _area_depth_m: float = 15.0
+var _area_origin_m: float = 0.0
 
 func configure(view_size: Vector2, surface_y: float, depth_m: float) -> void:
 	var device_safe := Rect2(Vector2.ZERO, view_size)
@@ -49,6 +50,8 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$CastButton.size = Vector2(maxf(136.0, 44.0 / pixel_scale), maxf(48.0, 44.0 / pixel_scale))
 	$CastButton.add_theme_font_size_override("font_size", maxi(20, int(ceil(12.0 / pixel_scale))))
 	$CastButton.position = Vector2(core_rect.get_center().x - $CastButton.size.x * 0.5, core_rect.end.y - $CastButton.size.y)
+	$DepthBandButton.size = Vector2(136, maxf(44, 44.0 / pixel_scale))
+	$DepthBandButton.position = $CastButton.position - Vector2(0, $DepthBandButton.size.y + 8)
 	$ReelButton.size = Vector2(maxf(152.0, 44.0 / pixel_scale), maxf(72.0, 44.0 / pixel_scale))
 	$ReelButton.position = core_rect.end - $ReelButton.size
 	$FightHUD.size = Vector2(minf(320.0, core_rect.size.x - $ReelButton.size.x - 16.0), 72)
@@ -63,7 +66,7 @@ func show_lure_depth(depth_m: float, active: bool) -> void:
 	if active:
 		$Depth/Label.text = "%.1fm" % depth_m
 	else:
-		$Depth/Label.text = "0–%dm" % int(_area_depth_m)
+		$Depth/Label.text = "%d–%dm" % [int(_area_origin_m), int(_area_origin_m + _area_depth_m)]
 
 func show_bite(active: bool, lure_position: Vector2) -> void:
 	$Bite.visible = active
@@ -90,10 +93,11 @@ func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
 	$CatchPanel/Name.text = result["name"]
 	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
 	$CatchPanel/Fish.texture = fish_texture
-	$CatchPanel/Price.text = "+ ¥%s" % _format_money(result.get("price", 0))
+	$CatchPanel/Price.text = ("¥" if result.get("id") == "No.10" else "+ ¥") + _format_money(result.get("price", 0))
 
 func hide_catch() -> void:
 	$CatchPanel.visible = false
+	show_unknown_choice(false)
 	$CatchPanel/Fish.texture = null
 
 func _format_money(value: int) -> String:
@@ -109,3 +113,19 @@ func show_progress(progress: GameProgress) -> void:
 	$Money/Label.text = "¥" + _format_money(progress.money)
 	var item := progress.cheapest_next()
 	$NextUpgrade.text = "ALL EQUIPMENT MAX" if item == null else "NEXT  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]
+
+func set_area_range(origin: float, span: float) -> void:
+	_area_origin_m = origin
+	_area_depth_m = span
+	show_lure_depth(0, false)
+
+func show_unknown_choice(enabled: bool) -> void:
+	var scale := maxf(0.1, float(get_window().size.y) / size.y)
+	var height := maxf(46, 44.0 / scale)
+	$CatchPanel.size.y = 190 + height + 18 if enabled else 190
+	$CatchPanel.position = core_rect.get_center() - $CatchPanel.size * 0.5
+	for name in ["SellChoice", "ReturnChoice"]:
+		var button: Button = $CatchPanel.get_node(name)
+		button.visible = enabled
+		button.size = Vector2(124, height)
+		button.position = Vector2(12 if name == "SellChoice" else 144, 196)

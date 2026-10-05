@@ -46,7 +46,7 @@ func refresh_contacts() -> void:
 		var estimate := fish.size_cm if fish.size_cm > 0 else (fish.fight_profile.min_size_cm + fish.fight_profile.max_size_cm) * 0.5
 		var size_text := "SMALL" if estimate < 25 else ("MEDIUM" if estimate < 50 else "LARGE")
 		var known: bool = _progress.fish_records[fish.fight_profile.id].discovered
-		contacts.append({"instance_id": fish.get_instance_id(), "depth_m": fish.depth_position, "x_fraction": clampf((fish.position.x - fish.water_bounds.position.x) / maxf(fish.water_bounds.size.x, 1), 0, 1), "size_text": size_text if _progress.levels.sonar >= 2 else "", "name_text": fish.fight_profile.display_name if _progress.levels.sonar >= 3 and known else ""})
+		contacts.append({"instance_id": fish.get_instance_id(), "depth_m": fish.depth_position, "x_fraction": clampf((fish.position.x - fish.water_bounds.position.x) / maxf(fish.water_bounds.size.x, 1), 0, 1), "size_text": size_text if _progress.levels.sonar >= 2 else "", "name_text": ("???" if fish.fight_profile.id == "No.10" else fish.fight_profile.display_name) if _progress.levels.sonar >= 3 and (known or fish.fight_profile.id == "No.10") else "", "dot_width": 8 if fish.fight_profile.id == "No.10" else 5})
 	queue_redraw()
 
 func depth_y(depth_m: float) -> float:
@@ -78,7 +78,7 @@ func _draw() -> void:
 	for index in range(contacts.size()):
 		var contact: Dictionary = contacts[index]
 		var point := Vector2(28 + contact.x_fraction * (size.x - 44), depth_y(contact.depth_m)).floor()
-		draw_rect(Rect2(point - Vector2(2, 1), Vector2(5, 2)), Color("d5e6b9"))
+		draw_rect(Rect2(point - Vector2(2, 1), Vector2(contact.dot_width, 2)), Color("d5e6b9"))
 		if index == focused and level >= 2:
 			draw_rect(Rect2(point - Vector2(4, 3), Vector2(9, 6)), Color("6fc5c4"), false, 1)
 	if not contacts.is_empty() and level >= 2:

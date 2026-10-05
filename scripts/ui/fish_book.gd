@@ -1,5 +1,5 @@
 extends Control
-## Five data-backed entries; undiscovered names/stats/descriptions stay hidden.
+## Data-backed entries; undiscovered names/stats/descriptions stay hidden.
 signal closed
 var progress: GameProgress
 var entries: Dictionary = {}

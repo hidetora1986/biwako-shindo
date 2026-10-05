@@ -3,6 +3,8 @@ extends Node2D
 @export_enum("Sky", "Mountains", "Underwater", "FarMountains", "MiddleMountains", "NearShore") var layer: String = "Sky"
 var view_size := Vector2(640, 360)
 var profile: LakeProfile
+var depth_origin_m: float = 0.0
+var depth_span_m: float = 15.0
 var _ridge_points := PackedVector2Array()
 var _rng := RandomNumberGenerator.new()
 
@@ -83,7 +85,14 @@ func _draw_mountain_layer() -> void:
 		draw_rect(Rect2(0, horizon - 1, view_size.x, 2), Color("8ca999"))
 		draw_rect(Rect2(0, horizon + 1, view_size.x, 2), Color("bfd0bb"))
 
+func set_depth_band(origin: float, span: float) -> void:
+	depth_origin_m = origin
+	depth_span_m = span
+	queue_redraw()
+
 func color_at_depth(depth_m: float) -> Color:
+	if depth_m > 15:
+		return profile.water_deep.lerp(Color("23364b"), clampf((depth_m - 15) / 35, 0, 1))
 	var ratio := clampf(depth_m / profile.displayed_depth_m, 0, 1)
 	if ratio < 0.5:
 		return profile.water_upper.lerp(profile.water_middle, ratio * 2)
@@ -93,14 +102,17 @@ func _draw_underwater() -> void:
 	var surface := floorf(view_size.y * profile.surface_ratio)
 	var height := view_size.y - surface
 	for y in range(int(surface), int(view_size.y), 2):
-		var depth := float(y - surface) / height * profile.displayed_depth_m
+		var depth := depth_origin_m + float(y - surface) / height * depth_span_m
 		draw_rect(Rect2(0, y, view_size.x, 2), color_at_depth(depth))
 	# Narrow, broken light bands attenuate downwards. Static, no god-ray shader.
 	for x in [view_size.x * 0.10, view_size.x * 0.38, view_size.x * 0.72, view_size.x * 0.93]:
 		for band in range(6):
 			var y := surface + 6 + band * 26
 			var ray := PackedVector2Array([Vector2(floorf(x + band * 7), y), Vector2(floorf(x + 15 + band * 7), y), Vector2(floorf(x + 23 + band * 7), y + 26), Vector2(floorf(x + 6 + band * 7), y + 26)])
-			draw_colored_polygon(ray, Color(0.72, 0.92, 0.84, 0.045 - band * 0.0055))
+			draw_colored_polygon(ray, Color(0.72, 0.92, 0.84, (0.045 - band * 0.0055) * (1.0 - depth_origin_m / 60.0)))
+	if depth_origin_m >= 30:
+		# Open deeper water; avoid suggesting the lake floor is only 50m down.
+		return
 	_rng.seed = 3418
 	# Keep the central fishing lane uncluttered. A normal gravel / silt lake bed.
 	for x in range(0, int(view_size.x), 8):

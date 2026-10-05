@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.06"
+species_id = "giant_catfish"
+display_name = "巨大ナマズ"
+min_depth = 15.0
+max_depth = 25.0
+min_size_cm = 100.0
+max_size_cm = 160.0
+min_price = 6000
+max_price = 18000
+rarity = 3
+stamina = 100.0
+pull_power = 12.0
+stamina_drain = 12.0
+reel_progress_speed = 0.23
+run_interval = 4.2
+run_duration = 1.0
+run_power = 26.0
+description = "深い水をゆっくり泳ぐ大型のナマズ。"
+placeholder_kind = "bass"

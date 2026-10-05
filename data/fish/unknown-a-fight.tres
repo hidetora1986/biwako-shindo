@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.10"
+species_id = "unknown_a"
+display_name = "名称不明種A"
+min_depth = 35.0
+max_depth = 50.0
+min_size_cm = 80.0
+max_size_cm = 140.0
+min_price = 28000
+max_price = 60000
+rarity = 5
+stamina = 100.0
+pull_power = 15.0
+stamina_drain = 14.0
+reel_progress_speed = 0.24
+run_interval = 2.8
+run_duration = 0.65
+run_power = 30.0
+description = "分類: 不明。既知の記録との一致が確認できない。"
+placeholder_kind = "bass"
