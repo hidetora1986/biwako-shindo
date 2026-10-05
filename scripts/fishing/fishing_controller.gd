@@ -41,6 +41,7 @@ var progress := GameProgress.new()
 var _cast_serial: int = 0
 var _shop_open: bool = false
 var _book_open: bool = false
+var _playtest: Node
 var save_manager: SaveManager
 var anomaly := SonarAnomaly.new()
 var environment := LakeEnvironment.new()
@@ -67,6 +68,8 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_boat = boat
 	_fish_container = fishes
 	_hud = hud
+	_playtest = get_node("/root/HumanPlaytest")
+	save_path = _playtest.test_save_path(save_path)
 	save_manager = SaveManager.new(save_path)
 	save_manager.load_into(progress)
 	save_manager.bind_progress(progress)
@@ -103,6 +106,7 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 			hidden_route.on_title()
 		else:
 			_begin_ending() # Interrupted after reward: replay only the ending, never the boss/reward.
+	_playtest.bind_flow(self)
 
 func configure_water(bounds: Rect2, surface_y: float, depth_m: float, origin_m: float = 0.0) -> void:
 	_water = bounds
@@ -572,6 +576,7 @@ func resolve_unknown_catch(sell: bool) -> bool:
 		if not progress.return_catch(active_fish.fight_profile, active_fish.size_cm, _cast_serial):
 			return false
 	last_catch["returned"] = not sell
+	_playtest.choice(last_catch.get("id", ""), "SELL" if sell else "RETURN")
 	_begin_reset()
 	return true
 
@@ -621,6 +626,7 @@ func _step_ending(delta: float) -> void:
 func request_continue() -> bool:
 	if state != State.TITLE or not progress.main_ending_seen:
 		return false
+	_playtest.record("POST GAME CONTINUE")
 	ending_screen.visible = false
 	_set_cinematic(false)
 	state = State.READY

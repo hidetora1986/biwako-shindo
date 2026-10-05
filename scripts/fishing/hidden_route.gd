@@ -285,6 +285,7 @@ func set_reeling(pressed: bool) -> bool:
 
 func choose(contact: bool) -> bool:
 	if stage != Stage.CHOICE: return false
+	flow._playtest.record("NO00 FINAL CHOICE", {"choice": "CONTACT" if contact else "CUT"})
 	flow.line.visible = contact
 	_enter(Stage.REEL_UP if contact else Stage.CUT)
 	return true

@@ -32,3 +32,5 @@
 | [repository-setup.md](repository-setup.md) | GitHub への初期反映と履歴の復元手順 |
 
 仕様は Markdown で保存します。未確定の内容は未確定と明記し、実装や Acceptance の完了を推測で記録しないでください。
+
+- [RC1 Human Playtest計測・評価手順](release/human-playtest.md)
