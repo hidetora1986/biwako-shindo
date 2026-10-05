@@ -21,6 +21,15 @@ var max_depth_reached_m: float = 0.0
 var anomaly_seen: bool = false
 var sonar_sessions: int = 0
 var last_sale_new_discovery: bool = false
+# No.00 is deliberately outside FISH_PROFILES / ordinary catch records.
+var anonymous_lure_obtained: bool = false
+var anonymous_lure_equipped: bool = false
+var hidden_entry_seen: bool = false
+var no00_contacted: bool = false
+var hidden_cut_ending_seen: bool = false
+var hidden_contact_ending_seen: bool = false
+var hidden_postgame_sessions: int = 0
+var second_playthrough_hooks: Dictionary = {}
 var _last_sold_session: int = 0
 
 func _init() -> void:
@@ -42,7 +51,7 @@ func next_level(category: String) -> EquipmentLevel:
 	return next
 
 func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
-	if fish == null or session_id <= _last_sold_session or (fish.is_boss and boss15_defeated):
+	if fish == null or fish.id == "00" or session_id <= _last_sold_session or (fish.is_boss and boss15_defeated):
 		return 0
 	var price := fish.sale_price(size_cm)
 	last_sale_new_discovery = record_catch(fish, size_cm, false)
@@ -147,3 +156,40 @@ func finish_main_ending() -> void:
 
 func can_encounter_boss() -> bool:
 	return lv5_unlocked() and levels.rod == 5 and levels.line == 5 and night_unlocked and not boss15_defeated
+
+func hidden_eligible() -> bool:
+	if not (boss15_defeated and main_ending_seen and returned_unknown_a and returned_unknown_b and hull_knock_count >= 3 and zero_depth_contact_seen and levels.sonar == 5 and night_unlocked):
+		return false
+	for record: Dictionary in fish_records.values():
+		if not record.discovered:
+			return false
+	return true
+
+func hidden_finished() -> bool:
+	return hidden_cut_ending_seen or hidden_contact_ending_seen
+
+func note_postgame_catch() -> void:
+	if hidden_eligible() and not anonymous_lure_obtained:
+		hidden_postgame_sessions = mini(3, hidden_postgame_sessions + 1)
+		if hidden_postgame_sessions >= 2:
+			anonymous_lure_obtained = true
+		changed.emit()
+
+func mark_hidden_entry() -> void:
+	if hidden_eligible() and not hidden_entry_seen:
+		hidden_entry_seen = true
+		changed.emit()
+
+func finish_hidden(contact: bool) -> void:
+	if hidden_finished():
+		return
+	if contact:
+		hidden_contact_ending_seen = true
+		no00_contacted = true
+	else:
+		hidden_cut_ending_seen = true
+	second_playthrough_hooks = {"first_record_count":2,"returning_dialogue":true,"sonar_depth_flash":120}
+	changed.emit()
+
+func no00_record() -> Dictionary:
+	return {"id":"00","discovered":no00_contacted,"caught_count":2 if no00_contacted else 0,"description":"記録が一致しない。" if no00_contacted else "この項目は存在しない。"}

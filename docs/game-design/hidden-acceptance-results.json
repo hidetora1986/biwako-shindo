@@ -1,0 +1,224 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "base_head": "dd80cf37aed83a6eb0d1dfa12758f72ebd433fde",
+  "branch": "feature/hidden-boss-v1",
+  "tests": {
+    "phase1_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "PHASE1_ACCEPTANCE {\"failures\":[],\"fish_count\":7,\"phase\":1,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase2_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "PHASE2_ACCEPTANCE {\"average_cast_to_hit_s\":5.26666666666665,\"casts\":36,\"checks\":57,\"failures\":[],\"longest_cast_to_hit_s\":5.26666666666665,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase3_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "PHASE3_ACCEPTANCE {\"checks\":109,\"consecutive_catches\":5,\"failures\":[],\"fight_seconds\":{\"bass\":4.81666666666665,\"biwamasu\":5.74999999999998,\"bluegill\":2.68333333333333,\"catfish\":8.16666666666665,\"crucian\":4.13333333333332},\"guided_catches\":18,\"guided_sessions\":20,\"longest_guided_s\":9.93333333333341,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase4_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "PHASE4_ACCEPTANCE {\"catches\":[{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":true,\"price\":1402,\"size_cm\":41.2,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1203,\"size_cm\":36.6,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1341,\"size_cm\":39.8,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1653,\"size_cm\":47.0,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1008,\"size_cm\":32.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1177,\"size_cm\":36.0,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":791,\"size_cm\":27.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":921,\"size_cm\":30.1,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1164,\"size_cm\":35.7,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":930,\"size_cm\":30.3,\"species_id\":\"bass\"}],\"checks\":196,\"consecutive_catches\":10,\"failures\":[],\"first_upgrade_catch\":2,\"result\":\"PASS\",\"upgrades\":3}"
+      ]
+    },
+    "phase5_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "PHASE5_ACCEPTANCE {\"anomaly_duration_s\":0.6,\"checks\":105,\"failures\":[],\"result\":\"PASS\",\"save_version\":1}"
+      ]
+    },
+    "mvp_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "MVP_ACCEPTANCE {\"checks\":316,\"cycle_seconds\":[12.5166666666669,12.5166666666669,12.5166666666669,12.5166666666669,12.0000000000002,15.1500000000003,12.0000000000002,10.0500000000001,10.0500000000001,10.7166666666668,12.0000000000002,12.0000000000002,15.2833333333337,10.7166666666668,10.0500000000001,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002],\"failures\":[],\"fight_seconds\":[4.79999999999999,4.79999999999999,4.79999999999999,4.79999999999999,4.28333333333332,7.43333333333331,4.28333333333332,2.33333333333333,2.33333333333333,2.99999999999999,4.28333333333332,4.28333333333332,7.56666666666665,2.99999999999999,2.33333333333333,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332],\"first_upgrade_catch\":2,\"future_50m_sink_s\":8.41666666666666,\"purchases\":[\"line\",\"reel\",\"sonar\",\"rod\"],\"real_catches\":21,\"result\":\"PASS\"}"
+      ]
+    },
+    "visual_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "VISUAL_ACCEPTANCE {\"checks\":65,\"failures\":[],\"fish_species\":5,\"mountain_layers\":3,\"result\":\"PASS\"}"
+      ]
+    },
+    "midgame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "MIDGAME_ACCEPTANCE {\"checks\":380,\"deep_catches\":[{\"cycle_s\":19.1000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":12480},{\"cycle_s\":15.5500000000003,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":12656},{\"cycle_s\":18.6833333333336,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":12412},{\"cycle_s\":19.3000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":8000},{\"cycle_s\":18.9000000000003,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":26470},{\"cycle_s\":18.966666666667,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":14248},{\"cycle_s\":19.3000000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":13980},{\"cycle_s\":16.3500000000003,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":17552},{\"cycle_s\":18.7500000000003,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16606},{\"cycle_s\":15.8166666666669,\"depth\":20.1585139661307,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":8864},{\"cycle_s\":19.3500000000003,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":13042},{\"cycle_s\":18.9833333333336,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16426},{\"cycle_s\":14.7666666666669,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":14160},{\"cycle_s\":19.2333333333336,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57013},{\"cycle_s\":19.3833333333336,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":36267},{\"cycle_s\":18.516666666667,\"depth\":35.3475119384523,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":30453},{\"cycle_s\":20.4000000000002,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":50240},{\"cycle_s\":20.0833333333336,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":47413},{\"cycle_s\":13.5000000000002,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":18360},{\"cycle_s\":18.766666666667,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59787},{\"cycle_s\":20.7166666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59040},{\"cycle_s\":13.5333333333335,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":17280},{\"cycle_s\":18.7833333333336,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57600},{\"cycle_s\":19.7166666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57760}],\"failures\":[],\"money_earned\":621096,\"result\":\"PASS\",\"returns\":1,\"species\":[\"No.06\",\"No.07\",\"No.08\",\"No.09\",\"No.10\"],\"unknown_sales\":8}"
+      ]
+    },
+    "lategame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "LATEGAME_ACCEPTANCE {\"checks\":460,\"cycles\":[{\"cycle_s\":21.6666666666668,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":69700},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":80164},{\"cycle_s\":22.8833333333334,\"depth\":65.0,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":63729},{\"cycle_s\":21.6166666666668,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":49193},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":114429},{\"cycle_s\":21.5833333333335,\"depth\":65.0,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":52964},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":146625},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":159750},{\"cycle_s\":23.9833333333333,\"depth\":85.0,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":116750},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":87125},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":96875},{\"cycle_s\":28.6833333333331,\"depth\":85.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":265500},{\"cycle_s\":27.4999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":222000},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":397500},{\"cycle_s\":27.7333333333331,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":241800},{\"cycle_s\":27.7999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":198300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":346800},{\"cycle_s\":27.7499999999998,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":325500},{\"cycle_s\":27.4999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":306300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":418500}],\"failures\":[],\"knock_strikes\":6,\"night\":1.99999999999999,\"pre_lv5_unknown\":true,\"rare_casts\":11,\"result\":\"PASS\"}"
+      ]
+    },
+    "boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "BOSS_ACCEPTANCE {\"actions\":[0,2,1],\"checks\":74,\"encounters\":3,\"failures\":[],\"fight_s\":53.2499999999983,\"phases\":[1,2,3],\"result\":\"PASS\",\"reward\":1069000,\"warnings_s\":[0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001]}"
+      ]
+    },
+    "hidden_boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_ACCEPTANCE {\"checks\":99,\"failures\":[],\"fight_seconds\":50,\"ratios\":[\"16:9\",\"19.5:9\",\"20:9\",\"640x360\"]}"
+      ]
+    },
+    "hidden-restart-cut-write": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS false"
+      ]
+    },
+    "hidden-restart-cut-read": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS false"
+      ]
+    },
+    "hidden-restart-contact-write": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS true"
+      ]
+    },
+    "hidden-restart-contact-read": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS true"
+      ]
+    },
+    "boss-restart-write": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_WRITE PASS"
+      ]
+    },
+    "boss-restart-interrupt": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_INTERRUPTED_DAWN PASS"
+      ]
+    },
+    "boss-restart-finish": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_FINISH PASS"
+      ]
+    },
+    "boss-restart-postgame": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_POSTGAME_CONTINUE PASS"
+      ]
+    },
+    "import": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": []
+    },
+    "headless": {
+      "exit_code": 0,
+      "errors": [],
+      "pass": true,
+      "summary": []
+    }
+  },
+  "native_renderer": {
+    "result": "PASS",
+    "backend": "Compatibility / Mesa llvmpipe / Xvfb",
+    "screenshots": 33,
+    "ratios": [
+      "16:9",
+      "19.5:9",
+      "20:9"
+    ],
+    "files": [
+      "docs/hidden/screenshots/16x9-A-no00-entry.png",
+      "docs/hidden/screenshots/16x9-B-anonymous-lure.png",
+      "docs/hidden/screenshots/16x9-C-114m.png",
+      "docs/hidden/screenshots/16x9-D-121m.png",
+      "docs/hidden/screenshots/16x9-E-sonar-invalid.png",
+      "docs/hidden/screenshots/16x9-F-contact.png",
+      "docs/hidden/screenshots/16x9-G-hidden-fight.png",
+      "docs/hidden/screenshots/16x9-H-final-choice.png",
+      "docs/hidden/screenshots/16x9-I-cut-ending.png",
+      "docs/hidden/screenshots/16x9-J-no00-count2.png",
+      "docs/hidden/screenshots/16x9-K-persistent-book.png",
+      "docs/hidden/screenshots/19_5x9-A-no00-entry.png",
+      "docs/hidden/screenshots/19_5x9-B-anonymous-lure.png",
+      "docs/hidden/screenshots/19_5x9-C-114m.png",
+      "docs/hidden/screenshots/19_5x9-D-121m.png",
+      "docs/hidden/screenshots/19_5x9-E-sonar-invalid.png",
+      "docs/hidden/screenshots/19_5x9-F-contact.png",
+      "docs/hidden/screenshots/19_5x9-G-hidden-fight.png",
+      "docs/hidden/screenshots/19_5x9-H-final-choice.png",
+      "docs/hidden/screenshots/19_5x9-I-cut-ending.png",
+      "docs/hidden/screenshots/19_5x9-J-no00-count2.png",
+      "docs/hidden/screenshots/19_5x9-K-persistent-book.png",
+      "docs/hidden/screenshots/20x9-A-no00-entry.png",
+      "docs/hidden/screenshots/20x9-B-anonymous-lure.png",
+      "docs/hidden/screenshots/20x9-C-114m.png",
+      "docs/hidden/screenshots/20x9-D-121m.png",
+      "docs/hidden/screenshots/20x9-E-sonar-invalid.png",
+      "docs/hidden/screenshots/20x9-F-contact.png",
+      "docs/hidden/screenshots/20x9-G-hidden-fight.png",
+      "docs/hidden/screenshots/20x9-H-final-choice.png",
+      "docs/hidden/screenshots/20x9-I-cut-ending.png",
+      "docs/hidden/screenshots/20x9-J-no00-count2.png",
+      "docs/hidden/screenshots/20x9-K-persistent-book.png"
+    ],
+    "idle_nodes": 182,
+    "idle_frames_per_ratio": 120,
+    "idle_save_writes": 0
+  },
+  "critical_errors": 0,
+  "limits": [
+    "Physical iPhone/Android safe areas, haptics, audio level and human difficulty have not been tested.",
+    "Normal fishing maximum remains120m; displayed121 and invalid reading only belong to Hidden Encounter."
+  ]
+}

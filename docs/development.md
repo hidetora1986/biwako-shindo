@@ -65,3 +65,5 @@ git status --short
 4. 差分・検証結果をレビューし、完了を確認してから統合する。
 
 初期構築の段階では `main` へ統合しません。
+
+Hidden Phaseは `dd80cf37` からの `feature/hidden-boss-v1` のみで実施。main・MVP・Visual・Midgame・Lategame・Bossの既存6ブランチへコミット／マージ／force pushしません。

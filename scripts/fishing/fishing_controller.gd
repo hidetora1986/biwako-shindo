@@ -1,7 +1,7 @@
 extends Node2D
 ## Owns fishing states/input. FishingFight handles only fight numbers.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE, HIDDEN }
 signal hook_succeeded
 signal hook_missed
 
@@ -50,6 +50,7 @@ var seek_depth_m: float = 0.0
 var _deep_cast_count: int = 0
 var boss_encounter := BossEncounter.new()
 var ending_screen: MainEndingScreen
+var hidden_route: HiddenRoute
 var ending_elapsed: float = 0.0
 var _ending_surface_restored: bool = false
 var _cinematic_visibility: Dictionary = {}
@@ -89,6 +90,9 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_hud.add_child(ending_screen)
 	ending_screen.configure(_hud.size,_hud.safe_rect)
 	ending_screen.continued.connect(request_continue)
+	hidden_route = HiddenRoute.new()
+	add_child(hidden_route)
+	hidden_route.setup(self)
 	_progress_changed()
 	_refresh_ui()
 	if progress.boss15_defeated:
@@ -96,6 +100,7 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 			_set_cinematic(true)
 			state = State.TITLE
 			ending_screen.show_title()
+			hidden_route.on_title()
 		else:
 			_begin_ending() # Interrupted after reward: replay only the ending, never the boss/reward.
 
@@ -117,6 +122,8 @@ func request_cast() -> bool:
 		_deep_cast_count += 1
 		get_parent().populate_depth_band(selected_band, progress.current("line").effect_value, _deep_cast_count)
 		seek_depth_m = DepthBands.seek_depth(selected_band, _deep_cast_count, progress.current("line").effect_value)
+	if hidden_route != null and hidden_route.can_start():
+		return hidden_route.begin()
 	boss_encounter.begin_cast()
 	if not lure.cast_from(_boat.rod_tip_position()):
 		return false
@@ -132,7 +139,7 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
-	if _shop_open or _book_open or state in [State.ENDING,State.TITLE,State.BOSS_BITE]:
+	if _shop_open or _book_open or state in [State.ENDING,State.TITLE,State.BOSS_BITE,State.HIDDEN]:
 		return
 	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("ShopButton").disabled and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
 		if request_shop():
@@ -187,6 +194,9 @@ func request_hook() -> bool:
 
 func _physics_process(delta: float) -> void:
 	if _hud == null or _shop_open or _book_open:
+		return
+	if state == State.HIDDEN:
+		hidden_route.step(delta)
 		return
 	if state == State.ENDING:
 		_step_ending(delta)
@@ -333,6 +343,8 @@ func _miss() -> void:
 func _begin_reset() -> void:
 	if state in [State.LANDED, State.CHOOSING, State.FAILED]:
 		progress.complete_normal_session()
+		if _session_caught:
+			progress.note_postgame_catch()
 	state = State.RESET
 	lure.begin_reset()
 	_stop_reel()
@@ -460,7 +472,9 @@ func _update_line() -> void:
 func _refresh_ui() -> void:
 	if _hud == null:
 		return
-	if state in [State.ENDING,State.TITLE]:
+	if hidden_route != null:
+		hidden_route.refresh_lure()
+	if state in [State.ENDING,State.TITLE,State.HIDDEN]:
 		return
 	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open or _book_open
 	_hud.get_node("ShopButton").visible = state not in [State.LANDED, State.CHOOSING]
@@ -497,6 +511,8 @@ func _shop_closed() -> void:
 func _progress_changed() -> void:
 	lure.max_depth_m = minf(DepthBands.MAX_PLAYABLE_DEPTH, progress.current("line").effect_value)
 	environment.update_target(progress)
+	if hidden_route != null and hidden_route._night_selected and progress.night_unlocked:
+		environment.target = 2
 	if _hud != null:
 		_hud.show_progress(progress)
 
@@ -614,5 +630,6 @@ func request_continue() -> bool:
 	get_parent().populate_depth_band(0,progress.current("line").effect_value)
 	environment.transition_seconds = 6
 	_boat.set_line_pull(0,false)
+	hidden_route.on_continue()
 	_refresh_ui()
 	return true

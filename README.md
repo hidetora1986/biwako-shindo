@@ -9,10 +9,10 @@
 
 ## 起動方法
 
-今回のBoss Phaseは `feature/boss-v1` にあります。完成したMVPとビジュアル版は、それぞれ元のブランチに維持しています。
+今回のHidden Phaseは `feature/hidden-boss-v1` にあります。完成したMVPとビジュアル版は、それぞれ元のブランチに維持しています。
 
 ```sh
-git clone --branch feature/boss-v1 https://github.com/hidetora1986/biwako-shindo.git
+git clone --branch feature/hidden-boss-v1 https://github.com/hidetora1986/biwako-shindo.git
 cd biwako-shindo
 godot --editor --path .
 ```
@@ -27,7 +27,7 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-Boss Phase — 100〜120mの湖底域・No.15「湖底の主」・3段階Boss Fight・Main Ending・CONTINUEを追加。既存5ブランチを保持します。
+Hidden Phase — 通常ルート・Main Endingを維持し、専用の遭遇、船を守る耐久戦、2つのHidden Endingを追加。既存6ブランチを保持します。通常魚は15種、通常の深度上限は120mのままです。
 
 **操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。No.01〜09とNo.11〜13・No.15は自動売却され、左上の所持金が増えます。名称不明種A・BはCATCH後に「売る／戻す」を選びます。戻した場合は所持金が増えず、捕獲記録は残ります。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。CASTの上の**DEPTH**をタップし、解放済みの0〜15m・15〜30m・30〜50m・50〜65m・65〜85m・85〜100m・100〜120mを切り替えます。ラインLv2では15〜25mまで、Lv3では50mまで遊べます。名称不明種Aを発見するとLv4装備がSHOPに出ます。ラインLv4では85mまで遊べ、80〜85mで名称不明種Bを発見できます。売る／戻すのどちらでもLv5が解放され、ラインLv5は120m対応になります。今回の実プレイ上限は120mです。No.14発見・ROD Lv5・LINE Lv5・夜の解放が揃うと、ABYSSで100m以上に沈めたルアーへNo.15が接近します。ゆっくりラインが引かれた後、!でタップしてHOOKし、従来のREEL長押し／離す操作で挑みます。初回捕獲後は自動売却・短い夜明け・Titleへ進み、CONTINUEで所持金・図鑑・装備を保ったまま釣りを続けられます。No.15は再出現しません。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
 
@@ -38,7 +38,8 @@ Boss Phase — 100〜120mの湖底域・No.15「湖底の主」・3段階Boss Fi
 - `feature/visual-refinement-v1`: 完成したビジュアル版を保持。今回変更しません。
 - `feature/midgame-depth-v1`: 0〜50m拡張版を保持。今回変更しません。
 - `feature/lategame-depth-v1`: 0〜100m・Lv5版を保持。今回変更しません。
-- `feature/boss-v1`: `4c9c3783`から分岐した今回のBoss専用ブランチ。
+- `feature/boss-v1`: 完成したNo.15・Main Ending版を保持。今回変更しません。
+- `feature/hidden-boss-v1`: `dd80cf37`から分岐した今回のHidden専用ブランチ。
 - 将来の拡張: `feature/horror-phase1`、`feature/fish-expansion`、`feature/boss` など。
 
 ## ディレクトリ構成
@@ -82,6 +83,7 @@ godot --headless --path . --script res://tests/visual_acceptance.gd
 godot --headless --path . --script res://tests/midgame_depth_acceptance.gd
 godot --headless --path . --script res://tests/lategame_depth_acceptance.gd
 godot --headless --path . --script res://tests/boss_acceptance.gd
+godot --headless --path . --script res://tests/hidden_boss_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -105,3 +107,5 @@ Phase 6の調整内容と正式MVP Acceptanceは [Phase 6 Acceptance](docs/game-
 後半深度・Lv5・Save互換・画面例は [Late Game Depth v1](docs/game-design/lategame-depth-v1.md) を参照してください。`tests/lategame_capture.gd`でA〜G・夕方・残留ソナー・図鑑のPNGを取得できます。
 
 No.15・Ending・Save復元の仕様と画面は [Boss v1 Acceptance](docs/game-design/boss-v1.md) を参照してください。`tests/boss_capture.gd`でA〜H・DIVE・TitleのPNGを取得できます。
+
+Hidden実装・保存互換・専用テスト・画面例は [Hidden Phase検証記録](docs/game-design/hidden-boss-v1.md) を参照してください（開発向けネタバレを含みます）。

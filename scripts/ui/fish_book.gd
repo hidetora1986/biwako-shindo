@@ -3,6 +3,7 @@ extends Control
 signal closed
 var progress: GameProgress
 var entries: Dictionary = {}
+var hidden_entry: Button
 var _owns_pause: bool = false
 
 func _ready() -> void:
@@ -16,6 +17,18 @@ func _ready() -> void:
 		label.add_theme_font_size_override("font_size", 14)
 		$Panel/Scroll/Rows.add_child(label)
 		entries[fish.id] = label
+
+	hidden_entry = Button.new()
+	hidden_entry.name = "No00"
+	hidden_entry.add_theme_font_override("font",preload("res://assets/ui/pixel_theme.tres").default_font)
+	hidden_entry.custom_minimum_size.y = 78
+	hidden_entry.add_theme_font_size_override("font_size",14)
+	hidden_entry.pressed.connect(func(): progress.mark_hidden_entry(); _show_no00())
+	$Panel/Scroll/Rows.add_child(hidden_entry)
+
+func _show_no00() -> void:
+	hidden_entry.modulate = Color.WHITE
+	hidden_entry.text = "No.00\n帰ってきたもの\n深度: 記録不能   サイズ: ---   売値: ---\n捕獲数: 2\n記録が一致しない。" if progress.no00_contacted else "No.00\nこの項目は存在しない。"
 
 func setup(state: GameProgress) -> void:
 	progress = state
@@ -61,6 +74,10 @@ func _input(event: InputEvent) -> void:
 	if visible and event is InputEventScreenTouch and event.pressed and $Panel/Close.get_global_rect().has_point(event.position):
 		close_book()
 		get_viewport().set_input_as_handled()
+	elif visible and event is InputEventScreenTouch and event.pressed and hidden_entry.visible and hidden_entry.get_global_rect().has_point(event.position) and $Panel/Scroll.get_global_rect().has_point(event.position):
+		progress.mark_hidden_entry()
+		_show_no00()
+		get_viewport().set_input_as_handled()
 
 func _refresh() -> void:
 	if progress == null:
@@ -73,4 +90,9 @@ func _refresh() -> void:
 			entries[fish.id].text = "%s  %s\n捕獲数 %d  |  BEST SIZE %.1f cm\n%s" % [fish.id, fish.display_name, record.caught_count, record.best_size_cm, fish.description]
 		else:
 			entries[fish.id].text = "%s  ???\n未発見" % fish.id
+	hidden_entry.visible = progress.hidden_eligible() or progress.no00_contacted
+	hidden_entry.modulate = Color(0.7,0.78,0.8,0.25)
+	hidden_entry.text = "No.00"
+	if progress.no00_contacted or progress.hidden_entry_seen:
+		_show_no00()
 	$Panel/Wallet.text = "%d / %d 種 発見" % [found, GameProgress.FISH_PROFILES.size()]
