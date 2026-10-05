@@ -8,9 +8,14 @@ const CATEGORIES := ["rod", "reel", "line", "sonar"]
 var catalog: EquipmentCatalog = preload("res://data/equipment/mvp.tres")
 var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}
-const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres")]
+const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres"), preload("res://data/fish/thread-jaw-fight.tres"), preload("res://data/fish/split-belly-fight.tres"), preload("res://data/fish/reverse-scale-fight.tres"), preload("res://data/fish/unknown-b-fight.tres")]
 var fish_records: Dictionary = {}
 var returned_unknown_a: bool = false
+var returned_unknown_b: bool = false
+var night_unlocked: bool = false
+var hull_knock_count: int = 0
+var zero_depth_contact_seen: bool = false
+var max_depth_reached_m: float = 0.0
 var anomaly_seen: bool = false
 var sonar_sessions: int = 0
 var last_sale_new_discovery: bool = false
@@ -30,7 +35,9 @@ func next_level(category: String) -> EquipmentLevel:
 	if not levels.has(category):
 		return null
 	var next := catalog.find(category, int(levels[category]) + 1)
-	return null if next != null and next.level >= 4 and not lv4_unlocked() else next
+	if next != null and ((next.level == 4 and not lv4_unlocked()) or (next.level >= 5 and not lv5_unlocked())):
+		return null
+	return next
 
 func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
 	if fish == null or session_id <= _last_sold_session:
@@ -43,10 +50,13 @@ func sell_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> int:
 	return price
 
 func return_catch(fish: FishFightProfile, size_cm: float, session_id: int) -> bool:
-	if fish == null or fish.id != "No.10" or session_id <= _last_sold_session:
+	if fish == null or fish.id not in ["No.10", "No.14"] or session_id <= _last_sold_session:
 		return false
 	last_sale_new_discovery = record_catch(fish, size_cm, false)
-	returned_unknown_a = true
+	if fish.id == "No.10":
+		returned_unknown_a = true
+	else:
+		returned_unknown_b = true
 	_last_sold_session = session_id
 	changed.emit()
 	return true
@@ -83,6 +93,8 @@ func record_catch(fish: FishFightProfile, size_cm: float, notify: bool = true) -
 	var record: Dictionary = fish_records[fish.id]
 	var is_new: bool = not record.discovered
 	record.discovered = true
+	if fish.id == "No.12":
+		night_unlocked = true
 	record.caught_count = mini(2147483647, record.caught_count + 1)
 	record.best_size_cm = maxf(record.best_size_cm, snappedf(clampf(size_cm, fish.min_size_cm, fish.max_size_cm), 0.1))
 	if notify:
@@ -97,4 +109,27 @@ func complete_normal_session() -> void:
 func finish_anomaly() -> void:
 	if not anomaly_seen:
 		anomaly_seen = true
+		changed.emit()
+
+func lv5_unlocked() -> bool:
+	return fish_records.get("No.14", {}).get("discovered", false)
+
+func time_of_day_target() -> float:
+	return 2.0 if night_unlocked else (1.0 if fish_records["No.11"].discovered else 0.0)
+
+func note_depth(depth_m: float) -> void:
+	var previous := max_depth_reached_m
+	max_depth_reached_m = maxf(previous, clampf(depth_m, 0, 100))
+	# Persist the two event milestones, never every sinking frame.
+	if (previous < 60 and max_depth_reached_m >= 60) or (previous < 70 and max_depth_reached_m >= 70):
+		changed.emit()
+
+func finish_hull_knock(stage: int) -> void:
+	if stage == hull_knock_count + 1 and stage <= 3:
+		hull_knock_count = stage
+		changed.emit()
+
+func finish_zero_contact() -> void:
+	if not zero_depth_contact_seen:
+		zero_depth_contact_seen = true
 		changed.emit()

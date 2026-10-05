@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.12"
+species_id = "split_belly"
+display_name = "裂け腹魚"
+min_depth = 60.0
+max_depth = 75.0
+min_size_cm = 110.0
+max_size_cm = 180.0
+min_price = 55000
+max_price = 120000
+rarity = 5
+stamina = 190.0
+pull_power = 14.0
+stamina_drain = 16.0
+reel_progress_speed = 0.18
+run_interval = 3.6
+run_duration = 0.7
+run_power = 36.0
+run_warning_seconds = 0.6
+pull_pulse_power = 0
+stamina_recovery_after_run = 8.0
+break_grace_seconds = 0.85
+description = "腹側に細い隙間のある構造が見える。"
+placeholder_kind = "bass"

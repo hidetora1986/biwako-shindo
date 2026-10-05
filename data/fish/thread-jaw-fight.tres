@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.11"
+species_id = "thread_jaw"
+display_name = "糸顎魚"
+min_depth = 50.0
+max_depth = 65.0
+min_size_cm = 90.0
+max_size_cm = 160.0
+min_price = 40000
+max_price = 95000
+rarity = 5
+stamina = 175.0
+pull_power = 13.0
+stamina_drain = 15.0
+reel_progress_speed = 0.19
+run_interval = 2.8
+run_duration = 0.4
+run_power = 30.0
+run_warning_seconds = 0.6
+pull_pulse_power = 6.0
+stamina_recovery_after_run = 0.0
+break_grace_seconds = 0.85
+description = "細い器官が顎の下に伸びる。"
+placeholder_kind = "bass"

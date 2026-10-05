@@ -7,6 +7,7 @@ signal hook_missed
 
 @export var save_path: String = "user://biwako-shindo/save.json"
 @export var random_seed: int = 2463
+@export var hull_knock_sound: AudioStream
 @export_range(1.0, 3.0) var hook_window_seconds: float = 1.5
 @export_range(0.1, 0.5) var hit_hold_seconds: float = 0.3
 
@@ -42,6 +43,8 @@ var _shop_open: bool = false
 var _book_open: bool = false
 var save_manager: SaveManager
 var anomaly := SonarAnomaly.new()
+var environment := LakeEnvironment.new()
+var hull_events := HullEvents.new()
 var selected_band: int = 0
 var seek_depth_m: float = 0.0
 var _deep_cast_count: int = 0
@@ -73,6 +76,8 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	progress.depth_unlocked.connect(_hud.get_node("DepthUnlock").show_unlock)
 	_hud.get_node("Shop").setup(progress, _hud)
 	_hud.get_node("Shop").closed.connect(_shop_closed)
+	environment.setup(get_parent(), progress)
+	hull_events.setup(progress, _boat, _hud.get_node("SonarPlaceholder"), self, hull_knock_sound)
 	_progress_changed()
 	_refresh_ui()
 
@@ -163,11 +168,15 @@ func request_hook() -> bool:
 func _physics_process(delta: float) -> void:
 	if _hud == null or _shop_open or _book_open:
 		return
+	environment.step(delta)
+	progress.note_depth(lure.depth_m)
+	var hull_was_active := hull_events.active
+	hull_events.step(delta, state in [State.READY,State.WAITING] and active_fish == null and not anomaly.active, environment.value)
 	var anomaly_was_active := anomaly.active
 	anomaly.step(delta, can_trigger_anomaly())
 	if state == State.READY:
 		# Static HUD needs updating only when the modal eligibility changes.
-		if anomaly_was_active != anomaly.active:
+		if anomaly_was_active != anomaly.active or hull_was_active != hull_events.active:
 			_refresh_ui()
 		return
 	cast_elapsed += delta
@@ -222,7 +231,7 @@ func _physics_process(delta: float) -> void:
 		State.LANDED, State.FAILED:
 			_result_remaining -= delta
 			if _result_remaining <= 0.0:
-				if state == State.LANDED and last_catch.get("id") == "No.10":
+				if state == State.LANDED and last_catch.get("id") in ["No.10","No.14"]:
 					state = State.CHOOSING
 					_hud.show_unknown_choice(true)
 				else:
@@ -338,6 +347,8 @@ func _update_fight_pose() -> void:
 	var origin := Vector2(_water.position.x + _fight_origin_fraction.x * _water.size.x, _surface_y + _fight_origin_fraction.y * (_water.end.y - _surface_y))
 	var target := Vector2(_boat.position.x - 24, _surface_y + 22)
 	var fish_position := origin.lerp(target, clampf(1.0 - fight.fish_distance, 0.0, 1.0))
+	if active_fish.fight_profile.pull_pulse_power > 0:
+		fish_position.y += sin(fight.elapsed * TAU * 2.4) * 1.2
 	if fight.resistance == FishingFight.Resistance.WARNING:
 		fish_position.y += sin(fight.elapsed * 38.0) * 2.0
 	active_fish.set_fight_pose(fish_position, fight.resistance)
@@ -371,9 +382,11 @@ func _show_catch() -> void:
 	_session_caught = true
 	_result_remaining = 1.5
 	var profile: FishFightProfile = active_fish.fight_profile
-	var unknown := profile.id == "No.10"
+	var unknown := profile.id in ["No.10","No.14"]
 	last_catch = {"species_id": profile.species_id, "name": profile.display_name, "size_cm": active_fish.size_cm, "id": profile.id, "price": profile.sale_price(active_fish.size_cm) if unknown else progress.sell_catch(profile, active_fish.size_cm, _cast_serial)}
 	last_catch["new_discovery"] = not progress.fish_records[profile.id].discovered if unknown else progress.last_sale_new_discovery
+	if profile.id == "No.14":
+		_hud.get_node("SonarPlaceholder").retain_catch_contact(active_fish)
 	active_fish.visible = false
 	_hud.show_catch(last_catch, active_fish.sprite.sprite_frames.get_frame_texture("swim", 0))
 	_haptic(100, 0.8)
@@ -401,7 +414,7 @@ func _refresh_ui() -> void:
 	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
 	var band_button: Button = _hud.get_node("DepthBandButton")
 	band_button.visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
-	band_button.disabled = state != State.READY or _shop_open or _book_open or anomaly.active
+	band_button.disabled = state != State.READY or _shop_open or _book_open or anomaly.active or hull_events.active
 	band_button.text = "DEPTH %d–%dm" % [DepthBands.STARTS[selected_band], minf(DepthBands.ENDS[selected_band], progress.current("line").effect_value)]
 	_hud.show_fight(fight, state == State.FIGHTING)
 	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
@@ -409,7 +422,7 @@ func _refresh_ui() -> void:
 	_hud.show_bite(state == State.BITTEN, lure.position)
 
 func can_open_shop() -> bool:
-	return not _shop_open and not _book_open and not anomaly.active and state in [State.READY, State.SINKING, State.WAITING]
+	return not _shop_open and not _book_open and not anomaly.active and not hull_events.active and state in [State.READY, State.SINKING, State.WAITING]
 
 func request_shop() -> bool:
 	if not can_open_shop():
@@ -426,6 +439,7 @@ func _shop_closed() -> void:
 
 func _progress_changed() -> void:
 	lure.max_depth_m = minf(DepthBands.MAX_PLAYABLE_DEPTH, progress.current("line").effect_value)
+	environment.update_target(progress)
 	if _hud != null:
 		_hud.show_progress(progress)
 
@@ -447,7 +461,7 @@ func _book_closed() -> void:
 
 func can_trigger_anomaly() -> bool:
 	# Between fishing sessions only; cannot overlap HIT/fight/catch or a modal.
-	return state == State.READY and not _shop_open and not _book_open
+	return state == State.READY and not _shop_open and not _book_open and not hull_events.active
 
 func debug_trigger_anomaly() -> bool:
 	# Acceptance callable; no released-game button or player-facing warning.
@@ -458,7 +472,7 @@ func _exit_tree() -> void:
 		save_manager.unbind_progress()
 
 func select_depth_band(band: int) -> bool:
-	if state != State.READY or _shop_open or _book_open or anomaly.active or not DepthBands.available(band, progress.current("line").effect_value):
+	if state != State.READY or _shop_open or _book_open or anomaly.active or hull_events.active or not DepthBands.available(band, progress.current("line").effect_value):
 		return false
 	selected_band = band
 	seek_depth_m = 0.0
@@ -469,14 +483,14 @@ func select_depth_band(band: int) -> bool:
 	return true
 
 func cycle_depth_band() -> bool:
-	for offset in range(1, 4):
-		var band := (selected_band + offset) % 3
+	for offset in range(1, DepthBands.STARTS.size() + 1):
+		var band := (selected_band + offset) % DepthBands.STARTS.size()
 		if DepthBands.available(band, progress.current("line").effect_value):
 			return select_depth_band(band)
 	return false
 
 func resolve_unknown_catch(sell: bool) -> bool:
-	if state != State.CHOOSING or active_fish == null or last_catch.get("id") != "No.10":
+	if state != State.CHOOSING or active_fish == null or last_catch.get("id") not in ["No.10","No.14"]:
 		return false
 	if sell:
 		progress.sell_catch(active_fish.fight_profile, active_fish.size_cm, _cast_serial)

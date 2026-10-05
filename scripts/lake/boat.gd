@@ -8,6 +8,7 @@ var anchor_position := Vector2.ZERO
 var _time: float = 0.0
 var _tension: float = 0.0
 var _fighting: bool = false
+var _knock_remaining: float = 0.0
 
 func _ready() -> void:
 	$Sprite.texture = boat_art if boat_art != null else RefinedPixelArt.boat_texture()
@@ -20,6 +21,8 @@ func set_anchor(value: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	_time += delta
+	_knock_remaining = maxf(0,_knock_remaining - delta)
+	$Sprite.position.y = sin(_knock_remaining / 0.18 * PI) * 1.5 if _knock_remaining > 0 else 0.0
 	_refresh_position()
 
 func _refresh_position() -> void:
@@ -47,3 +50,7 @@ func _draw() -> void:
 		var bend := pow(1.0 - float(x - 15) / 29.0, 2.0)
 		var pixel := Vector2(x - 55, 5 + int(float(x - 15) * 0.57) - 45) + Vector2(_tension * 0.025, _tension * 0.065) * bend
 		draw_rect(Rect2(pixel.round(), Vector2.ONE), Color("344e4e"))
+
+func hull_knock() -> void:
+	_knock_remaining = 0.18
+	$Sprite.position.y = 1.5

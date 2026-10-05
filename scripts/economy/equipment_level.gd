@@ -9,6 +9,8 @@ extends Resource
 @export var effect_label: String = "最大対応サイズ"
 @export var effect_unit: String = "cm"
 @export var capability: String = ""
+@export_multiline var flavor_text: String = ""
+@export var unlimited_display: bool = false
 
 func effect_text() -> String:
 	if effect_unit == "×":

@@ -5,6 +5,9 @@ extends Control
 var contacts: Array[Dictionary] = []
 var anomaly_active: bool = false
 var anomaly_progress: float = 0.0
+var zero_contact_active: bool = false
+var lingering_contact: Dictionary = {}
+var lingering_remaining: float = 0.0
 var _fishes: Node2D
 var _progress: GameProgress
 var _sample_remaining: float = 0.0
@@ -24,6 +27,11 @@ func setup(fishes: Node2D, progress: GameProgress) -> void:
 func _process(delta: float) -> void:
 	if _progress == null:
 		return
+	if lingering_remaining > 0:
+		lingering_remaining = maxf(0, lingering_remaining - delta)
+		if lingering_remaining == 0:
+			lingering_contact.clear()
+			refresh_contacts()
 	_sample_remaining -= delta
 	_focus_remaining -= delta
 	if _focus_remaining <= 0.0:
@@ -43,10 +51,13 @@ func refresh_contacts() -> void:
 	for fish: FishController in _fishes.get_children():
 		if not fish.visible or fish.state == FishController.SwimState.LANDING or fish.depth_position < 0 or fish.depth_position > max_depth():
 			continue
-		var estimate := fish.size_cm if fish.size_cm > 0 else (fish.fight_profile.min_size_cm + fish.fight_profile.max_size_cm) * 0.5
-		var size_text := "SMALL" if estimate < 25 else ("MEDIUM" if estimate < 50 else "LARGE")
-		var known: bool = _progress.fish_records[fish.fight_profile.id].discovered
-		contacts.append({"instance_id": fish.get_instance_id(), "depth_m": fish.depth_position, "x_fraction": clampf((fish.position.x - fish.water_bounds.position.x) / maxf(fish.water_bounds.size.x, 1), 0, 1), "size_text": size_text if _progress.levels.sonar >= 2 else "", "name_text": ("???" if fish.fight_profile.id == "No.10" else fish.fight_profile.display_name) if _progress.levels.sonar >= 3 and (known or fish.fight_profile.id == "No.10") else "", "dot_width": 8 if fish.fight_profile.id == "No.10" else 5})
+		contacts.append(_fish_contact(fish))
+	if not lingering_contact.is_empty() and lingering_remaining > 0 and lingering_contact.depth_m <= max_depth():
+		var found := false
+		for contact: Dictionary in contacts:
+			found = found or contact.instance_id == lingering_contact.instance_id
+		if not found:
+			contacts.append(lingering_contact.duplicate())
 	queue_redraw()
 
 func depth_y(depth_m: float) -> float:
@@ -78,16 +89,37 @@ func _draw() -> void:
 	for index in range(contacts.size()):
 		var contact: Dictionary = contacts[index]
 		var point := Vector2(28 + contact.x_fraction * (size.x - 44), depth_y(contact.depth_m)).floor()
-		draw_rect(Rect2(point - Vector2(2, 1), Vector2(contact.dot_width, 2)), Color("d5e6b9"))
+		draw_rect(Rect2(point - Vector2(floorf(contact.dot_width / 2.0), 1), Vector2(contact.dot_width, 2)), Color("d5e6b9"))
 		if index == focused and level >= 2:
-			draw_rect(Rect2(point - Vector2(4, 3), Vector2(9, 6)), Color("6fc5c4"), false, 1)
+			draw_rect(Rect2(point - Vector2(maxf(9,contact.dot_width+4)/2, 3), Vector2(maxf(9,contact.dot_width+4), 6)), Color("6fc5c4"), false, 1)
 	if not contacts.is_empty() and level >= 2:
 		draw_string(font, Vector2(10, size.y - 22), contacts[focused].size_text + " · %.1fm" % contacts[focused].depth_m, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 14, Color("d5e2c9"))
 		if level >= 3:
 			draw_string(font, Vector2(10, size.y - 6), contacts[focused].name_text, HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 14, Color("d5e6b9"))
+	if zero_contact_active:
+		var point := Vector2(floorf(size.x * 0.52),depth_y(0))
+		draw_rect(Rect2(point - Vector2(8,1),Vector2(16,3)),Color("b0cdc2"))
 	if anomaly_active:
 		# 8x a normal five-pixel return. No lake sprite, text, sound or camera effects.
 		var x := lerpf(-40, size.x + 40, anomaly_progress)
 		var y := depth_y(max_depth()) - 3
 		draw_rect(Rect2(floorf(x) - 20, y - 3, 40, 6), Color("a4bfa7"))
 		draw_rect(Rect2(floorf(x) - 24, y - 1, 5, 2), Color("a4bfa7"))
+
+func _fish_contact(fish: FishController) -> Dictionary:
+	var estimate := fish.size_cm if fish.size_cm > 0 else (fish.fight_profile.min_size_cm + fish.fight_profile.max_size_cm) * 0.5
+	var size_text := "SMALL" if estimate < 25 else ("MEDIUM" if estimate < 50 else "LARGE")
+	var known: bool = _progress.fish_records[fish.fight_profile.id].discovered
+	var unknown := fish.fight_profile.id in ["No.10","No.14"]
+	return {"instance_id":fish.get_instance_id(),"depth_m":fish.depth_position,"x_fraction":clampf((fish.position.x - fish.water_bounds.position.x)/maxf(fish.water_bounds.size.x,1),0,1),"size_text":size_text if _progress.levels.sonar >= 2 else "","name_text":("???" if unknown else fish.fight_profile.display_name) if _progress.levels.sonar >= 3 and (known or unknown) else "","dot_width":16 if fish.fight_profile.id == "No.14" else (8 if fish.fight_profile.id == "No.10" else 5)}
+
+func retain_catch_contact(fish: FishController) -> void:
+	if fish.fight_profile.id != "No.14":
+		return
+	lingering_contact = _fish_contact(fish)
+	lingering_remaining = 1.5
+	queue_redraw()
+
+func set_zero_contact(enabled: bool) -> void:
+	zero_contact_active = enabled
+	queue_redraw()

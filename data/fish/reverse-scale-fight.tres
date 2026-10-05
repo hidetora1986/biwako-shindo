@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="FishFightProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_fight_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+id = "No.13"
+species_id = "reverse_scale"
+display_name = "逆鱗魚"
+min_depth = 70.0
+max_depth = 85.0
+min_size_cm = 130.0
+max_size_cm = 210.0
+min_price = 80000
+max_price = 180000
+rarity = 5
+stamina = 210.0
+pull_power = 16.0
+stamina_drain = 17.0
+reel_progress_speed = 0.17
+run_interval = 3.2
+run_duration = 0.8
+run_power = 48.0
+run_warning_seconds = 0.7
+pull_pulse_power = 0
+stamina_recovery_after_run = 0.0
+break_grace_seconds = 1.0
+description = "鱗の並びが記録の形と一致しない。"
+placeholder_kind = "bass"

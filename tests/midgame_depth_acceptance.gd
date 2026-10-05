@@ -26,7 +26,7 @@ func _run() -> void:
 	await process_frame
 	var progress: GameProgress = _flow.progress
 	var expected := [[15,25,100,160,6000,18000,3], [20,30,35,60,8000,20000,4], [20,35,120,220,10000,28000,4], [30,40,18,28,12000,24000,5], [35,50,80,140,28000,60000,5]]
-	_check(GameProgress.FISH_PROFILES.size() == 10 and progress.fish_records.size() == 10, "Ten Resource fish and default records")
+	_check(GameProgress.FISH_PROFILES.size() >= 10 and progress.fish_records.size() == GameProgress.FISH_PROFILES.size(), "Ten Resource fish and default records")
 	var art_hashes: Dictionary = {}
 	for i in range(5, 10):
 		var profile: FishFightProfile = GameProgress.FISH_PROFILES[i]
@@ -114,7 +114,7 @@ func _run() -> void:
 	_check(average_cycle >= 10 and average_cycle <= 20, "Deep guided average cycle: 10–20s")
 	_check(returns == 1 and unknown_sales > 0, "Both No.10 choices naturally exercised")
 	var book: Control = _hud.get_node("FishBook")
-	_check(book.entries.size() == 10 and _flow.request_book(), "Fish Book 1–10 opens")
+	_check(book.entries.size() == GameProgress.FISH_PROFILES.size() and _flow.request_book(), "Fish Book 1–10 opens")
 	_check(book.entries["No.10"].text.contains("分類: 不明") and book.entries["No.10"].text.contains("BEST SIZE") and not _flow.request_cast() and not _flow.select_depth_band(0), "Unknown book: restrained classification, records, paused inputs")
 	book.close_book()
 	_check(not paused, "Book closes and resumes")
@@ -127,7 +127,7 @@ func _run() -> void:
 	var unlocked: Array = []
 	progress.depth_unlocked.connect(func(a: float,b: float): unlocked.append([a,b]))
 	_check(progress.purchase("line",4) and progress.money == old_money - 65000 and unlocked == [[50.0,85.0]], "LINE4 purchase: 50m → 85m reward and exact deduction")
-	_check(progress.current("line").effect_value == 85 and _flow.lure.max_depth_m == 50 and not _flow.select_depth_band(3), "85m equipment ready; this content stops at 50m")
+	_check(progress.current("line").effect_value == 85 and _flow.lure.max_depth_m == 85 and not _flow.select_depth_band(6), "85m equipment retained; out-of-range band rejected")
 	_check(not progress.purchase("line",4) and progress.next_level("line") == null, "No double purchase / level overflow")
 	for category: String in ["rod","reel","sonar"]:
 		var balance: int = progress.money

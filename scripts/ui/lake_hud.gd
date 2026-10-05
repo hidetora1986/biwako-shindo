@@ -93,7 +93,7 @@ func show_catch(result: Dictionary, fish_texture: Texture2D) -> void:
 	$CatchPanel/Name.text = result["name"]
 	$CatchPanel/Size.text = "%.1f cm" % result["size_cm"]
 	$CatchPanel/Fish.texture = fish_texture
-	$CatchPanel/Price.text = ("¥" if result.get("id") == "No.10" else "+ ¥") + _format_money(result.get("price", 0))
+	$CatchPanel/Price.text = ("¥" if result.get("id") in ["No.10","No.14"] else "+ ¥") + _format_money(result.get("price", 0))
 
 func hide_catch() -> void:
 	$CatchPanel.visible = false
@@ -112,7 +112,10 @@ func _format_money(value: int) -> String:
 func show_progress(progress: GameProgress) -> void:
 	$Money/Label.text = "¥" + _format_money(progress.money)
 	var item := progress.cheapest_next()
-	$NextUpgrade.text = "ALL EQUIPMENT MAX" if item == null else "NEXT  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]
+	var locked := false
+	for category: String in GameProgress.CATEGORIES:
+		locked = locked or (int(progress.levels[category]) >= 4 and progress.catalog.find(category,int(progress.levels[category])+1) != null)
+	$NextUpgrade.text = ("NEXT UPGRADE LOCKED" if locked else "ALL EQUIPMENT MAX") if item == null else "NEXT  %s Lv%d\n%s" % [item.category.to_upper(), item.level, "購入できます" if progress.money >= item.price else "あと ¥" + _format_money(item.price - progress.money)]
 
 func set_area_range(origin: float, span: float) -> void:
 	_area_origin_m = origin

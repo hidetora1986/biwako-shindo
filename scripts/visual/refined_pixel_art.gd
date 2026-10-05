@@ -17,6 +17,8 @@ static func fish_frames(species: String) -> SpriteFrames:
 	return frames
 
 static func fish_texture(species: String, phase: int = 1) -> Texture2D:
+	if species in ["thread_jaw","split_belly","reverse_scale","unknown_b"]:
+		return LategamePixelArt.texture(species,phase)
 	if species in ["giant_catfish", "pale_biwamasu", "long_eel", "blind_isaza", "unknown_a"]:
 		return _midgame_texture(species, phase)
 	var image := Image.create(40, 22, false, Image.FORMAT_RGBA8)

@@ -3,6 +3,7 @@ extends Node2D
 @export_enum("Sky", "Mountains", "Underwater", "FarMountains", "MiddleMountains", "NearShore") var layer: String = "Sky"
 var view_size := Vector2(640, 360)
 var profile: LakeProfile
+var time_of_day: float = 0.0
 var depth_origin_m: float = 0.0
 var depth_span_m: float = 15.0
 var _ridge_points := PackedVector2Array()
@@ -46,8 +47,8 @@ func _draw_sky() -> void:
 	# Soft stepped haze, without blur, lights or post-processing.
 	for i in range(3, 0, -1):
 		draw_rect(Rect2(sun - Vector2(10 + i * 3, 8 + i * 2), Vector2(20 + i * 6, 16 + i * 4)), Color(0.97, 0.96, 0.80, 0.055))
-	draw_rect(Rect2(sun - Vector2(8, 6), Vector2(16, 12)), Color("fff1c9"))
-	draw_rect(Rect2(sun - Vector2(6, 8), Vector2(12, 16)), Color("fff1c9"))
+	draw_rect(Rect2(sun - Vector2(8, 6), Vector2(16, 12)), Color("fff1c9").lerp(Color("c6d5d9"),clampf(time_of_day - 1,0,1)))
+	draw_rect(Rect2(sun - Vector2(6, 8), Vector2(12, 16)), Color("fff1c9").lerp(Color("c6d5d9"),clampf(time_of_day - 1,0,1)))
 	_draw_cloud(Vector2(view_size.x * 0.04, 24), 1.2, 0)
 	_draw_cloud(Vector2(view_size.x * 0.40, 45), 0.8, 1)
 	_draw_cloud(Vector2(view_size.x * 0.76, 21), 1.6, 2)
@@ -63,8 +64,8 @@ func _draw_cloud(origin: Vector2, factor: float, variant: int) -> void:
 	elif variant == 2:
 		shapes = [Rect2(0, 7, 61, 4), Rect2(4, 4, 18, 5), Rect2(25, 1, 27, 8)]
 	for shape: Rect2 in shapes:
-		draw_rect(Rect2((origin + shape.position * factor).floor(), (shape.size * factor).floor()), Color("edf3e5"))
-	draw_rect(Rect2((origin + Vector2(4, 10) * factor).floor(), Vector2(floorf(54 * factor), 2)), Color("c8e0dd"))
+		draw_rect(Rect2((origin + shape.position * factor).floor(), (shape.size * factor).floor()), Color("edf3e5").lerp(Color("60758b"),time_of_day * 0.5))
+	draw_rect(Rect2((origin + Vector2(4, 10) * factor).floor(), Vector2(floorf(54 * factor), 2)), Color("c8e0dd").lerp(Color("455b74"),time_of_day * 0.5))
 
 func _draw_mountain_layer() -> void:
 	var color := profile.mountain_far
@@ -91,6 +92,8 @@ func set_depth_band(origin: float, span: float) -> void:
 	queue_redraw()
 
 func color_at_depth(depth_m: float) -> Color:
+	if depth_m > 50:
+		return Color("23364b").lerp(Color("101e30"),clampf((depth_m-50)/50,0,1))
 	if depth_m > 15:
 		return profile.water_deep.lerp(Color("23364b"), clampf((depth_m - 15) / 35, 0, 1))
 	var ratio := clampf(depth_m / profile.displayed_depth_m, 0, 1)
@@ -109,7 +112,17 @@ func _draw_underwater() -> void:
 		for band in range(6):
 			var y := surface + 6 + band * 26
 			var ray := PackedVector2Array([Vector2(floorf(x + band * 7), y), Vector2(floorf(x + 15 + band * 7), y), Vector2(floorf(x + 23 + band * 7), y + 26), Vector2(floorf(x + 6 + band * 7), y + 26)])
-			draw_colored_polygon(ray, Color(0.72, 0.92, 0.84, (0.045 - band * 0.0055) * (1.0 - depth_origin_m / 60.0)))
+			draw_colored_polygon(ray, Color(0.72, 0.92, 0.84, (0.045 - band * 0.0055) * maxf(0,1.0 - depth_origin_m / 65.0)))
+	if depth_origin_m >= 50:
+		# Bounded static specks; no particle nodes, flashes or large noisy layers.
+		_rng.seed = 847
+		for i in range(24):
+			var point := Vector2(_rng.randf_range(0,view_size.x),_rng.randf_range(surface+12,view_size.y-12)).floor()
+			draw_rect(Rect2(point,Vector2.ONE),Color(0.42,0.56,0.65,0.14))
+		if depth_origin_m >= 65:
+			for x in range(0,int(view_size.x),38):
+				var y := floorf(view_size.y - 9 + sin(x * 0.016)*4)
+				draw_rect(Rect2(x,y,27,2),Color("263646").lerp(Color("1a293a"),clampf((depth_origin_m-65)/35,0,1)))
 	if depth_origin_m >= 30:
 		# Open deeper water; avoid suggesting the lake floor is only 50m down.
 		return

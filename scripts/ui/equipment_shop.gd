@@ -129,12 +129,15 @@ func _refresh() -> void:
 		var current := progress.current(category)
 		var button: Button = _buttons[category]
 		if item == null:
-			_labels[category].text = "%s  Lv.%d  MAX\n%s  %s" % [category.to_upper(), current.level, current.effect_label, current.effect_text()]
-			button.text = "MAX"
+			var status := "LOCKED" if current.level >= 4 and progress.catalog.find(category,current.level+1) != null else "MAX"
+			_labels[category].text = "%s  Lv.%d  %s\n%s  %s" % [category.to_upper(), current.level,status, current.effect_label, current.effect_text()]
+			button.text = status
 			button.disabled = true
 			_expected_levels[category] = -1
 		else:
 			_labels[category].text = "%s  Lv.%d → Lv.%d\n%s  %s → %s%s" % [category.to_upper(), current.level, item.level, item.effect_label, current.effect_text(), item.effect_text(), " / " + item.capability if category == "sonar" else ""]
+			if item.level >= 5:
+				_labels[category].text = "%s  Lv.%d → Lv.%d  %s\n%s  %s → %s" % [category.to_upper(),current.level,item.level,item.display_name,item.effect_label,current.effect_text(),item.effect_text()]
 			button.text = "¥%s\n%s" % [_hud._format_money(item.price), "購入" if progress.money >= item.price else "所持金不足"]
 			button.disabled = not progress.can_purchase(category, item.level) or _cooldown > 0.0 or _hud.get_node("DepthUnlock").visible
 			_expected_levels[category] = item.level

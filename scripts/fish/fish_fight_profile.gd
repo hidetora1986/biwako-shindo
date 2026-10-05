@@ -7,7 +7,7 @@ extends Resource
 @export var max_depth: float = 5.0
 @export var min_price: int = 200
 @export var max_price: int = 450
-@export_range(1, 5) var rarity: int = 1
+@export_range(1, 6) var rarity: int = 1
 @export_multiline var description: String = "湖岸の浅い水に多い小型魚。"
 @export var species_id: String = "bluegill"
 @export var display_name: String = "ブルーギル"
@@ -36,3 +36,9 @@ func sale_price(size_cm: float) -> int:
 
 func allows_depth(depth_m: float) -> bool:
 	return depth_m >= min_depth and depth_m <= max_depth
+
+# Late-game tuning defaults preserve every existing fight.
+@export var run_warning_seconds: float = 0.5
+@export var break_grace_seconds: float = 0.65
+@export var pull_pulse_power: float = 0.0
+@export var stamina_recovery_after_run: float = 0.0

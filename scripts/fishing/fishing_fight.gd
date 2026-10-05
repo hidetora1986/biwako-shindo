@@ -20,6 +20,7 @@ var break_grace: float = 0.65
 var slack_grace: float = 5.5
 var _resistance_timer: float = 0.0
 var _was_danger: bool = false
+var _recovered_once: bool = false
 
 var reel_multiplier: float = 1.0
 var rod_load: float = 1.0
@@ -41,6 +42,8 @@ func start(fish_profile: FishFightProfile, reel_speed: float = 1.0, rod_capacity
 	landed = false
 	_was_danger = false
 	_resistance_timer = profile.run_interval
+	_recovered_once = false
+	break_grace = profile.break_grace_seconds
 
 func step(delta: float) -> void:
 	run_started = false
@@ -53,19 +56,22 @@ func step(delta: float) -> void:
 		match resistance:
 			Resistance.CALM:
 				resistance = Resistance.WARNING
-				_resistance_timer = 0.5
+				_resistance_timer = profile.run_warning_seconds
 			Resistance.WARNING:
 				resistance = Resistance.RUN
 				_resistance_timer = profile.run_duration
 				run_started = true
 			Resistance.RUN:
+				if not _recovered_once and profile.stamina_recovery_after_run > 0:
+					stamina = minf(profile.max_stamina, stamina + profile.stamina_recovery_after_run)
+					_recovered_once = true
 				resistance = Resistance.CALM
 				_resistance_timer = profile.run_interval
 	if stamina <= 0.0:
 		resistance = Resistance.CALM
 	var running := resistance == Resistance.RUN
 	if reeling:
-		tension += (profile.pull_power * rod_load + (32.0 if tension < 20.0 else 0.0) + (profile.run_power if running else 0.0)) * delta
+		tension += (profile.pull_power * rod_load + profile.pull_pulse_power * sin(elapsed * TAU * 2.4) + (32.0 if tension < 20.0 else 0.0) + (profile.run_power if running else 0.0)) * delta
 		fish_distance -= profile.reel_progress_speed * reel_multiplier * (0.35 if running else 1.0) * delta
 	else:
 		tension -= (42.0 - (profile.pull_power * 0.65 if running else 0.0)) * delta

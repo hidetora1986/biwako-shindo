@@ -18,6 +18,7 @@ var _previous_width: float = 0.0
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_refresh_layout)
+	profile = profile.duplicate()
 	_refresh_layout()
 	_spawn_fish()
 	$FishingController.setup($Lake/Boat, $Underwater/FishContainer, $HUD/Root)
@@ -70,6 +71,12 @@ func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> 
 	depth_origin_m = DepthBands.STARTS[band]
 	depth_span_m = DepthBands.ENDS[band] - depth_origin_m
 	var pool := DepthBands.pool(band, line_depth)
+	if band == 4:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = spawn_seed + cast_number * 1009
+		# Rare at 80–85m before Lv5, with a bounded six-cast encounter opportunity.
+		if rng.randf() >= 0.28 and (cast_number == 0 or cast_number % 6 != 0):
+			pool = pool.filter(func(entry: FishFightProfile) -> bool: return entry.id != "No.14")
 	var fishes := $Underwater/FishContainer.get_children()
 	for i in range(fishes.size()):
 		var fish: FishController = fishes[i]
@@ -79,9 +86,9 @@ func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> 
 		var depth := lerpf(lo, hi, 0.18 + 0.64 * float((i + cast_number) % 7) / 6)
 		fish.swim_direction = 1 if i % 2 == 0 else -1
 		fish.repopulate(entry, depth, view_size.x * (0.10 + 0.80 * float(i) / maxf(1, fishes.size() - 1)))
-		fish.swim_speed = 12 if entry.id == "No.06" else (29 if entry.id == "No.07" else (14 if entry.id == "No.08" else 18))
+		fish.swim_speed = 10 if entry.rarity >= 5 and entry.min_depth >= 50 else (12 if entry.id == "No.06" else (29 if entry.id == "No.07" else (14 if entry.id == "No.08" else 18)))
 		fish.sprite.speed_scale = clampf(fish.swim_speed / 18.0, 0.7, 1.8)
-		fish.bite_detection_radius = 240 if band > 0 else 130
+		fish.bite_detection_radius = 280 if band > 2 else (240 if band > 0 else 130)
 		fish.approach_speed = 85 if entry.id in ["No.07", "No.10"] else 72
 		fish.configure_water(water_bounds, depth_span_m, depth_origin_m)
 	layout_for_size(view_size)

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EquipmentCatalog" load_steps=19 format=3]
+[gd_resource type="Resource" script_class="EquipmentCatalog" load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/economy/equipment_catalog.gd" id="1_catalog"]
 [ext_resource type="Script" path="res://scripts/economy/equipment_level.gd" id="2_level"]
@@ -179,6 +179,52 @@ effect_label = "最大探知"
 effect_unit = "m"
 capability = "ANOMALY表示能力"
 
+[sub_resource type="Resource" id="rod_5"]
+script = ExtResource("2_level")
+category = "rod"
+level = 5
+price = 420000
+effect_value = 500.0
+display_name = "深淵ロッド"
+effect_label = "最大対応サイズ"
+effect_unit = "cm"
+flavor_text = "魚を釣るために作られたものではない。"
+
+[sub_resource type="Resource" id="reel_5"]
+script = ExtResource("2_level")
+category = "reel"
+level = 5
+price = 360000
+effect_value = 1.7
+display_name = "ABYSS 8000"
+effect_label = "巻き速度"
+effect_unit = "×"
+flavor_text = "メーカー名が削り取られている。"
+
+[sub_resource type="Resource" id="line_5"]
+script = ExtResource("2_level")
+category = "line"
+level = 5
+price = 300000
+effect_value = 120.0
+display_name = "深海ライン"
+effect_label = "最大深度"
+effect_unit = "m"
+flavor_text = "切断試験を中止しました。"
+
+[sub_resource type="Resource" id="sonar_5"]
+script = ExtResource("2_level")
+category = "sonar"
+level = 5
+price = 500000
+effect_value = 120.0
+display_name = "ABYSS SCAN"
+effect_label = "最大探知"
+effect_unit = "m"
+flavor_text = ""
+unlimited_display = true
+capability = "広域探知"
+
 [resource]
 script = ExtResource("1_catalog")
-levels = Array[ExtResource("2_level")]([SubResource("rod_1"), SubResource("rod_2"), SubResource("rod_3"), SubResource("reel_1"), SubResource("reel_2"), SubResource("reel_3"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("sonar_1"), SubResource("sonar_2"), SubResource("sonar_3"), SubResource("rod_4"), SubResource("reel_4"), SubResource("line_4"), SubResource("sonar_4")])
+levels = Array[ExtResource("2_level")]([SubResource("rod_1"), SubResource("rod_2"), SubResource("rod_3"), SubResource("reel_1"), SubResource("reel_2"), SubResource("reel_3"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("sonar_1"), SubResource("sonar_2"), SubResource("sonar_3"), SubResource("rod_4"), SubResource("reel_4"), SubResource("line_4"), SubResource("sonar_4"), SubResource("rod_5"), SubResource("reel_5"), SubResource("line_5"), SubResource("sonar_5")])

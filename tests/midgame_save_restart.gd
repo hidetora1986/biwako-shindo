@@ -25,7 +25,7 @@ func _run() -> void:
 		assert(flow.progress.fish_records["No.02"].best_size_cm == 44.2)
 		assert(flow.progress.fish_records["No.10"].caught_count == 1 and flow.progress.fish_records["No.10"].best_size_cm == 112.4)
 		assert(flow.progress.anomaly_seen and flow.progress.returned_unknown_a and flow.progress.lv4_unlocked())
-		assert(flow.lure.max_depth_m == 50 and flow.progress.current("line").effect_value == 85)
+		assert(flow.lure.max_depth_m == 85 and flow.progress.current("line").effect_value == 85)
 		assert(flow.select_depth_band(2))
 		main.free()
 		assert(DirAccess.remove_absolute(PATH) == OK)

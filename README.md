@@ -9,10 +9,10 @@
 
 ## 起動方法
 
-今回の深度拡張は `feature/midgame-depth-v1` にあります。完成したMVPとビジュアル版は、それぞれ元のブランチに維持しています。
+今回の後半深度拡張は `feature/lategame-depth-v1` にあります。完成したMVPとビジュアル版は、それぞれ元のブランチに維持しています。
 
 ```sh
-git clone --branch feature/midgame-depth-v1 https://github.com/hidetora1986/biwako-shindo.git
+git clone --branch feature/lategame-depth-v1 https://github.com/hidetora1986/biwako-shindo.git
 cd biwako-shindo
 godot --editor --path .
 ```
@@ -27,16 +27,17 @@ Godot のプロジェクトマネージャーから、リポジトリ直下の `
 
 ## 現在の開発フェーズ
 
-Content Expansion Phase 1 — 実プレイを0〜50mへ拡張し、No.06〜10、名称不明種Aの「売る／戻す」、10種図鑑、Lv4装備と旧Save互換を追加。main・MVP・ビジュアル版のブランチは変更しません。
+Late Game Phase 1 — 実プレイを0〜100mへ拡張。No.11〜14、夕方から夜への移行、段階的な船底ノック、0.0mソナー反応、Lv5装備と14種図鑑を追加。既存4ブランチを保持します。
 
-**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。No.01〜09は自動売却され、左上の所持金が増えます。名称不明種AはCATCH後に「売る／戻す」を選びます。戻した場合は所持金が増えず、捕獲記録は残ります。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。CASTの上の**DEPTH**をタップし、解放済みの0〜15m・15〜30m・30〜50mを切り替えます。ラインLv2では15〜25mまで、Lv3では50mまで遊べます。名称不明種Aを発見するとLv4装備がSHOPに出ます。ラインLv4の85mは次Phaseへの準備で、今回の実プレイ上限は50mです。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
+**操作:** CASTをタップ／クリック。魚が寄り、**!**が出たら画面をタップ／左クリックして**HIT!**。次に右下の**REELを長押し**します。テンションが黄色・赤、またはRUNになったら離し、安全域へ戻ったらまた巻きます。魚が疲れて近づくと自動で**CATCH!・魚名・サイズ・売値**を表示し、再びCASTできます。巻き続けて危険域を維持するとLINE BREAK、長時間離したままではESCAPEDですが、すぐ再挑戦できます。No.01〜09とNo.11〜13は自動売却され、左上の所持金が増えます。名称不明種A・BはCATCH後に「売る／戻す」を選びます。戻した場合は所持金が増えず、捕獲記録は残ります。**SHOP**を開き、ロッド・リール・ライン・ソナーの次Lvを購入すると即装備されます。ラインLv1は10mまで、Lv2・3の購入で25m・50mを解放します。CASTの上の**DEPTH**をタップし、解放済みの0〜15m・15〜30m・30〜50m・50〜65m・65〜85m・85〜100mを切り替えます。ラインLv2では15〜25mまで、Lv3では50mまで遊べます。名称不明種Aを発見するとLv4装備がSHOPに出ます。ラインLv4では85mまで遊べ、80〜85mで名称不明種Bを発見できます。売る／戻すのどちらでもLv5が解放され、ラインLv5は120m対応になります。今回の魚と表示帯の実プレイ上限は100mです。ショップ中は釣りが停止し、×で再開します。**FISH BOOK**で捕獲数・BEST SIZEを確認できます。所持金・装備・図鑑は`user://biwako-shindo/save.json`に自動保存され、次の起動時に復元されます。初回の魚にはNEW!を表示します。
 
 ## ブランチ運用
 
 - `main`: 安定版。初期化後は直接開発せず、Acceptance 完了後の Pull Request で統合します。
 - `feature/mvp-fishing`: Phase 6完了時のMVPを保持します。今回変更しません。
 - `feature/visual-refinement-v1`: 完成したビジュアル版を保持。今回変更しません。
-- `feature/midgame-depth-v1`: `3b7ba306`から分岐した今回の深度拡張専用ブランチ。
+- `feature/midgame-depth-v1`: 0〜50m拡張版を保持。今回変更しません。
+- `feature/lategame-depth-v1`: `7824109a`から分岐した今回の50〜100m拡張専用ブランチ。
 - 将来の拡張: `feature/horror-phase1`、`feature/fish-expansion`、`feature/boss` など。
 
 ## ディレクトリ構成
@@ -61,7 +62,7 @@ docs/
 
 Compatibility レンダラーと Nearest テクスチャフィルターを使用します。横持ちの基準画面は `640 × 360`（16:9）、PCの初期ウィンドウは `1280 × 720` です。19.5:9などの横長画面では左右の景色を広げ、HUDは中央の16:9相当の範囲に収めます。iPhone / Androidでは端末のSafe Areaも考慮します。
 
-描画はすべてGodot内の自作仮素材です。魚の`fish_art`、ボートの`boat_art`、`data/lake/morning.tres`の色・表示深度を差し替えできます。空・水面・ボートを固定し、水中は0〜15m・15〜30m・30〜50mの深度帯ごとに表示します。
+描画はすべてGodot内の自作仮素材です。魚の`fish_art`、ボートの`boat_art`、`data/lake/morning.tres`の色・表示深度を差し替えできます。空・水面・ボートを固定し、水中は0〜100mの6つの深度帯ごとに表示します。環境色はシーン専用Resourceに適用し、魚・ボートの差し替え構造を維持します。
 
 `.godot/`、キャッシュ、ローカル設定、ビルド・書き出し成果物は `.gitignore` で除外します。Godot の `*.import` と `*.uid` は参照維持のため追跡対象です。共有用の `export_presets.cfg` も追跡対象ですが、書き出し設定はまだありません。
 
@@ -78,6 +79,7 @@ godot --headless --path . --script res://tests/phase5_acceptance.gd
 godot --headless --path . --script res://tests/mvp_acceptance.gd
 godot --headless --path . --script res://tests/visual_acceptance.gd
 godot --headless --path . --script res://tests/midgame_depth_acceptance.gd
+godot --headless --path . --script res://tests/lategame_depth_acceptance.gd
 ```
 
 仕様と開発ルールは [ドキュメント案内](docs/README.md)、[MVP 仕様書](docs/game-design/mvp-spec.md)、[開発手順](docs/development.md) を参照してください。
@@ -97,3 +99,5 @@ Phase 6の調整内容と正式MVP Acceptanceは [Phase 6 Acceptance](docs/game-
 ビジュアルの範囲・検証・画面例は [Visual Refinement v1](docs/visual/visual-v1-acceptance.md) を参照してください。`tests/visual_capture.gd`で通常・Fight・ショップ・図鑑・CATCHのPNGを再取得できます。
 
 深度拡張の仕様・検証・画面例は [Midgame Depth v1](docs/game-design/midgame-depth-v1.md) を参照してください。`tests/midgame_capture.gd`で深場・Fight・選択・Lv4ショップ・No.10図鑑のPNGを取得できます。
+
+後半深度・Lv5・Save互換・画面例は [Late Game Depth v1](docs/game-design/lategame-depth-v1.md) を参照してください。`tests/lategame_capture.gd`でA〜G・夕方・残留ソナー・図鑑のPNGを取得できます。
