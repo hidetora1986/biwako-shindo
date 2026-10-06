@@ -54,6 +54,9 @@ var hull_events := HullEvents.new()
 var selected_band: int = 0
 var seek_depth_m: float = 0.0
 var _deep_cast_count: int = 0
+var aim_selected := false
+var aim_fraction := 0.28
+var aim_depth_m := -1.0
 var boss_encounter := BossEncounter.new()
 var ending_screen: MainEndingScreen
 var hidden_route: HiddenRoute
@@ -135,15 +138,21 @@ func configure_water(bounds: Rect2, surface_y: float, depth_m: float, origin_m: 
 func request_cast() -> bool:
 	if state != State.READY or _boat == null or _shop_open or _book_open or _area_open or _save_pending:
 		return false
+	seek_depth_m = 0.0
 	if selected_band > 0:
 		_deep_cast_count += 1
-		get_parent().populate_depth_band(selected_band, progress.current("line").effect_value, _deep_cast_count)
+		# Keep the visible fish in place when the player explicitly aims at them.
+		if not aim_selected:
+			get_parent().populate_depth_band(selected_band, progress.current("line").effect_value, _deep_cast_count)
 		seek_depth_m = DepthBands.seek_depth(selected_band, _deep_cast_count, progress.current("line").effect_value)
+	if aim_selected and aim_depth_m >= 0:
+		seek_depth_m = aim_depth_m
 	if hidden_route != null and hidden_route.can_start():
 		return hidden_route.begin()
 	boss_encounter.begin_cast()
-	if not lure.cast_from(_boat.rod_tip_position()):
+	if not lure.cast_from(_boat.rod_tip_position(), aim_fraction if aim_selected else 0.28, aim_depth_m if aim_selected else -1.0):
 		return false
+	clear_aim()
 	state = State.CASTING
 	_cast_serial += 1
 	cast_elapsed = 0.0
@@ -197,6 +206,69 @@ func _input(event: InputEvent) -> void:
 		return
 	if state == State.BITTEN and event is InputEventScreenTouch and event.pressed and _hud.get_node("HookButton").get_global_rect().has_point(event.position):
 		if request_hook(): get_viewport().set_input_as_handled()
+
+func _unhandled_input(event: InputEvent) -> void:
+	var pressed: bool = event is InputEventScreenTouch and event.pressed
+	pressed = pressed or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed)
+	if pressed and select_cast_point(event.position):
+		get_viewport().set_input_as_handled()
+
+func select_cast_point(point: Vector2) -> bool:
+	if state != State.READY or _hud == null or _shop_open or _book_open or _area_open or _save_pending or anomaly.active or hull_events.active:
+		return false
+	if not point.is_finite() or not Rect2(Vector2(_water.position.x, _surface_y - 24), Vector2(_water.size.x, _water.end.y - _surface_y + 24)).has_point(point):
+		return false
+	# Even passive HUD labels/sonar are not lake targets.
+	for child in _hud.get_children():
+		if child is HiddenVisual: continue # Full-screen rendering layer, not a UI hit area.
+		if child is Control and child.is_visible_in_tree() and child.get_global_rect().has_point(point):
+			return false
+	aim_fraction = clampf((point.x - _water.position.x) / _water.size.x, 0.03, 0.97)
+	aim_depth_m = -1.0
+	if point.y > _surface_y + 4:
+		var fraction := clampf((point.y - _surface_y) / maxf(1, _water.end.y - 8 - _surface_y), 0, 1)
+		aim_depth_m = minf(lure.max_depth_m, lure.depth_origin_m + fraction * lure._visible_depth_m)
+	# Small fish remain tappable: snap a nearby tap to the visible fish snapshot.
+	if point.y > _surface_y + 4:
+		var radius := maxf(14, 22.0 * _hud.size.y / maxf(1, get_window().size.y))
+		var nearest: FishController
+		for fish: FishController in _fish_container.get_children():
+			var distance := point.distance_to(fish.position)
+			if fish.visible and distance < radius:
+				nearest = fish
+				radius = distance
+		if nearest != null:
+			aim_fraction = clampf((nearest.position.x - _water.position.x) / _water.size.x, 0.03, 0.97)
+			aim_depth_m = minf(lure.max_depth_m, nearest.depth_position)
+	aim_selected = true
+	queue_redraw()
+	return true
+
+func clear_aim() -> void:
+	aim_selected = false
+	aim_depth_m = -1.0
+	queue_redraw()
+
+func aim_position() -> Vector2:
+	var y := _surface_y
+	if aim_depth_m >= 0:
+		y += clampf((aim_depth_m - lure.depth_origin_m) / lure._visible_depth_m, 0, 1) * (_water.end.y - 8 - _surface_y)
+	return Vector2(_water.position.x + aim_fraction * _water.size.x, y).round()
+
+func _draw() -> void:
+	if not aim_selected or state != State.READY or _shop_open or _book_open or _area_open or _save_pending:
+		return
+	var center := aim_position()
+	var tint := Color("fff1be")
+	for direction in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
+		draw_line(center + direction * 5, center + direction * 11, tint, 2)
+	draw_circle(center, 2, tint)
+	if aim_depth_m >= 0:
+		draw_line(Vector2(center.x - 6, _surface_y), Vector2(center.x + 6, _surface_y), tint, 2)
+		var label_position := center + Vector2(14, 4)
+		label_position.x = clampf(label_position.x, _hud.safe_rect.position.x, _hud.safe_rect.end.x - 70)
+		label_position.y = minf(label_position.y, _hud.safe_rect.end.y - 4)
+		draw_string(ThemeDB.fallback_font, label_position, "%.1fm" % aim_depth_m, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, tint)
 
 func request_hook() -> bool:
 	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open or _book_open or _area_open or _save_pending:
@@ -499,6 +571,7 @@ func _update_line() -> void:
 		line.set_point_position(1, lure.position)
 
 func _refresh_ui() -> void:
+	queue_redraw()
 	if _hud == null:
 		return
 	if hidden_route != null:
@@ -585,6 +658,7 @@ func _exit_tree() -> void:
 func select_depth_band(band: int) -> bool:
 	if state != State.READY or _shop_open or _book_open or _area_open or _save_pending or anomaly.active or hull_events.active or not LakeAreas.band_available(progress.current_area, band, progress.current("line").effect_value):
 		return false
+	clear_aim()
 	selected_band = band
 	seek_depth_m = 0.0
 	_deep_cast_count = 0
@@ -756,6 +830,7 @@ func _step_travel(delta: float) -> void:
 	_refresh_ui()
 
 func restore_area() -> void:
+	clear_aim()
 	var area := progress.current_area
 	if not LakeAreas.unlocked(area, progress):
 		area = LakeAreas.SOUTH

@@ -22,6 +22,8 @@ with sync_playwright() as p:
  saved=read();assert saved['data']['current_area']=='south_shore'
  page.touchscreen.tap(679,55);page.wait_for_timeout(200)
  assert 'SAVE POINT' not in snap('clean-hud')
+ page.touchscreen.tap(400,230);page.wait_for_timeout(150)
+ aim_text=snap('cast-aim');assert re.search(r'\d+[.,]\d\s*m',aim_text),aim_text
  page.touchscreen.tap(700,342)
  def until_button(word,limit=100):
   for i in range(limit):
@@ -77,5 +79,5 @@ with sync_playwright() as p:
  page.touchscreen.tap(679,55);page.wait_for_timeout(200)
  errors=[m for m in logs if m['type'] in ['error','pageerror']]
  assert not errors,errors
- result={'result':'PASS','browser':'Chromium touch emulation','manual_save_indexeddb':True,'touch_hook':True,'random_tap_no_hook':True,'real_fishing_money':caught_money,'area_map':True,'boat_travel':True,'arrival_save':True,'reload_center':True,'shop_book_touch':True,'aspect_ratios':['16:9','19.5:9','20:9'],'errors':errors,'physical_safari':'NOT TESTED'}
+ result={'result':'PASS','browser':'Chromium touch emulation','manual_save_indexeddb':True,'touch_hook':True,'targeted_cast_catch':True,'random_tap_no_hook':True,'real_fishing_money':caught_money,'area_map':True,'boat_travel':True,'arrival_save':True,'reload_center':True,'shop_book_touch':True,'aspect_ratios':['16:9','19.5:9','20:9'],'errors':errors,'physical_safari':'NOT TESTED'}
  Path('/tmp/feedback-web-results.json').write_text(json.dumps(result,indent=2));print(json.dumps(result));b.close()

@@ -14,6 +14,7 @@ signal landed
 var state: State = State.READY
 var depth_origin_m: float = 0.0
 var depth_m: float = 0.0
+var target_depth_m: float = -1.0 # Negative keeps the ordinary automatic descent.
 var splash_remaining: float = 0.0
 var _surface_y: float = 136.0
 var _water := Rect2(10, 140, 620, 198)
@@ -36,11 +37,12 @@ func configure_water(bounds: Rect2, surface_y: float, visible_depth_m: float, or
 	if state not in [State.READY, State.RESET, State.CASTING, State.FIGHTING, State.LANDING]:
 		_update_underwater_position()
 
-func cast_from(origin: Vector2, target_fraction: float = 0.28) -> bool:
+func cast_from(origin: Vector2, target_fraction: float = 0.28, stop_depth_m: float = -1.0) -> bool:
 	if state != State.READY:
 		return false
 	_cast_start = origin
-	_x_fraction = clampf(target_fraction, 0.1, 0.9)
+	_x_fraction = clampf(target_fraction, 0.03, 0.97)
+	target_depth_m = stop_depth_m
 	_cast_elapsed = 0.0
 	depth_m = 0.0
 	splash_remaining = 0.0
@@ -71,9 +73,9 @@ func _physics_process(delta: float) -> void:
 				_splash_x = position.x
 				landed.emit()
 		State.SINKING:
-			depth_m = minf(depth_m + (sink_speed_m + maxf(0, depth_m - 15.0) * deep_sink_acceleration) * delta, minf(max_depth_m, depth_origin_m + _visible_depth_m))
+			depth_m = minf(depth_m + (sink_speed_m + maxf(0, depth_m - 15.0) * deep_sink_acceleration) * delta, _sink_limit())
 			_update_underwater_position()
-			if depth_m >= minf(max_depth_m, depth_origin_m + _visible_depth_m):
+			if depth_m >= _sink_limit():
 				state = State.WAITING
 		State.BITTEN:
 			_wobble_time += delta
@@ -81,6 +83,10 @@ func _physics_process(delta: float) -> void:
 			if _wobble_time <= 0.7:
 				position += Vector2(sin(_wobble_time * 24.0) * 2.0, sin(_wobble_time * 18.0) * 1.2)
 	queue_redraw()
+
+func _sink_limit() -> float:
+	var limit := minf(max_depth_m, depth_origin_m + _visible_depth_m)
+	return minf(limit, maxf(depth_origin_m, target_depth_m)) if target_depth_m >= 0 else limit
 
 func _target_x() -> float:
 	return _water.position.x + _water.size.x * _x_fraction
@@ -101,7 +107,7 @@ func hook() -> void:
 	state = State.HOOKED
 
 func resume_sinking() -> void:
-	state = State.WAITING if depth_m >= minf(max_depth_m, depth_origin_m + _visible_depth_m) else State.SINKING
+	state = State.WAITING if depth_m >= _sink_limit() else State.SINKING
 	_update_underwater_position()
 
 func begin_reset() -> void:
@@ -112,6 +118,7 @@ func begin_reset() -> void:
 func finish_reset() -> void:
 	state = State.READY
 	depth_m = 0.0
+	target_depth_m = -1.0
 
 func _draw() -> void:
 	if lure_art != null:
