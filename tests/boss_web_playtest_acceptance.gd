@@ -17,6 +17,7 @@ func _run() -> void:
 	_step(2.6)
 	_check(_flow.progress.boss15_defeated and _flow.state == FLOW.State.ENDING, "Boss defeat enters Main Ending")
 	_step(9)
+	_flow.story.skip();_flow.story.skip();_step(0.3)
 	_check(_flow.request_continue(), "Main ending Continue works")
 	var saved := GameProgress.new()
 	_check(SaveManager.new(BossWebPlaytest.SAVE_PATH).load_into(saved) and saved.boss15_defeated and saved.main_ending_seen, "Boss/ending saved only in test namespace")

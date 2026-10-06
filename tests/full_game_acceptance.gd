@@ -47,6 +47,7 @@ func _catch_real(prefer_new: bool = false) -> bool:
 		_step(0.3)
 	elif record.id == "No.15":
 		_step(10.5)
+		_flow.story.skip();_flow.story.skip();_step(0.3)
 	else: _step(1.8)
 	var persisted := GameProgress.new()
 	_check(_flow.save_manager.load_into(persisted) and persisted.money == _flow.progress.money and persisted.fish_records == _flow.progress.fish_records and persisted.returned_unknown_a == _flow.progress.returned_unknown_a and persisted.returned_unknown_b == _flow.progress.returned_unknown_b,"Actual catch/choice durable save")
@@ -123,6 +124,7 @@ func _run() -> void:
 		var contact_ending := not ("--cut" in OS.get_cmdline_user_args())
 		_check(hidden.choose(contact_ending),"Hidden final choice")
 		_step(6.2)
+		_flow.story.skip();_flow.story.skip();_step(0.3)
 		_check(progress.hidden_finished() and progress.no00_contacted == contact_ending and progress.no00_record().caught_count == (2 if contact_ending else 0) and _flow.state == FLOW.State.TITLE,"Hidden ending and count2 / cut uncaught")
 		_check(_flow.request_continue(),"Hidden postgame Continue")
 		var saved := GameProgress.new()

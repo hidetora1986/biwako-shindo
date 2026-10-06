@@ -7,7 +7,7 @@
 | 魚No.01〜15、船、空、湖、山、湖底、UIアイコン | Repository内GDScriptによる自作プロシージャル／Placeholder。外部画像を取得していない |
 | No.00の水中曲線・ソナー反応 | 自作Control描画。全身素材はない |
 | 音 | 自作WAV生成。94Hzの短いノックと低音量ライン音。正式BGMはない |
-| 日本語フォント | Godot SystemFontでOS提供のNoto Sans CJK JP／Hiragino Sans／sans-serifを使用。フォントファイルは配布物へ同梱していない。実機Fallback要検証 |
+| 日本語フォント | 既存Web版の`assets/fonts/NotoSansJP.ttf`を物語UIにも利用。SIL Open Font License 1.1（同ディレクトリのOFL.txt参照）。CreditsにNoto Sans JPを記載。OSのSystemFont Fallbackも維持 |
 | docs内PNG | 現RCのGodot Compatibilityレンダラー出力。合成・外部画像なし。深層のScreenshotは隔離したDebug装備Fixtureを使用し、進行検証とは区別する |
 | Godot | 4.6.3 stable。エンジンはMIT。最終配布時にエンジンと同梱ライブラリのライセンス通知を確認する |
 

@@ -6,12 +6,14 @@ func _initialize() -> void:
 func _run() -> void:
 	if "--write" in OS.get_cmdline_user_args():
 		var progress := GameProgress.new()
+		progress.opening_seen = true # This fixture is an established fishing session.
 		progress.money = 200000
 		progress.levels = {"rod":3,"reel":3,"line":3,"sonar":3}
 		progress.record_catch(GameProgress.FISH_PROFILES[1],44.2,false)
 		assert(progress.return_catch(GameProgress.FISH_PROFILES[9],112.4,1))
 		assert(progress.purchase("line",4))
 		progress.anomaly_seen = true
+		progress.current_area = LakeAreas.NORTH # Resume within the depth band under the existing area gates.
 		assert(SaveManager.new(PATH).save_progress(progress))
 		print("RESTART_WRITE PASS")
 	else:

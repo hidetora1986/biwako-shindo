@@ -1,7 +1,7 @@
 extends Node2D
 ## Owns fishing states/input. FishingFight handles only fight numbers.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE, HIDDEN, TRAVELLING }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE, HIDDEN, TRAVELLING, NARRATIVE }
 signal hook_succeeded
 signal hook_missed
 
@@ -61,6 +61,7 @@ var aim_depth_m := -1.0
 var boss_encounter := BossEncounter.new()
 var ending_screen: MainEndingScreen
 var hidden_route: HiddenRoute
+var story: NarrativeScreen
 var ending_elapsed: float = 0.0
 var _ending_surface_restored: bool = false
 var _cinematic_visibility: Dictionary = {}
@@ -120,6 +121,10 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	hidden_route = HiddenRoute.new()
 	add_child(hidden_route)
 	hidden_route.setup(self)
+	story = NarrativeScreen.new()
+	story.name = "Narrative"
+	_hud.add_child(story)
+	story.setup(self)
 	restore_area()
 	_progress_changed()
 	_refresh_ui()
@@ -131,6 +136,14 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 			hidden_route.on_title()
 		else:
 			_begin_ending() # Interrupted after reward: replay only the ending, never the boss/reward.
+	if progress.main_ending_seen and progress.hidden_cut_ending_seen and not progress.cut_story_ending_seen:
+		story.begin("cut")
+	elif progress.main_ending_seen and progress.hidden_contact_ending_seen and not progress.contact_story_ending_seen:
+		story.begin("contact")
+	elif progress.main_ending_seen and not progress.main_story_ending_seen:
+		_begin_ending()
+	elif state == State.READY and not progress.opening_seen and not boss_playtest:
+		story.begin("opening")
 	if boss_playtest:
 		BossWebPlaytest.configure(self)
 	_playtest.bind_flow(self)
@@ -176,7 +189,7 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
-	if _shop_open or _book_open or _area_open or _save_pending or state in [State.ENDING,State.TITLE,State.BOSS_BITE,State.HIDDEN]:
+	if _shop_open or _book_open or _area_open or _save_pending or state in [State.ENDING,State.TITLE,State.BOSS_BITE,State.HIDDEN,State.NARRATIVE]:
 		return
 	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("ShopButton").disabled and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
 		if request_shop():
@@ -231,7 +244,7 @@ func select_cast_point(point: Vector2) -> bool:
 		return false
 	# Even passive HUD labels/sonar are not lake targets.
 	for child in _hud.get_children():
-		if child is HiddenVisual: continue # Full-screen rendering layer, not a UI hit area.
+		if child is HiddenVisual or child is NarrativeScreen: continue # Full-screen rendering layer, not a UI hit area.
 		if child is Control and child.is_visible_in_tree() and child.get_global_rect().has_point(point):
 			return false
 	aim_fraction = clampf((point.x - _water.position.x) / _water.size.x, 0.03, 0.97)
@@ -304,6 +317,9 @@ func request_hook() -> bool:
 func _physics_process(delta: float) -> void:
 	if _hud == null or _shop_open or _book_open or _area_open or _save_pending:
 		return
+	if state != State.ENDING and story != null:
+		story.step(delta)
+	if state == State.NARRATIVE:return
 	if state == State.TRAVELLING:
 		_step_travel(delta)
 		return
@@ -316,6 +332,7 @@ func _physics_process(delta: float) -> void:
 	if state == State.TITLE:
 		return
 	environment.step(delta)
+	story.sync_progress(delta)
 	progress.note_depth(lure.depth_m)
 	var hull_was_active := hull_events.active
 	hull_events.step(delta, state in [State.READY,State.WAITING] and active_fish == null and not anomaly.active, environment.value)
@@ -575,7 +592,7 @@ func _haptic(duration_ms: int, amplitude: float) -> void:
 		Input.vibrate_handheld(duration_ms, amplitude)
 
 func _update_line() -> void:
-	line.visible = state not in [State.TRAVELLING, State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET, State.ENDING, State.TITLE]
+	line.visible = state not in [State.TRAVELLING, State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET, State.ENDING, State.TITLE, State.NARRATIVE]
 	line.default_color = Color("dfb875") if state == State.FIGHTING and fight.tension >= 70.0 else Color(0.88, 0.94, 0.81, 0.75)
 	if _boat != null and line.get_point_count() == 2:
 		line.set_point_position(0, _boat.rod_tip_position())
@@ -587,7 +604,7 @@ func _refresh_ui() -> void:
 		return
 	if hidden_route != null:
 		hidden_route.refresh_lure()
-	if state in [State.ENDING,State.TITLE,State.HIDDEN]:
+	if state in [State.ENDING,State.TITLE,State.HIDDEN,State.NARRATIVE]:
 		return
 	_hud.get_node("AreaButton").visible = state not in [State.LANDED, State.CHOOSING]
 	# Manual save lives in the paused AREA map; keep the lake HUD clear.
@@ -701,12 +718,12 @@ func resolve_unknown_catch(sell: bool) -> bool:
 func _set_cinematic(enabled: bool) -> void:
 	if enabled:
 		for node: Node in _hud.get_children():
-			if node is CanvasItem and node != ending_screen:
-				_cinematic_visibility[node.name] = node.visible
+			if node is CanvasItem and node != ending_screen and node != story:
+				if not _cinematic_visibility.has(node.name):_cinematic_visibility[node.name] = node.visible
 				node.visible = false
 	else:
 		for node: Node in _hud.get_children():
-			if node is CanvasItem and node != ending_screen:
+			if node is CanvasItem and node != ending_screen and node != story:
 				node.visible = _cinematic_visibility.get(node.name,true)
 		_cinematic_visibility.clear()
 	_hud.get_node("SonarPlaceholder").set_process(not enabled)
@@ -722,27 +739,26 @@ func _begin_ending() -> void:
 	_ending_surface_restored = false
 	_set_cinematic(true)
 	ending_screen.show_dawn(0)
+	story.begin("main")
+
+func restore_ending_surface() -> void:
+	if _ending_surface_restored:return
+	_ending_surface_restored = true
+	progress.current_area = LakeAreas.SOUTH
+	get_parent().set_area(LakeAreas.SOUTH)
+	selected_band = 0;_deep_cast_count = 0;seek_depth_m = 0
+	get_parent().populate_depth_band(0,progress.current("line").effect_value,0,true)
+	environment.transition_seconds = 3;environment.target = 0
 
 func _step_ending(delta: float) -> void:
 	ending_elapsed += delta
-	if ending_elapsed >= 0.6 and not _ending_surface_restored:
-		_ending_surface_restored = true
-		selected_band = 0
-		_deep_cast_count = 0
-		seek_depth_m = 0
-		get_parent().populate_depth_band(0,progress.current("line").effect_value,0,true)
-		environment.transition_seconds = 3
-		environment.target = 0
-	if _ending_surface_restored:
-		environment.step(delta)
+	if ending_elapsed >= 0.6:restore_ending_surface()
+	if _ending_surface_restored:environment.step(delta)
 	ending_screen.show_dawn(ending_elapsed)
-	if ending_elapsed >= 8:
-		progress.finish_main_ending()
-		state = State.TITLE
-		ending_screen.show_title()
+	story.step(delta)
 
 func request_continue() -> bool:
-	if state != State.TITLE or not progress.main_ending_seen:
+	if state != State.TITLE or not progress.main_ending_seen or story.active or story.input_lock > 0:
 		return false
 	_playtest.record("POST GAME CONTINUE")
 	ending_screen.visible = false

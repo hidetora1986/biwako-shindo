@@ -6,6 +6,8 @@ func _initialize() -> void:
 func _run() -> void:
 	if "--write" in OS.get_cmdline_user_args():
 		var progress := GameProgress.new()
+		progress.opening_seen = true # This fixture is an established fishing session.
+		progress.night_page_seen = true
 		for index in [9,10,11,12]:
 			var profile: FishFightProfile = GameProgress.FISH_PROFILES[index]
 			progress.record_catch(profile,(profile.min_size_cm+profile.max_size_cm)/2,false)
@@ -18,6 +20,7 @@ func _run() -> void:
 		progress.money = 2000000
 		progress.levels = {"rod":4,"reel":4,"line":4,"sonar":4}
 		assert(progress.purchase("line",5))
+		progress.current_area = LakeAreas.CENTER # Resume within the depth band under the existing area gates.
 		assert(SaveManager.new(PATH).save_progress(progress))
 		print("LATE_RESTART_WRITE PASS")
 	else:

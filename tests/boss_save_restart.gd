@@ -40,6 +40,7 @@ func _run() -> void:
 		elif "--finish" in OS.get_cmdline_user_args():
 			assert(flow.state == flow.State.ENDING)
 			flow._physics_process(8.1)
+			flow.story.skip();flow.story.skip();flow._physics_process(0.3)
 			assert(flow.state == flow.State.TITLE and flow.progress.main_ending_seen and flow.save_manager.write_count == 1 and flow.environment.value == 0)
 			print("BOSS_RESTART_FINISH PASS")
 		else:

@@ -49,7 +49,7 @@ func _run() -> void:
 	_paths.append(path)
 	var book: Control = _hud.get_node("FishBook")
 	_check(_flow.progress.money == 0 and _flow.progress.levels.values() == [1, 1, 1, 1] and not _flow.progress.anomaly_seen, "No Save: default wallet/gear/anomaly")
-	_check(not FileAccess.file_exists(path), "No Save: load does not create or write every frame")
+	_check(_flow.progress.opening_seen and _flow.save_manager.write_count == 1, "Opening Skip persists once; loading/idle does not autosave every frame")
 	var hidden_ok := true
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES:
 		var text: String = book.entries[fish.id].text

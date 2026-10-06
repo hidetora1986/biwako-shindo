@@ -105,6 +105,8 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$Result.add_theme_font_size_override("font_size", 28 if $Result.text == "LINE BREAK" else 36)
 	$Result.position = Vector2(core_rect.get_center().x - $Result.size.x * 0.5, clampf(surface_y + 60, safe_rect.position.y, safe_rect.end.y - $Result.size.y))
 	$Depth/Label.text = "0–%dm" % int(depth_m)
+	if has_node("Narrative"):
+		$Narrative.configure(view_size,safe_rect)
 	if has_node("MainEnding"):
 		$MainEnding.configure(view_size,safe_rect)
 

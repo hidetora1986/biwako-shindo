@@ -19,6 +19,8 @@ func _run() -> void:
 		progress.hidden_entry_seen = true
 		progress.hidden_postgame_sessions = 2
 		progress.finish_hidden(contact)
+		progress.opening_seen = true;progress.main_story_ending_seen = true
+		progress.contact_story_ending_seen = contact;progress.cut_story_ending_seen = not contact
 		assert(SaveManager.new(path).save_progress(progress))
 		print("HIDDEN_RESTART_WRITE PASS ",contact)
 	else:

@@ -10,6 +10,8 @@ with sync_playwright() as p:
   return subprocess.check_output(['tesseract',path,'stdout','--psm','6'],text=True,stderr=subprocess.DEVNULL)
  def start():
   page.locator('#start').tap();page.wait_for_function("!document.getElementById('start-screen')",timeout=90000);page.wait_for_timeout(300)
+  # Fresh-save Opening SKIP; ignored after loading established progress.
+  page.touchscreen.tap(775,40);page.wait_for_timeout(300)
  def save_text(suffix):
   return page.evaluate("""async suffix=>{const d=await new Promise(ok=>{const r=indexedDB.open('/userfs');r.onsuccess=()=>ok(r.result);});const keys=await new Promise(ok=>{const r=d.transaction('FILE_DATA').objectStore('FILE_DATA').getAllKeys();r.onsuccess=()=>ok(r.result);});const key=keys.find(k=>String(k).endsWith(suffix));if(!key){d.close();return null;}const v=await new Promise(ok=>{const r=d.transaction('FILE_DATA').objectStore('FILE_DATA').get(key);r.onsuccess=()=>ok(r.result);});d.close();return new TextDecoder().decode(v.contents);}""",suffix)
  page.goto('http://127.0.0.1:8765/');start()

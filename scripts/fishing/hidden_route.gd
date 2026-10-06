@@ -261,7 +261,8 @@ func step(delta: float) -> void:
 			flow.environment.step(delta)
 			if elapsed >= 3:
 				flow.progress.finish_hidden(false)
-				_restore(true)
+				_restore(false)
+				flow.story.begin("cut")
 		Stage.REEL_UP:
 			flow.lure.position.y -= delta*50
 			visual.fade = clampf((elapsed-1)/1.0,0,1)
@@ -270,7 +271,8 @@ func step(delta: float) -> void:
 			visual.fade = 1
 			if elapsed >= 3:
 				flow.progress.finish_hidden(true)
-				_restore(true)
+				_restore(false)
+				flow.story.begin("contact")
 	depth_label.text = depth_display
 	visual.depth_text = depth_display
 	visual.queue_redraw()
@@ -355,6 +357,8 @@ func debug_setup() -> bool:
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES: flow.progress.record_catch(fish,fish.min_size_cm,false)
 	flow.progress.boss15_defeated = true
 	flow.progress.main_ending_seen = true
+	flow.progress.main_story_ending_seen = true
+	flow.progress.opening_seen = true
 	flow.progress.unknown_a_sold_first = false
 	flow.progress.unknown_b_sold_first = false
 	flow.progress.returned_unknown_a = true

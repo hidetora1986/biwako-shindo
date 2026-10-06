@@ -6,6 +6,8 @@ func _run() -> void:
 	for index in [9,11,13,14]: saved.record_catch(GameProgress.FISH_PROFILES[index],GameProgress.FISH_PROFILES[index].min_size_cm,false)
 	saved.levels = {"rod":5,"reel":5,"line":5,"sonar":5}
 	saved.main_ending_seen = true
+	saved.main_story_ending_seen = true
+	saved.opening_seen = true
 	saved.returned_unknown_a = true
 	saved.returned_unknown_b = true
 	saved.max_depth_reached_m = 110

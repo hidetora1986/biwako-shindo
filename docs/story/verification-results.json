@@ -1,0 +1,397 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "base": "42281da7004b0143fa35801b8e79e74bb61ef5b2",
+  "branch": "feature/narrative-ending-v1",
+  "native_regression": {
+    "phase1_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE1_ACCEPTANCE {\"failures\":[],\"fish_count\":7,\"phase\":1,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase2_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE2_ACCEPTANCE {\"average_cast_to_hit_s\":5.42083333333332,\"casts\":36,\"checks\":57,\"failures\":[],\"longest_cast_to_hit_s\":8.96666666666668,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase3_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE3_ACCEPTANCE {\"checks\":109,\"consecutive_catches\":5,\"failures\":[],\"fight_seconds\":{\"bass\":4.81666666666665,\"biwamasu\":5.74999999999998,\"bluegill\":2.68333333333333,\"catfish\":8.16666666666665,\"crucian\":4.13333333333332},\"guided_catches\":18,\"guided_sessions\":20,\"longest_guided_s\":9.93333333333341,\"result\":\"PASS\"}"
+      ]
+    },
+    "phase4_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE4_ACCEPTANCE {\"catches\":[{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":true,\"price\":1402,\"size_cm\":41.2,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1203,\"size_cm\":36.6,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1341,\"size_cm\":39.8,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1653,\"size_cm\":47.0,\"species_id\":\"bass\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":1008,\"size_cm\":32.1,\"species_id\":\"bass\"},{\"id\":\"No.04\",\"name\":\"ナマズ\",\"new_discovery\":true,\"price\":2156,\"size_cm\":59.7,\"species_id\":\"catfish\"},{\"id\":\"No.01\",\"name\":\"ブルーギル\",\"new_discovery\":true,\"price\":218,\"size_cm\":12.7,\"species_id\":\"bluegill\"},{\"id\":\"No.02\",\"name\":\"ブラックバス\",\"new_discovery\":false,\"price\":921,\"size_cm\":30.1,\"species_id\":\"bass\"},{\"id\":\"No.03\",\"name\":\"フナ\",\"new_discovery\":true,\"price\":479,\"size_cm\":24.1,\"species_id\":\"crucian\"},{\"id\":\"No.01\",\"name\":\"ブルーギル\",\"new_discovery\":false,\"price\":245,\"size_cm\":13.8,\"species_id\":\"bluegill\"}],\"checks\":197,\"consecutive_catches\":10,\"failures\":[],\"first_upgrade_catch\":2,\"result\":\"PASS\",\"upgrades\":3}"
+      ]
+    },
+    "phase5_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PHASE5_ACCEPTANCE {\"anomaly_duration_s\":0.6,\"checks\":105,\"failures\":[],\"result\":\"PASS\",\"save_version\":1}"
+      ]
+    },
+    "mvp_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "MVP_ACCEPTANCE {\"checks\":316,\"cycle_seconds\":[12.5166666666669,12.5166666666669,12.5166666666669,11.8333333333335,10.3833333333334,15.1500000000003,10.0500000000001,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,12.0000000000002,10.7166666666668,10.0500000000001,12.8333333333336,10.0500000000001,12.0000000000002,10.7166666666668,12.0000000000002,10.0500000000001],\"failures\":[],\"fight_seconds\":[4.79999999999999,4.79999999999999,4.79999999999999,4.11666666666666,2.66666666666666,7.43333333333331,2.33333333333333,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,4.28333333333332,2.99999999999999,2.33333333333333,5.11666666666665,2.33333333333333,4.28333333333332,2.99999999999999,4.28333333333332,2.33333333333333],\"first_upgrade_catch\":2,\"future_50m_sink_s\":8.41666666666666,\"purchases\":[\"line\",\"reel\",\"sonar\",\"rod\"],\"real_catches\":21,\"result\":\"PASS\"}"
+      ]
+    },
+    "visual_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "VISUAL_ACCEPTANCE {\"checks\":65,\"failures\":[],\"fish_species\":5,\"mountain_layers\":3,\"result\":\"PASS\"}"
+      ]
+    },
+    "midgame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "MIDGAME_ACCEPTANCE {\"checks\":380,\"deep_catches\":[{\"cycle_s\":19.0833333333336,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":12480},{\"cycle_s\":15.5166666666669,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":12656},{\"cycle_s\":18.7333333333336,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":12412},{\"cycle_s\":19.3500000000003,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":8000},{\"cycle_s\":18.8833333333336,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":26470},{\"cycle_s\":18.8500000000003,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":14248},{\"cycle_s\":19.3333333333336,\"depth\":20.1585139661307,\"fight_s\":8.26666666666666,\"id\":\"No.06\",\"price\":13980},{\"cycle_s\":16.366666666667,\"depth\":25.008298754536,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":17552},{\"cycle_s\":18.6500000000003,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16606},{\"cycle_s\":15.9000000000003,\"depth\":20.1585139661307,\"fight_s\":4.43333333333332,\"id\":\"No.07\",\"price\":8864},{\"cycle_s\":19.4000000000003,\"depth\":25.008298754536,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":13042},{\"cycle_s\":18.9500000000003,\"depth\":28.0190863096082,\"fight_s\":7.51666666666665,\"id\":\"No.08\",\"price\":16426},{\"cycle_s\":14.9500000000002,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":14160},{\"cycle_s\":19.2000000000003,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57013},{\"cycle_s\":19.3666666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":36267},{\"cycle_s\":18.5000000000003,\"depth\":35.3475119384523,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":30453},{\"cycle_s\":20.2000000000002,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":50240},{\"cycle_s\":20.0333333333336,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":47413},{\"cycle_s\":13.5833333333335,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":18360},{\"cycle_s\":18.766666666667,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59787},{\"cycle_s\":20.6333333333335,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":59040},{\"cycle_s\":13.6000000000002,\"depth\":35.3475119384523,\"fight_s\":2.06666666666666,\"id\":\"No.09\",\"price\":17280},{\"cycle_s\":18.7833333333336,\"depth\":40.3186008764548,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57600},{\"cycle_s\":19.7166666666669,\"depth\":50.0,\"fight_s\":7.08333333333331,\"id\":\"No.10\",\"price\":57760}],\"failures\":[],\"money_earned\":621096,\"result\":\"PASS\",\"returns\":1,\"species\":[\"No.06\",\"No.07\",\"No.08\",\"No.09\",\"No.10\"],\"unknown_sales\":8}"
+      ]
+    },
+    "lategame_depth_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "LATEGAME_ACCEPTANCE {\"checks\":461,\"cycles\":[{\"cycle_s\":21.6500000000001,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":69700},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":80164},{\"cycle_s\":22.8666666666667,\"depth\":65.0,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":63729},{\"cycle_s\":21.6500000000001,\"depth\":55.1585135650927,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":49193},{\"cycle_s\":22.6666666666668,\"depth\":63.1993210598214,\"fight_s\":10.8666666666668,\"id\":\"No.12\",\"price\":114429},{\"cycle_s\":21.5500000000002,\"depth\":65.0,\"fight_s\":9.50000000000005,\"id\":\"No.11\",\"price\":52964},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":146625},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":159750},{\"cycle_s\":23.9666666666667,\"depth\":85.0,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":116750},{\"cycle_s\":23.1166666666667,\"depth\":72.8004657148499,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":87125},{\"cycle_s\":23.2000000000001,\"depth\":82.2100982584082,\"fight_s\":11.2166666666668,\"id\":\"No.13\",\"price\":96875},{\"cycle_s\":28.7166666666664,\"depth\":85.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":265500},{\"cycle_s\":27.5166666666665,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":222000},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":397500},{\"cycle_s\":27.6999999999998,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":241800},{\"cycle_s\":27.8166666666665,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":198300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":346800},{\"cycle_s\":27.7499999999998,\"depth\":100.0,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":325500},{\"cycle_s\":27.7999999999998,\"depth\":90.8059300791374,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":306300},{\"cycle_s\":27.4999999999998,\"depth\":95.5003278876235,\"fight_s\":15.416666666667,\"id\":\"No.14\",\"price\":418500}],\"failures\":[],\"knock_strikes\":6,\"night\":1.99999999999999,\"pre_lv5_unknown\":true,\"rare_casts\":11,\"result\":\"PASS\"}"
+      ]
+    },
+    "boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_ACCEPTANCE {\"actions\":[0,2,1],\"checks\":74,\"encounters\":3,\"failures\":[],\"fight_s\":53.2499999999983,\"phases\":[1,2,3],\"result\":\"PASS\",\"reward\":1069000,\"warnings_s\":[0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001,0.800000000000001]}"
+      ]
+    },
+    "hidden_boss_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_ACCEPTANCE {\"checks\":99,\"failures\":[],\"fight_seconds\":50,\"ratios\":[\"16:9\",\"19.5:9\",\"20:9\",\"640x360\"]}"
+      ]
+    },
+    "playtest_feedback_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PLAYTEST_FEEDBACK_ACCEPTANCE {\"checks\":93,\"failures\":[],\"result\":\"PASS\"}"
+      ]
+    },
+    "human_playtest_acceptance": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HUMAN_PLAYTEST_ACCEPTANCE {\"checks\":502,\"failures\":[],\"human_feel\":\"MANUAL TEST REQUIRED\",\"result\":\"PASS\"}"
+      ]
+    },
+    "full-game-contact": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":110,\"failures\":[],\"hidden_catches\":28,\"hidden_s\":1142.94999999952,\"main_catches\":26,\"main_s\":1042.49999999959,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "full-game-cut": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":110,\"failures\":[],\"hidden_catches\":28,\"hidden_s\":1142.94999999952,\"main_catches\":26,\"main_s\":1042.49999999959,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "full-game-sell": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":96,\"failures\":[],\"hidden_catches\":26,\"hidden_s\":1037.91666666626,\"main_catches\":26,\"main_s\":1037.91666666626,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    },
+    "pacing_simulation": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "PACING_SIMULATION {\"assumptions\":{\"boss_retries\":2,\"boss_retry_cycle_s\":60,\"exploration_per_catch_s\":20,\"late_success_rate\":0.65,\"mid_success_rate\":0.7,\"new_controls_learning_min\":6,\"normal_success_rate\":0.85,\"postgame_search_min\":8,\"reading_and_shops_min\":6},\"estimated_hidden_minutes\":53.5894965165474,\"estimated_main_minutes\":43.0819965165485,\"hidden_active_minutes\":19.0491666666587,\"hidden_catches\":28.0,\"human_validation\":\"MANUAL TEST REQUIRED\",\"line_checkpoints\":[{\"catches\":3.0,\"catches_since_previous\":3.0,\"category\":\"line\",\"level\":2.0,\"money_after\":1374.0,\"money_before\":3174.0,\"price\":1800.0,\"seconds\":53.7499999999985},{\"catches\":7.0,\"catches_since_previous\":1.0,\"category\":\"line\",\"level\":3.0,\"money_after\":1641.0,\"money_before\":13641.0,\"price\":12000.0,\"seconds\":141.183333333338},{\"catches\":11.0,\"catches_since_previous\":2.0,\"category\":\"line\",\"level\":4.0,\"money_after\":2392.0,\"money_before\":67392.0,\"price\":65000.0,\"seconds\":263.083333333407},{\"catches\":18.0,\"catches_since_previous\":3.0,\"category\":\"line\",\"level\":5.0,\"money_after\":8453.0,\"money_before\":308453.0,\"price\":300000.0,\"seconds\":592.983333333208}],\"low_value_equipment_route\":[{\"catches_since_previous\":9,\"category\":\"line\",\"level\":2,\"money_after\":0,\"price\":1800},{\"catches_since_previous\":1,\"category\":\"sonar\",\"level\":2,\"money_after\":1000,\"price\":5000},{\"catches_since_previous\":1,\"category\":\"reel\",\"level\":2,\"money_after\":4000,\"price\":3000},{\"catches_since_previous\":0,\"category\":\"rod\",\"level\":2,\"money_after\":0,\"price\":4000},{\"catches_since_previous\":2,\"category\":\"line\",\"level\":3,\"money_after\":0,\"price\":12000},{\"catches_since_previous\":2,\"category\":\"reel\",\"level\":3,\"money_after\":9000,\"price\":15000},{\"catches_since_previous\":1,\"category\":\"rod\",\"level\":3,\"money_after\":3000,\"price\":18000},{\"catches_since_previous\":2,\"category\":\"sonar\",\"level\":3,\"money_after\":2000,\"price\":25000},{\"catches_since_previous\":6,\"category\":\"line\",\"level\":4,\"money_after\":9000,\"price\":65000},{\"catches_since_previous\":1,\"category\":\"reel\",\"level\":4,\"money_after\":14000,\"price\":75000},{\"catches_since_previous\":1,\"category\":\"rod\",\"level\":4,\"money_after\":4000,\"price\":90000},{\"catches_since_previous\":2,\"category\":\"sonar\",\"level\":4,\"money_after\":44000,\"price\":120000},{\"catches_since_previous\":4,\"category\":\"line\",\"level\":5,\"money_after\":64000,\"price\":300000},{\"catches_since_previous\":2,\"category\":\"reel\",\"level\":5,\"money_after\":64000,\"price\":360000},{\"catches_since_previous\":2,\"category\":\"rod\",\"level\":5,\"money_after\":4000,\"price\":420000},{\"catches_since_previous\":3,\"category\":\"sonar\",\"level\":5,\"money_after\":44000,\"price\":500000}],\"low_value_equipment_worst_stall\":9,\"low_value_worst_stall\":9,\"main_active_minutes\":17.3749999999932,\"main_catches\":26.0,\"minimum_line_route\":[{\"catches_for_purchase\":9,\"line_level\":2,\"minimum_fish\":\"No.01\",\"money_after\":0,\"price\":1800},{\"catches_for_purchase\":2,\"line_level\":3,\"minimum_fish\":\"No.06\",\"money_after\":0,\"price\":12000},{\"catches_for_purchase\":6,\"line_level\":4,\"minimum_fish\":\"No.09\",\"money_after\":7000,\"price\":65000},{\"catches_for_purchase\":8,\"line_level\":5,\"minimum_fish\":\"No.11\",\"money_after\":27000,\"price\":300000}],\"normal_worst_stall\":3.0,\"pacing_target_met\":false}"
+      ]
+    },
+    "full_game_stress": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_STRESS {\"catches\":90,\"checks\":1139,\"cycles\":100,\"failed_fights\":10,\"failures\":[],\"modal_opens\":600,\"money\":95959,\"nodes\":243,\"result\":\"PASS\"}"
+      ]
+    },
+    "rc1_save_stress": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "RC1_SAVE_STRESS PASS 138"
+      ]
+    },
+    "rc1_postgame_recovery": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    },
+    "hidden-restart-cut-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS false"
+      ]
+    },
+    "hidden-restart-cut-read": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS false"
+      ]
+    },
+    "hidden-restart-contact-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_WRITE PASS true"
+      ]
+    },
+    "hidden-restart-contact-read": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "HIDDEN_RESTART_LOAD_CONTINUE PASS true"
+      ]
+    },
+    "boss-restart-write": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_WRITE PASS"
+      ]
+    },
+    "boss-restart-interrupt": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_INTERRUPTED_DAWN PASS"
+      ]
+    },
+    "boss-restart-finish": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_FINISH PASS"
+      ]
+    },
+    "boss-restart-postgame": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "BOSS_RESTART_POSTGAME_CONTINUE PASS"
+      ]
+    },
+    "import": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    },
+    "headless": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": []
+    },
+    "human-journey": {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "pass": true,
+      "summary": [
+        "FULL_GAME_ACCEPTANCE {\"checks\":111,\"failures\":[],\"hidden_catches\":28,\"hidden_s\":1142.94999999952,\"main_catches\":26,\"main_s\":1042.49999999959,\"result\":\"PASS\",\"stall\":3}"
+      ]
+    }
+  },
+  "additional_native_tests": {
+    "narrative_acceptance-": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "NARRATIVE_ACCEPTANCE {\"checks\":50,\"failures\":[],\"human_story\":\"MANUAL TEST REQUIRED\",\"result\":\"PASS\"}"
+      ]
+    },
+    "cast_aim_acceptance-": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "CAST_AIM_ACCEPTANCE {\"checks\":33,\"failures\":[],\"result\":\"PASS\"}"
+      ]
+    },
+    "boss_web_playtest_acceptance---boss15-playtest": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "BOSS_WEB_PLAYTEST_ACCEPTANCE {\"checks\":17,\"failures\":[],\"result\":\"PASS\"}"
+      ]
+    },
+    "playtest_feedback_telemetry---rc1-playtest": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "FEEDBACK_TELEMETRY_ACCEPTANCE {\"checks\":12,\"failures\":[],\"result\":\"PASS\"}"
+      ]
+    },
+    "midgame_save_restart---write": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "RESTART_WRITE PASS"
+      ]
+    },
+    "midgame_save_restart---read": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "RESTART_READ PASS"
+      ]
+    },
+    "lategame_save_restart---write": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "LATE_RESTART_WRITE PASS"
+      ]
+    },
+    "lategame_save_restart---read": {
+      "pass": true,
+      "exit_code": 0,
+      "errors": [],
+      "summary": [
+        "LATE_RESTART_READ PASS"
+      ]
+    }
+  },
+  "web_narrative": {
+    "result": "PASS",
+    "opening_skip_persists": true,
+    "legacy_gameplay": "covered by native + playtest_feedback browser suite",
+    "journal_touch": true,
+    "main_cut_contact_skip_and_continue": true,
+    "ending_flags_indexeddb": true,
+    "unchanged_money_and_boss_count": true,
+    "ratios": [
+      "16:9 / 640x360",
+      "19.5:9 / 844x390",
+      "20:9 / 800x360"
+    ],
+    "errors": [],
+    "physical_iPhone_Android": "MANUAL TEST REQUIRED"
+  },
+  "web_feedback_regression": {
+    "result": "PASS",
+    "browser": "Chromium touch emulation",
+    "manual_save_indexeddb": true,
+    "touch_hook": true,
+    "targeted_cast_catch": true,
+    "random_tap_no_hook": true,
+    "real_fishing_money": 571,
+    "area_map": true,
+    "boat_travel": true,
+    "arrival_save": true,
+    "reload_center": true,
+    "shop_book_touch": true,
+    "aspect_ratios": [
+      "16:9",
+      "19.5:9",
+      "20:9"
+    ],
+    "errors": [],
+    "physical_safari": "NOT TESTED"
+  },
+  "web_boss_regression": {
+    "boss_web": "PASS",
+    "real_cast_hook_reel": true,
+    "normal_save_unchanged": true,
+    "return_normal": true,
+    "errors": []
+  },
+  "headless": "PASS",
+  "web_export": "PASS",
+  "critical_errors": 0,
+  "manual_story_test": "REQUIRED",
+  "physical_iPhone_Android": "MANUAL TEST REQUIRED",
+  "published_web_updated": false,
+  "balance_data_changed": false
+}

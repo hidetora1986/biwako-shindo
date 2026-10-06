@@ -148,7 +148,8 @@ func _run() -> void:
 	_step(4)
 	_check(_flow.selected_band == 0 and _flow.environment.value < 2 and _flow.environment.value > 0 and not _flow.line.visible, "Fade returns to surface; no stale line, dawn without black screen")
 	_step(4.1)
-	_check(_flow.state == FLOW.State.TITLE and progress.main_ending_seen and is_equal_approx(_flow.environment.value,0) and _flow.ending_screen.get_node("Continue").visible, "Eight-second dawn ends at morning title, seen saved")
+	_flow.story.skip();_flow.story.skip();_step(0.3)
+	_check(_flow.state == FLOW.State.TITLE and progress.main_ending_seen and is_equal_approx(_flow.environment.value,0) and _flow.ending_screen.get_node("Continue").visible, "Skippable dawn / journal / credits reach morning title, flags saved")
 	var all_records: Dictionary = progress.fish_records.duplicate(true)
 	var amount: int = progress.money
 	_touch(_flow.ending_screen.get_node("Continue").get_global_rect().get_center())

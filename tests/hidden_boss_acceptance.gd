@@ -133,6 +133,7 @@ func _run() -> void:
 	_check(hidden.cut.visible and hidden.lift.visible and not hidden.reel.visible and not hidden.set_reeling(true),"Two large choices only, REEL disabled")
 	_check(hidden.choose(false) and not hidden.choose(true),"Cut / duplicate choice blocked")
 	_step(3.2)
+	_flow.story.skip();_flow.story.skip();_step(0.3)
 	_check(progress.hidden_cut_ending_seen and not progress.no00_contacted and _flow.state == FLOW.State.TITLE and hidden.visual.title_shadow,"Cut ending dawn/title faint unbounded shadow, not caught")
 	_check(_flow.request_continue() and not hidden.visual.title_shadow,"Post-cut CONTINUE ordinary fishing")
 	_step(12.1); _travel_for_band(6) and _flow.select_depth_band(6)
@@ -145,6 +146,7 @@ func _run() -> void:
 	_step(3.1)
 	_check(hidden.stage == HiddenRoute.Stage.REVEAL and hidden.message.text.contains("捕獲数: 2") and hidden.message.text.contains("記録不能") and hidden.message.text.contains("売値: ---"),"No.00 book reveal / unknown size-depth-price / count2")
 	_step(3.1)
+	_flow.story.skip();_flow.story.skip();_step(0.3)
 	_check(progress.hidden_contact_ending_seen and progress.no00_contacted and progress.no00_record().caught_count == 2 and _flow.state == FLOW.State.TITLE,"Contact ending flags / immutable synthetic count2")
 	var secret := FishFightProfile.new()
 	secret.id = "00"

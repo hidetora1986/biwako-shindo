@@ -80,7 +80,7 @@ func _touch(position: Vector2, index: int = 0, pressed: bool = true) -> void:
 	event.pressed = pressed
 	root.push_input(event, true)
 
-func _new_scene() -> void:
+func _new_scene(skip_opening: bool = true) -> void:
 	if is_instance_valid(_main):
 		_main.free()
 	if not _test_save_path.is_empty():
@@ -96,6 +96,9 @@ func _new_scene() -> void:
 	_fishes = _lake.get_node("Underwater/FishContainer").get_children()
 	_boat = _lake.get_node("Lake/Boat")
 	_disable_physics(_main)
+	if skip_opening and _flow.story.active and _flow.story.mode == "opening":
+		_flow.story.skip()
+		_flow.story.input_lock = 0
 
 func _run() -> void:
 	root.size = Vector2i(1280, 720)

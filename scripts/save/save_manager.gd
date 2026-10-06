@@ -58,7 +58,8 @@ func snapshot(progress: GameProgress) -> Dictionary:
 		discovered[id] = record.discovered
 		counts[id] = record.caught_count
 		best[id] = record.best_size_cm
-	return {"current_area": progress.current_area, "unknown_a_sold_first":progress.unknown_a_sold_first,"unknown_b_sold_first":progress.unknown_b_sold_first,"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
+	progress.journal_pages_unlocked = NarrativeData.pages(progress)
+	return {"opening_seen":progress.opening_seen,"night_page_seen":progress.night_page_seen,"journal_pages_unlocked":progress.journal_pages_unlocked,"main_story_ending_seen":progress.main_story_ending_seen,"cut_story_ending_seen":progress.cut_story_ending_seen,"contact_story_ending_seen":progress.contact_story_ending_seen,"current_area": progress.current_area, "unknown_a_sold_first":progress.unknown_a_sold_first,"unknown_b_sold_first":progress.unknown_b_sold_first,"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
 
 func load_into(progress: GameProgress) -> bool:
 	var raw: Variant = null
@@ -116,6 +117,20 @@ func load_into(progress: GameProgress) -> bool:
 	progress.second_playthrough_hooks = {"first_record_count":2,"returning_dialogue":true,"sonar_depth_flash":120} if progress.hidden_finished() else {}
 	var area: Variant = data.get("current_area", LakeAreas.SOUTH)
 	progress.current_area = area if area is String and LakeAreas.unlocked(area, progress) else LakeAreas.SOUTH
+	# Additive v1 migration: established players do not replay new opening/endings.
+	for field: String in ["opening_seen","night_page_seen","main_story_ending_seen","cut_story_ending_seen","contact_story_ending_seen"]:
+		var fallback := valid if field == "opening_seen" else false
+		if field == "main_story_ending_seen":fallback = progress.main_ending_seen
+		if field == "cut_story_ending_seen":fallback = progress.hidden_cut_ending_seen
+		if field == "contact_story_ending_seen":fallback = progress.hidden_contact_ending_seen
+		var value: Variant = data.get(field,fallback)
+		progress.set(field,value if value is bool else fallback)
+	progress.journal_pages_unlocked = ["early"]
+	var pages: Variant = data.get("journal_pages_unlocked",[])
+	if pages is Array:
+		for id: Variant in pages:
+			if id is String and id in NarrativeData.PAGE_IDS and id not in progress.journal_pages_unlocked:progress.journal_pages_unlocked.append(id)
+	progress.journal_pages_unlocked = NarrativeData.pages(progress)
 	return valid
 
 func _dictionary(value: Variant) -> Dictionary:

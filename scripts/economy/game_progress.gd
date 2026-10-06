@@ -6,6 +6,12 @@ signal changed
 signal depth_unlocked(previous_depth: float, next_depth: float)
 const CATEGORIES := ["rod", "reel", "line", "sonar"]
 var catalog: EquipmentCatalog = preload("res://data/equipment/mvp.tres")
+var opening_seen := false
+var night_page_seen := false
+var journal_pages_unlocked: Array[String] = ["early"]
+var main_story_ending_seen := false
+var cut_story_ending_seen := false
+var contact_story_ending_seen := false
 var current_area: String = "south_shore"
 var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}

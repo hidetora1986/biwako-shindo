@@ -10,6 +10,8 @@ with sync_playwright() as p:
   return subprocess.check_output(['tesseract',path,'stdout','--psm','6'],text=True,stderr=subprocess.DEVNULL)
  def start():
   page.locator('#start').tap();page.wait_for_function("!document.getElementById('start-screen')",timeout=90000);page.wait_for_timeout(300)
+  # Fresh-save Opening SKIP; ignored after loading established progress.
+  page.touchscreen.tap(775,40);page.wait_for_timeout(300)
  def read():
   return page.evaluate('''async()=>{const d=await new Promise(ok=>{const r=indexedDB.open('/userfs');r.onsuccess=()=>ok(r.result);});const keys=await new Promise(ok=>{const r=d.transaction('FILE_DATA').objectStore('FILE_DATA').getAllKeys();r.onsuccess=()=>ok(r.result);});const key=keys.find(k=>String(k).endsWith('/biwako-shindo/save.json'));if(!key){d.close();return null;}const v=await new Promise(ok=>{const r=d.transaction('FILE_DATA').objectStore('FILE_DATA').get(key);r.onsuccess=()=>ok(r.result);});d.close();return {key,data:JSON.parse(new TextDecoder().decode(v.contents))};}''')
  def fixture(data):
@@ -75,7 +77,7 @@ with sync_playwright() as p:
  page.set_viewport_size({'width':844,'height':390});page.wait_for_timeout(300)
  page.touchscreen.tap(136,95);page.wait_for_timeout(200);shop_text=snap('shop');assert 'EQUIPMENT' in shop_text or ('ROD' in shop_text and 'SONAR' in shop_text),shop_text
  page.touchscreen.tap(679,55);page.wait_for_timeout(200)
- page.touchscreen.tap(275,95);page.wait_for_timeout(200);book_text=snap('book');assert 'FISH BOOK' in book_text or 'SPECIES' in book_text,book_text
+ page.touchscreen.tap(275,95);page.wait_for_timeout(200);book_text=snap('book');assert 'FISH BOOK' in book_text or 'SPECIES' in book_text or ('No.01' in book_text and 'No.02' in book_text),book_text
  page.touchscreen.tap(679,55);page.wait_for_timeout(200)
  errors=[m for m in logs if m['type'] in ['error','pageerror']]
  assert not errors,errors

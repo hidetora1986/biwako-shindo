@@ -1,0 +1,101 @@
+extends "res://tests/hidden_boss_acceptance.gd"
+## Real touch, progression, boss/hidden fight integration and additive save migration.
+func _reload_scene() -> void:
+	var path := _test_save_path
+	_main.free()
+	_main = load("res://scenes/main.tscn").instantiate()
+	_main.get_node("LakeScene/FishingController").save_path = path
+	root.add_child(_main)
+	_lake = _main.get_node("LakeScene");_flow = _lake.get_node("FishingController")
+	_hud = _lake.get_node("HUD/Root");_boat = _lake.get_node("Lake/Boat")
+	_fishes = _lake.get_node("Underwater/FishContainer").get_children()
+	hidden = _flow.hidden_route;_disable_physics(_main)
+
+func _run() -> void:
+	root.size = Vector2i(1280,720)
+	_new_scene(false);await process_frame;await process_frame
+	var story: NarrativeScreen = _flow.story
+	_check(story.active and story.mode == "opening" and _flow.state == FLOW.State.NARRATIVE, "New Game Opening")
+	_check(not _flow.request_cast() and not _flow.request_shop() and not _flow.request_book(), "Opening blocks underlying input")
+	_check(NarrativeData.content().opening.size() == 4 and story.steps.size()*5 == 20, "Four quiet cards / 20 seconds")
+	_step(20.1)
+	_check(_flow.state == FLOW.State.READY and _flow.progress.opening_seen and not story.active, "Opening naturally finishes and saves")
+	var loaded := GameProgress.new()
+	_check(_flow.save_manager.load_into(loaded) and loaded.opening_seen, "Opening flag reload")
+	_new_scene(false);await process_frame;await process_frame
+	story = _flow.story
+	_touch(story.skip_button.get_global_rect().get_center());_step(0.3)
+	_check(_flow.state == FLOW.State.READY and _flow.progress.opening_seen, "Opening touch SKIP")
+	_check(_flow.request_book(), "Fish Book opens once")
+	var book: Control = _hud.get_node("FishBook")
+	_touch(book.journal_tab.get_global_rect().get_center())
+	_check(book.journal_mode and book.journal_entries.early.visible and not book.journal_entries.fish10.visible, "Journal tab / normal initial page only")
+	_check(book.journal_entries.early.text.contains("フナ") and not book.journal_entries.early.text.contains("北湖"), "Early fishing record has no horror hint")
+	_check(not _flow.request_cast() and not _flow.request_shop() and paused, "Journal modal input lock")
+	book.close_book();_step(0.1)
+	_flow.progress.record_catch(GameProgress.FISH_PROFILES[4],40)
+	_check("fish05" in NarrativeData.pages(_flow.progress), "No05 ordinary fishing page")
+	_flow.progress.record_catch(GameProgress.FISH_PROFILES[9],80)
+	_check("fish10" in NarrativeData.pages(_flow.progress) and NarrativeData.content().journal.fish10.size() == 3, "No10 short beat / no choice hint")
+	_flow.progress.record_catch(GameProgress.FISH_PROFILES[10],80)
+	_check("deep" in NarrativeData.pages(_flow.progress), "No11-13 weathered record")
+	_flow.environment.value = 2;_flow.environment.target = 2;_step(0.1)
+	_check(_flow.progress.night_page_seen and story.flip_remaining > 0 and not book.visible, "First Night turns a page near boat; no modal")
+	_step(1.2);_step(0.1)
+	_check(story.flip_remaining == 0 and "night" in NarrativeData.pages(_flow.progress), "Night flip once; page persists")
+	_flow.progress.finish_hull_knock(1)
+	_check("knock" in NarrativeData.pages(_flow.progress) and not book.visible and not story.active, "Hull Knock unlocks silent page without auto-open")
+	_flow.progress.record_catch(GameProgress.FISH_PROFILES[13],170)
+	_check("fish14" in NarrativeData.pages(_flow.progress), "No14 journal beat")
+	_boss_fixture();_check(_boss_hook() and _boss_land(), "Unchanged No15 CAST / HOOK / FIGHT / CATCH")
+	var money: int = _flow.progress.money
+	_step(2.6)
+	_check(story.active and story.mode == "main" and not _flow.request_continue(), "Main story starts after ordinary auto-sale")
+	_step(3.2)
+	_check(_flow.progress.current_area == LakeAreas.SOUTH and _lake.current_area == LakeAreas.SOUTH and story.heading.text == "祖父の釣果帳", "Dawn / South Shore / final ordinary page")
+	_flow.save_manager.save_progress(_flow.progress)
+	_reload_scene();await process_frame;await process_frame;story = _flow.story
+	_check(story.active and story.mode == "main" and _flow.progress.money == money and _flow.progress.fish_records["No.15"].caught_count == 1, "Interrupted Main Story reload / no duplicate boss reward")
+	_step(48)
+	_check(_flow.state == FLOW.State.TITLE and _flow.progress.main_ending_seen and _flow.progress.main_story_ending_seen and _flow.progress.money == money, "Main closure / natural credits / saved reward unchanged")
+	_check(_flow.ending_screen.get_node("Clear").text == "MAIN END" and _flow.request_continue(), "Main END / Continue")
+	_check("postgame" in NarrativeData.pages(_flow.progress), "Postgame unreadable fragment")
+	_hidden_fixture()
+	_check("last" in NarrativeData.pages(_flow.progress), "Hidden eligibility reveals blank final journal page")
+	_check(_contact() and _survive() and hidden.choose(false), "Unchanged hidden encounter / final Cut choice")
+	_step(3.2)
+	_check(story.mode == "cut" and _flow.progress.hidden_cut_ending_seen and not _flow.progress.no00_contacted, "Cut story starts, not a catch")
+	_reload_scene();await process_frame;await process_frame;story = _flow.story
+	_check(story.mode == "cut" and _flow.progress.hidden_cut_ending_seen and not _flow.progress.no00_contacted and not _flow.line.visible, "Interrupted Cut Story replays safely")
+	_step(2.1)
+	_check(story.section == 1 and story.text.text.is_empty() and story.old_mark.visible and not story.new_mark.visible, "Cut page is a single old tally, no explanation")
+	story.skip();_check(story.credits and _flow.progress.cut_story_ending_seen, "Ending Skip retains Cut flags; starts credits")
+	story.skip();_step(0.3)
+	_check(_flow.state == FLOW.State.TITLE and hidden.visual.title_shadow and _flow.request_continue(), "Credit Skip / faint shadow / Continue")
+	_step(4.2);_check(not hidden.visual.title_shadow, "Cut shadow disappears after a few seconds")
+	_new_scene();await process_frame;await process_frame;story = _flow.story;_hidden_fixture()
+	_check(_contact() and _survive() and hidden.choose(true), "Independent hidden Contact route")
+	_step(3.1)
+	_check(hidden.message.text.contains("捕獲数: 2") and hidden.stage == HiddenRoute.Stage.REVEAL, "Contact reveal, no body / immutable count two")
+	_step(3.1)
+	_check(story.mode == "contact" and story.text.text.is_empty() and story.old_mark.visible and story.new_mark.visible and _flow.progress.no00_record().caught_count == 2, "Silent journal: old and new tally")
+	_reload_scene();await process_frame;await process_frame;story = _flow.story
+	_check(story.mode == "contact" and _flow.progress.no00_record().caught_count == 2, "Interrupted Contact Story keeps count two")
+	for ratio in [Vector2i(1280,720),Vector2i(1560,720),Vector2i(1600,720),Vector2i(640,360)]:
+		root.size = ratio;await process_frame;await process_frame
+		_check(_hud.safe_rect.encloses(story.panel.get_global_rect()) and _hud.safe_rect.encloses(story.skip_button.get_global_rect()) and story.skip_button.size.y*float(ratio.y)/_lake.view_size.y >= 44, "Story safe/readable/touch target at %s" % ratio)
+	_touch(story.skip_button.get_global_rect().get_center());_step(0.3)
+	_check(story.credits and _flow.progress.contact_story_ending_seen and _flow.progress.hidden_contact_ending_seen, "Contact Skip saves both flags")
+	_touch(Vector2(20,220));_step(0.3)
+	_check(_flow.state == FLOW.State.TITLE and not story.active, "Credits touch anywhere skips to Title")
+	_check(_flow.save_manager.load_into(loaded) and loaded.contact_story_ending_seen and loaded.no00_record().caught_count == 2, "Contact Story Save / Reload count remains 2")
+	var legacy: Dictionary = _flow.save_manager.snapshot(_flow.progress)
+	for key: String in ["opening_seen","night_page_seen","journal_pages_unlocked","main_story_ending_seen","cut_story_ending_seen","contact_story_ending_seen"]:legacy.erase(key)
+	var file := FileAccess.open(_test_save_path,FileAccess.WRITE);file.store_string(JSON.stringify(legacy));file.close()
+	_check(_flow.save_manager.load_into(loaded) and loaded.opening_seen and loaded.main_story_ending_seen and loaded.contact_story_ending_seen and loaded.no00_record().caught_count == 2, "Legacy v1 defaults preserve prior completed endings")
+	legacy["journal_pages_unlocked"] = ["early","bad",null,12,"early"];legacy["opening_seen"] = "wrong"
+	file = FileAccess.open(_test_save_path,FileAccess.WRITE);file.store_string(JSON.stringify(legacy));file.close()
+	_check(_flow.save_manager.load_into(loaded) and not "bad" in loaded.journal_pages_unlocked and loaded.opening_seen, "Wrong types / unknown pages safely fall back")
+	print("NARRATIVE_ACCEPTANCE ",JSON.stringify({"result":"PASS" if _failures.is_empty() else "FAIL","checks":_checks,"failures":_failures,"human_story":"MANUAL TEST REQUIRED"}))
+	_main.free();DirAccess.remove_absolute(_test_save_path);await process_frame
+	quit(0 if _failures.is_empty() else 1)
