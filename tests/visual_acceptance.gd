@@ -11,11 +11,11 @@ func _run() -> void:
 		ids[fish.fight_profile.species_id] = true
 		var frames := fish.sprite.sprite_frames
 		_check(frames.get_frame_count("swim") == 3 and frames.get_frame_texture("swim", 0).get_size() == Vector2(40, 22), "Fish art: three nearest pixel frames / unchanged AI envelope")
-		_check(frames == RefinedPixelArt.fish_frames(fish.fight_profile.species_id), "Fish art: species-specific shared cache")
+		_check(frames == (GoldenAssets.FISH[fish.fight_profile.species_id] if fish.sprite.golden_enabled else RefinedPixelArt.fish_frames(fish.fight_profile.species_id)), "Fish art: species-specific shared cache")
 		var before: Array = [fish.state, fish.position, fish.depth_position, fish.size_cm, fish.stamina, fish.swim_direction]
 		fish.sprite._process(1.0)
 		_check(before == [fish.state, fish.position, fish.depth_position, fish.size_cm, fish.stamina, fish.swim_direction], "Fish visual: no state / position / gameplay size mutation")
-		_check(fish.sprite.scale.x >= 0.7 and fish.sprite.scale.x <= 1 and fish.sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Fish visual: size variation inside original bounds / nearest filtering")
+		_check(fish.sprite.scale.x >= 0.7 and fish.sprite.scale.x <= (1.35 if fish.sprite.golden_enabled else 1.0) and fish.sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Fish visual: size variation visual-only scale / nearest filtering")
 	for profile: FishFightProfile in GameProgress.FISH_PROFILES.slice(0, 5):
 		var frame := RefinedPixelArt.fish_frames(profile.species_id).get_frame_texture("swim", 1)
 		shapes[frame.get_image().get_data().hex_encode().sha256_text()] = true

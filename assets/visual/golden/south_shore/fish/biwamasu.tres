@@ -1,0 +1,31 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/visual/golden/south_shore/fish/biwamasu.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="Frame0"]
+
+atlas = ExtResource("1")
+
+region = Rect2(0, 0, 40, 22)
+
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Frame1"]
+
+atlas = ExtResource("1")
+
+region = Rect2(40, 0, 40, 22)
+
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Frame2"]
+
+atlas = ExtResource("1")
+
+region = Rect2(80, 0, 40, 22)
+
+filter_clip = true
+
+[resource]
+
+animations = [{"frames": [{"duration":1.0,"texture":SubResource("Frame0")},{"duration":1.0,"texture":SubResource("Frame1")},{"duration":1.0,"texture":SubResource("Frame2")}], "loop":true, "name": &"swim", "speed":4.0}]

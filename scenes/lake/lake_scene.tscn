@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
 [ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
@@ -21,6 +21,8 @@
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansJP.ttf" id="web_jp"]
 
 [ext_resource type="Script" path="res://scripts/ui/area_map.gd" id="13_area_map"]
+
+[ext_resource type="Script" path="res://scripts/visual/golden/golden_screen.gd" id="golden"]
 
 [sub_resource type="SystemFont" id="Font_catch"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
@@ -461,3 +463,6 @@ process_mode = 3
 z_index = 30
 visible = false
 script = ExtResource("13_area_map")
+
+[node name="GoldenVisual" type="Node" parent="."]
+script = ExtResource("golden")

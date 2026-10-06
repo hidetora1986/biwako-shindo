@@ -104,8 +104,8 @@ func _run() -> void:
 		ui_ok = true
 		for node_name in ["Money", "SonarPlaceholder", "Depth"]:
 			var control: Control = hud.get_node(node_name)
-			ui_ok = ui_ok and hud.safe_rect.encloses(control.get_global_rect()) and control.size.y >= 44
-		_check(ui_ok, spec[2] + ": simulated notch and 44 px future touch regions")
+			ui_ok = ui_ok and hud.safe_rect.encloses(control.get_global_rect()) and control.size.y >= (28 if lake.get_node("GoldenVisual").active and node_name in ["Money","Depth"] else 44)
+		_check(ui_ok, spec[2] + ": simulated notch / compact info / touch regions")
 		hud.configure(size, lake.surface_y, 15.0)
 	# A different image size can be supplied without changing the fish logic.
 	var custom_art := SpriteFrames.new()

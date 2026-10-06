@@ -110,6 +110,10 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	if has_node("MainEnding"):
 		$MainEnding.configure(view_size,safe_rect)
 
+	var lake: Node = get_parent().get_parent()
+	if lake.has_node("GoldenVisual"):
+		lake.get_node("GoldenVisual").apply_layout()
+
 func show_lure_depth(depth_m: float, active: bool) -> void:
 	if active:
 		$Depth/Label.text = "%.1fm" % depth_m

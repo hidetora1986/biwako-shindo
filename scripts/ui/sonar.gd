@@ -2,6 +2,7 @@ class_name SonarDisplay
 extends Control
 ## Samples the real fish every 0.15s; estimated details rotate below the depth plot.
 @export var text_font: Font
+var golden_visual := false
 var contacts: Array[Dictionary] = []
 var anomaly_active: bool = false
 var anomaly_progress: float = 0.0
@@ -70,6 +71,9 @@ func set_anomaly(enabled: bool, value: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if golden_visual:
+		GoldenSonar.paint(self)
+		return
 	draw_rect(Rect2(Vector2.ZERO, size), Color("132e40"))
 	draw_rect(Rect2(Vector2.ZERO, size), Color("81b1b5"), false, 1)
 	# Small pixel brackets and a thin header divider evoke a compact fish finder.
