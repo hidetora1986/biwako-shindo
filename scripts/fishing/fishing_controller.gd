@@ -47,6 +47,7 @@ var _manual_confirmation := false
 var _travel_remaining := 0.0
 var _travel_destination := ""
 var _playtest: Node
+var boss_playtest := false
 var save_manager: SaveManager
 var anomaly := SonarAnomaly.new()
 var environment := LakeEnvironment.new()
@@ -78,8 +79,16 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	_hud = hud
 	_playtest = get_node("/root/HumanPlaytest")
 	save_path = _playtest.test_save_path(save_path)
+	boss_playtest = BossWebPlaytest.requested()
+	if boss_playtest:
+		# Separate namespace, fresh on each explicit test URL load. No normal-save IO.
+		save_path = BossWebPlaytest.SAVE_PATH
+		progress = BossWebPlaytest.fresh_progress()
 	save_manager = SaveManager.new(save_path)
-	save_manager.load_into(progress)
+	if boss_playtest:
+		save_manager.save_progress(progress)
+	else:
+		save_manager.load_into(progress)
 	save_manager.bind_progress(progress)
 	_hud.get_node("CastButton").pressed.connect(_cast_or_retrieve)
 	_hud.get_node("HookButton").pressed.connect(request_hook)
@@ -122,6 +131,8 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 			hidden_route.on_title()
 		else:
 			_begin_ending() # Interrupted after reward: replay only the ending, never the boss/reward.
+	if boss_playtest:
+		BossWebPlaytest.configure(self)
 	_playtest.bind_flow(self)
 
 func configure_water(bounds: Rect2, surface_y: float, depth_m: float, origin_m: float = 0.0) -> void:

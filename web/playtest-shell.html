@@ -40,6 +40,11 @@
     const GODOT_CONFIG = $GODOT_CONFIG;
     const engine = new Engine(GODOT_CONFIG);
     const start = document.getElementById('start');
+    if (new URLSearchParams(location.search).get('boss_test') === '15') {
+      document.querySelector('#start-screen h1').textContent = '湖底の主 — ボステスト';
+      document.querySelector('#start-screen p').textContent = 'Lv5装備 · 通常セーブとは別のテストです';
+      start.textContent = '湖底の主に挑戦';
+    }
     const status = document.getElementById('status');
     const canvas = document.getElementById('canvas');
     // Page controls only. The engine keeps all existing touch and save behavior.

@@ -19,6 +19,14 @@ RC1 Human Playtest commit `a296c41e9835d1778a576b67c59a3e79e6a3aff9` is cherry-p
 
 エリア上限とLINE上限の小さい方が有効。No.06–07、No.11–13は隣接エリアで重なる。No.15とNo.00は北湖中央だけで、従来の装備／夜／進行条件も必要。魚は既存7ノードを再利用する。到着時に深度帯・魚・ソナー・岸の見え方・HUDを更新する。
 
+## No.15ボス直行テスト
+
+https://hidetora1986.github.io/biwako-shindo/?boss_test=15
+
+Web Playtest専用Featureのビルドのみ。Lv5装備・北湖中央・夜・ABYSS 100–120mの新しいテスト状態から始める。「湖底の主に挑戦」→CAST→HOOK→REEL。Bossの数値、AI、Endingは変更しない。失敗後はCASTで再挑戦できる。倒した後のEndingも通常通り。ページの再読み込みでテストだけを新規開始する。
+
+固定保存先は`user://web-boss-playtest/no15/save.json`。通常保存先`user://biwako-shindo/save.json`はLoadも書き換えも行わない。URLのパラメータを外して開けば通常ゲームへ戻る。正式UIに解放／お金付与ボタンは追加しない。ネイティブAcceptanceのみDebug引数`--boss15-playtest`を利用可能で、正式モバイルExportでは無効。
+
 ## キャスト照準
 
 待機中に水面または水中をタップ（PCは左クリック）して照準を決め、右下CASTで投げる。水面の照準は横位置だけを指定し従来どおり沈下する。水中の照準はその深度で止まる。小さな魚の近くへのタップは、その時点の魚の横位置／深度に補正する。魚は泳ぎ続け、接近・BITE・HOOK判定は通常AIのまま。命中／捕獲を確定する操作ではない。
