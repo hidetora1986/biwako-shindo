@@ -1,7 +1,7 @@
 extends Node2D
 ## Owns fishing states/input. FishingFight handles only fight numbers.
 
-enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE, HIDDEN }
+enum State { READY, CASTING, SINKING, WAITING, BITTEN, HOOKED, FIGHTING, LANDING, LANDED, CHOOSING, FAILED, RESET, BOSS_BITE, ENDING, TITLE, HIDDEN, TRAVELLING }
 signal hook_succeeded
 signal hook_missed
 
@@ -41,6 +41,11 @@ var progress := GameProgress.new()
 var _cast_serial: int = 0
 var _shop_open: bool = false
 var _book_open: bool = false
+var _area_open := false
+var _save_pending := false
+var _manual_confirmation := false
+var _travel_remaining := 0.0
+var _travel_destination := ""
 var _playtest: Node
 var save_manager: SaveManager
 var anomaly := SonarAnomaly.new()
@@ -73,7 +78,14 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	save_manager = SaveManager.new(save_path)
 	save_manager.load_into(progress)
 	save_manager.bind_progress(progress)
-	_hud.get_node("CastButton").pressed.connect(request_cast)
+	_hud.get_node("CastButton").pressed.connect(_cast_or_retrieve)
+	_hud.get_node("HookButton").pressed.connect(request_hook)
+	_hud.get_node("AreaButton").pressed.connect(request_area)
+	_hud.get_node("SaveButton").pressed.connect(request_save)
+	_hud.get_node("AreaMap").setup(self)
+	_hud.get_node("AreaMap").closed.connect(_area_closed)
+	_hud.get_node("AreaMap").destination_selected.connect(request_travel)
+	_hud.get_node("AreaMap").save_requested.connect(request_save.bind(true))
 	_hud.get_node("DepthBandButton").pressed.connect(cycle_depth_band)
 	_hud.get_node("CatchPanel/SellChoice").pressed.connect(resolve_unknown_catch.bind(true))
 	_hud.get_node("CatchPanel/ReturnChoice").pressed.connect(resolve_unknown_catch.bind(false))
@@ -96,6 +108,7 @@ func setup(boat: Node2D, fishes: Node2D, hud: Control) -> void:
 	hidden_route = HiddenRoute.new()
 	add_child(hidden_route)
 	hidden_route.setup(self)
+	restore_area()
 	_progress_changed()
 	_refresh_ui()
 	if progress.boss15_defeated:
@@ -120,7 +133,7 @@ func configure_water(bounds: Rect2, surface_y: float, depth_m: float, origin_m: 
 	_refresh_ui()
 
 func request_cast() -> bool:
-	if state != State.READY or _boat == null or _shop_open or _book_open:
+	if state != State.READY or _boat == null or _shop_open or _book_open or _area_open or _save_pending:
 		return false
 	if selected_band > 0:
 		_deep_cast_count += 1
@@ -143,7 +156,7 @@ func request_cast() -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
-	if _shop_open or _book_open or state in [State.ENDING,State.TITLE,State.BOSS_BITE,State.HIDDEN]:
+	if _shop_open or _book_open or _area_open or _save_pending or state in [State.ENDING,State.TITLE,State.BOSS_BITE,State.HIDDEN]:
 		return
 	if event is InputEventScreenTouch and event.pressed and _hud != null and not _hud.get_node("ShopButton").disabled and _hud.get_node("ShopButton").get_global_rect().has_point(event.position):
 		if request_shop():
@@ -162,6 +175,12 @@ func _input(event: InputEvent) -> void:
 					return
 		return
 	if state == State.READY and event is InputEventScreenTouch and event.pressed:
+		for control in ["AreaButton", "SaveButton"]:
+			if _hud.get_node(control).get_global_rect().has_point(event.position):
+				if control == "AreaButton": request_area()
+				else: request_save()
+				get_viewport().set_input_as_handled()
+				return
 		if _hud.get_node("DepthBandButton").get_global_rect().has_point(event.position):
 			cycle_depth_band()
 			get_viewport().set_input_as_handled()
@@ -171,15 +190,18 @@ func _input(event: InputEvent) -> void:
 		return
 	if state == State.READY and event is InputEventScreenTouch and event.pressed and _hud != null:
 		if _hud.get_node("CastButton").get_global_rect().has_point(event.position):
-			if request_cast():
+			if _cast_or_retrieve():
 				get_viewport().set_input_as_handled()
 			return
-	var pressed: bool = (event is InputEventScreenTouch and event.pressed) or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed)
-	if pressed and request_hook():
+	if can_retrieve() and event is InputEventScreenTouch and event.pressed and _hud.get_node("CastButton").get_global_rect().has_point(event.position):
+		request_retrieve()
 		get_viewport().set_input_as_handled()
+		return
+	if state == State.BITTEN and event is InputEventScreenTouch and event.pressed and _hud.get_node("HookButton").get_global_rect().has_point(event.position):
+		if request_hook(): get_viewport().set_input_as_handled()
 
 func request_hook() -> bool:
-	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open or _book_open:
+	if state != State.BITTEN or _bite_remaining <= 0.0 or _shop_open or _book_open or _area_open or _save_pending:
 		return false
 	state = State.HOOKED
 	lure.hook()
@@ -192,12 +214,17 @@ func request_hook() -> bool:
 	_fight_origin_fraction = Vector2((active_fish.position.x - _water.position.x) / _water.size.x, (active_fish.position.y - _surface_y) / (_water.end.y - _surface_y))
 	_hud.show_bite(false, lure.position)
 	_hud.show_result("HIT!")
+	_playtest.record("FIRST_HOOK_BUTTON_SUCCESS")
+	_haptic(90, 0.65)
 	hook_succeeded.emit()
 	_refresh_ui()
 	return true
 
 func _physics_process(delta: float) -> void:
-	if _hud == null or _shop_open or _book_open:
+	if _hud == null or _shop_open or _book_open or _area_open or _save_pending:
+		return
+	if state == State.TRAVELLING:
+		_step_travel(delta)
 		return
 	if state == State.HIDDEN:
 		hidden_route.step(delta)
@@ -467,7 +494,7 @@ func _haptic(duration_ms: int, amplitude: float) -> void:
 		Input.vibrate_handheld(duration_ms, amplitude)
 
 func _update_line() -> void:
-	line.visible = state not in [State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET, State.ENDING, State.TITLE]
+	line.visible = state not in [State.TRAVELLING, State.READY, State.LANDED, State.CHOOSING, State.FAILED, State.RESET, State.ENDING, State.TITLE]
 	line.default_color = Color("dfb875") if state == State.FIGHTING and fight.tension >= 70.0 else Color(0.88, 0.94, 0.81, 0.75)
 	if _boat != null and line.get_point_count() == 2:
 		line.set_point_position(0, _boat.rod_tip_position())
@@ -480,16 +507,23 @@ func _refresh_ui() -> void:
 		hidden_route.refresh_lure()
 	if state in [State.ENDING,State.TITLE,State.HIDDEN]:
 		return
-	_hud.get_node("CastButton").disabled = state != State.READY or _shop_open or _book_open
+	_hud.get_node("AreaButton").visible = state not in [State.LANDED, State.CHOOSING]
+	_hud.get_node("SaveButton").visible = state not in [State.LANDED, State.CHOOSING]
+	_hud.get_node("AreaButton").disabled = not can_open_area()
+	_hud.get_node("SaveButton").disabled = not can_save()
+	_hud.get_node("HookButton").visible = state == State.BITTEN
+	_hud.get_node("HookButton").disabled = state != State.BITTEN or _area_open or _save_pending
+	_hud.get_node("CastButton").disabled = (state != State.READY and not can_retrieve()) or _shop_open or _book_open or _area_open or _save_pending
+	_hud.get_node("CastButton").text = "回収" if state in [State.SINKING, State.WAITING] else "CAST"
 	_hud.get_node("ShopButton").visible = state not in [State.LANDED, State.CHOOSING]
 	_hud.get_node("BookButton").visible = state not in [State.LANDED, State.CHOOSING]
 	_hud.get_node("ShopButton").disabled = not can_open_shop()
 	_hud.get_node("BookButton").disabled = not can_open_book()
 	_hud.get_node("NextUpgrade").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
-	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
+	_hud.get_node("CastButton").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING]
 	var band_button: Button = _hud.get_node("DepthBandButton")
 	band_button.visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN]
-	band_button.disabled = state != State.READY or _shop_open or _book_open or anomaly.active or hull_events.active
+	band_button.disabled = state != State.READY or _shop_open or _book_open or _area_open or _save_pending or anomaly.active or hull_events.active
 	band_button.text = "ABYSS 100–120m" if selected_band == 6 else "DEPTH %d–%dm" % [DepthBands.STARTS[selected_band], minf(DepthBands.ENDS[selected_band], progress.current("line").effect_value)]
 	_hud.show_fight(fight, state == State.FIGHTING)
 	_hud.get_node("Depth").visible = state in [State.READY, State.CASTING, State.SINKING, State.WAITING, State.BITTEN, State.BOSS_BITE] or (state == State.FIGHTING and fight is BossFishingFight)
@@ -497,7 +531,7 @@ func _refresh_ui() -> void:
 	_hud.show_bite(state == State.BITTEN, lure.position)
 
 func can_open_shop() -> bool:
-	return not _shop_open and not _book_open and not anomaly.active and not hull_events.active and state in [State.READY, State.SINKING, State.WAITING]
+	return not _shop_open and not _book_open and not _area_open and not _save_pending and not anomaly.active and not hull_events.active and state in [State.READY, State.SINKING, State.WAITING]
 
 func request_shop() -> bool:
 	if not can_open_shop():
@@ -513,7 +547,7 @@ func _shop_closed() -> void:
 	_refresh_ui()
 
 func _progress_changed() -> void:
-	lure.max_depth_m = minf(DepthBands.MAX_PLAYABLE_DEPTH, progress.current("line").effect_value)
+	lure.max_depth_m = minf(LakeAreas.DATA[progress.current_area].max_depth, progress.current("line").effect_value)
 	environment.update_target(progress)
 	if hidden_route != null and hidden_route._night_selected and progress.night_unlocked:
 		environment.target = 2
@@ -538,7 +572,7 @@ func _book_closed() -> void:
 
 func can_trigger_anomaly() -> bool:
 	# Between fishing sessions only; cannot overlap HIT/fight/catch or a modal.
-	return state == State.READY and not _shop_open and not _book_open and not hull_events.active
+	return state == State.READY and not _shop_open and not _book_open and not _area_open and not _save_pending and not hull_events.active
 
 func debug_trigger_anomaly() -> bool:
 	# Acceptance callable; no released-game button or player-facing warning.
@@ -550,7 +584,7 @@ func _exit_tree() -> void:
 		save_manager.unbind_progress()
 
 func select_depth_band(band: int) -> bool:
-	if state != State.READY or _shop_open or _book_open or anomaly.active or hull_events.active or not DepthBands.available(band, progress.current("line").effect_value):
+	if state != State.READY or _shop_open or _book_open or _area_open or _save_pending or anomaly.active or hull_events.active or not LakeAreas.band_available(progress.current_area, band, progress.current("line").effect_value):
 		return false
 	selected_band = band
 	seek_depth_m = 0.0
@@ -563,7 +597,7 @@ func select_depth_band(band: int) -> bool:
 func cycle_depth_band() -> bool:
 	for offset in range(1, DepthBands.STARTS.size() + 1):
 		var band := (selected_band + offset) % DepthBands.STARTS.size()
-		if DepthBands.available(band, progress.current("line").effect_value):
+		if LakeAreas.band_available(progress.current_area, band, progress.current("line").effect_value):
 			return select_depth_band(band)
 	return false
 
@@ -612,7 +646,7 @@ func _step_ending(delta: float) -> void:
 		selected_band = 0
 		_deep_cast_count = 0
 		seek_depth_m = 0
-		get_parent().populate_depth_band(0,progress.current("line").effect_value)
+		get_parent().populate_depth_band(0,progress.current("line").effect_value,0,true)
 		environment.transition_seconds = 3
 		environment.target = 0
 	if _ending_surface_restored:
@@ -634,9 +668,119 @@ func request_continue() -> bool:
 	selected_band = 0
 	_deep_cast_count = 0
 	seek_depth_m = 0
-	get_parent().populate_depth_band(0,progress.current("line").effect_value)
+	restore_area()
 	environment.transition_seconds = 6
 	_boat.set_line_pull(0,false)
 	hidden_route.on_continue()
 	_refresh_ui()
 	return true
+
+func can_open_area() -> bool:
+	return state == State.READY and not _shop_open and not _book_open and not _area_open and not _save_pending and not anomaly.active and not hull_events.active
+
+func request_area() -> bool:
+	if not can_open_area(): return false
+	_area_open = true
+	_hud.get_node("AreaMap").open_map()
+	_refresh_ui()
+	return true
+
+func _area_closed() -> void:
+	_area_open = false
+	_refresh_ui()
+
+func can_save(from_map: bool = false) -> bool:
+	return state == State.READY and not _shop_open and not _book_open and (not _area_open or from_map) and not _save_pending and not anomaly.active and not hull_events.active
+
+func request_save(from_map: bool = false) -> bool:
+	if not can_save(from_map): return false
+	var success := _save_with_feedback()
+	if success and not OS.has_feature("web"): _playtest.record("FIRST_MANUAL_SAVE")
+	elif success: _manual_confirmation = true
+	return success
+
+func _save_with_feedback() -> bool:
+	if not save_manager.save_progress(progress):
+		_hud.save_feedback("SAVE FAILED", 2)
+		return false
+	if OS.has_feature("web"):
+		# FileAccess writes are synchronous; IndexedDB durability is asynchronous.
+		# Report SAVED only after this exact snapshot can be read from the browser DB.
+		_save_pending = true
+		_hud.save_feedback("SAVING…", 10)
+		_confirm_web_save(FileAccess.get_file_as_string(save_manager.save_path))
+	else:
+		_hud.save_feedback("SAVED")
+	return true
+
+func _confirm_web_save(expected: String) -> void:
+	var suffix := "/" + save_manager.save_path.trim_prefix("user://")
+	var script := "window.biwakoSaveConfirmed=false;window.biwakoSaveCheck=async function(){try{const d=await new Promise((ok,bad)=>{const r=indexedDB.open('/userfs');r.onsuccess=()=>ok(r.result);r.onerror=()=>bad(r.error);});if(!d.objectStoreNames.contains('FILE_DATA')){d.close();return;}const tx=d.transaction('FILE_DATA');const store=tx.objectStore('FILE_DATA');const keys=await new Promise(ok=>{const r=store.getAllKeys();r.onsuccess=()=>ok(r.result);});const key=keys.find(k=>String(k).endsWith(%s));if(key){const tx2=d.transaction('FILE_DATA');const v=await new Promise(ok=>{const r=tx2.objectStore('FILE_DATA').get(key);r.onsuccess=()=>ok(r.result);});window.biwakoSaveConfirmed=v&&new TextDecoder().decode(v.contents)===%s;}d.close();}catch(e){window.biwakoSaveConfirmed=false;}};" % [JSON.stringify(suffix), JSON.stringify(expected)]
+	JavaScriptBridge.eval(script, true)
+	var confirmed := false
+	for attempt in range(32):
+		JavaScriptBridge.eval("window.biwakoSaveCheck()", true)
+		await get_tree().create_timer(0.25, true).timeout
+		if JavaScriptBridge.eval("window.biwakoSaveConfirmed === true", true):
+			confirmed = true
+			break
+	_save_pending = false
+	if confirmed and _manual_confirmation: _playtest.record("FIRST_MANUAL_SAVE")
+	_manual_confirmation = false
+	_hud.save_feedback("SAVED" if confirmed else "SAVE FAILED", 1 if confirmed else 2)
+	_refresh_ui()
+
+func request_travel(destination: String) -> bool:
+	if not can_open_area() or destination == progress.current_area or not LakeAreas.unlocked(destination, progress): return false
+	state = State.TRAVELLING
+	_travel_destination = destination
+	_travel_remaining = 1.4
+	_hud.show_result("移動中")
+	_update_line()
+	_refresh_ui()
+	return true
+
+func _step_travel(delta: float) -> void:
+	_travel_remaining = maxf(0, _travel_remaining - delta)
+	var fraction := 1.0 - _travel_remaining / 1.4
+	_boat.set_anchor(Vector2(floorf(get_parent().view_size.x * 0.52 + sin(fraction * PI) * 80), _surface_y - 3))
+	if _travel_remaining > 0: return
+	progress.current_area = _travel_destination
+	_travel_destination = ""
+	restore_area()
+	state = State.READY
+	_hud.show_result("")
+	_save_with_feedback() # Arrival is an explicit additional autosave, including current_area.
+	_playtest.record("FIRST_AREA_MOVE")
+	if progress.current_area == LakeAreas.NORTH: _playtest.record("NORTH_SHORE_ENTERED")
+	if progress.current_area == LakeAreas.CENTER: _playtest.record("NORTH_CENTER_ENTERED")
+	_refresh_ui()
+
+func restore_area() -> void:
+	var area := progress.current_area
+	if not LakeAreas.unlocked(area, progress):
+		area = LakeAreas.SOUTH
+		progress.current_area = area
+	get_parent().set_area(area)
+	selected_band = LakeAreas.safe_band(area, selected_band, progress.current("line").effect_value)
+	seek_depth_m = 0
+	_deep_cast_count = 0
+	_progress_changed()
+	get_parent().populate_depth_band(selected_band, progress.current("line").effect_value)
+	_hud.get_node("SonarPlaceholder").lingering_contact.clear()
+	_hud.get_node("SonarPlaceholder").lingering_remaining = 0
+	_hud.get_node("SonarPlaceholder").refresh_contacts()
+	_hud.get_node("AreaLabel").text = LakeAreas.DATA[area].name + " / SAVE POINT"
+	_refresh_ui()
+
+func can_retrieve() -> bool:
+	return state in [State.SINKING, State.WAITING] and active_fish == null and not _shop_open and not _book_open and not _area_open and not _save_pending
+
+func request_retrieve() -> bool:
+	if not can_retrieve(): return false
+	_begin_reset()
+	_refresh_ui()
+	return true
+
+func _cast_or_retrieve() -> bool:
+	return request_cast() if state == State.READY else request_retrieve()

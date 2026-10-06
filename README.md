@@ -127,7 +127,7 @@ godot --headless --path . --script tests/rc1_postgame_recovery.gd
 
 ## Smartphone Web Play Test
 
-`release/web-test`では指定RC1のWeb Release ExportとGitHub Pages Workflowを用意しています。Pages設定は連携権限不足で未完了です。公開状態・スマホ設定・保存制限は[Web Play Test手順](docs/release/web-playtest.md)を確認してください。
+`release/web-test`のWeb版は[GitHub Pages](https://hidetora1986.github.io/biwako-shindo/)で公開しています。公開状態・スマホ設定・保存制限は[Web Play Test手順](docs/release/web-playtest.md)を確認してください。
 ## RC1 Human Playtest
 
 ゲーム内容を変えずに計測するDebug専用の起動方法:
@@ -137,3 +137,7 @@ godot --path . -- --rc1-playtest --rc1-fresh
 ```
 
 RC1専用Test Saveのみ初期化する。再開時は`--rc1-fresh`を外す。計測・評価・提出方法は[Human Playtest手順](docs/release/human-playtest.md)を参照。正式UIへ計測値は表示しない。B01／RC1 NOT READYは人間の実測が届くまで維持する。
+
+## Playtest Feedback v1
+
+専用HOOK、係留地点のSAVE、AREAによる船移動の操作と互換性は[Playtest Feedback v1](docs/release/playtest-feedback-v1.md)を参照してください。

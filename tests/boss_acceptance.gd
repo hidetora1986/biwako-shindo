@@ -22,7 +22,7 @@ func _boss_fixture(reel_level: int = 4, sonar_level: int = 5) -> void:
 	progress.anomaly_seen = true
 	progress.changed.emit()
 	_step(12.1)
-	assert(_flow.select_depth_band(6))
+	assert(_travel_for_band(6) and _flow.select_depth_band(6))
 
 func _boss_hook() -> bool:
 	if not _flow.request_cast() or not _until_bite(25): return false
@@ -159,8 +159,8 @@ func _run() -> void:
 	_check(progress.purchase("reel",5) and progress.money == amount-360000, "Earned boss reward buys optional REEL5 in postgame")
 	_hud.get_node("Shop").close_shop()
 	var before_normal: int = progress.money
-	_check(_flow.request_cast() and _until_bite() and _flow.request_hook() and _finish_fight() and progress.money > before_normal and progress.main_ending_seen and progress.fish_records["No.15"].caught_count == 1, "Postgame normal fishing/economy still works; no repeated ending")
-	_check(_flow.select_depth_band(6) and _flow.request_cast(), "Postgame ABYSS remains accessible")
+	_check(_travel_for_band(0) and _flow.select_depth_band(0) and _flow.request_cast() and _until_bite() and _flow.request_hook() and _finish_fight() and progress.money > before_normal and progress.main_ending_seen and progress.fish_records["No.15"].caught_count == 1, "Postgame normal fishing/economy still works; no repeated ending")
+	_check(_travel_for_band(6) and _flow.select_depth_band(6) and _flow.request_cast(), "Postgame ABYSS remains accessible")
 	_step(18)
 	_check(_flow.active_fish == null and not _flow.boss_encounter.spawned and not _fishes.any(func(f:FishController)->bool:return f.visible and f.fight_profile.is_boss), "Defeated boss never respawns, no farming")
 	# Old save lacks boss fields/record. Load preserves all previous progress.

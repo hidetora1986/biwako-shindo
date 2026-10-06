@@ -56,8 +56,8 @@ func _session(number: int) -> void:
 		if _flow.state == FLOW.State.BITTEN:
 			saw_bite = true
 			_check(not _flow.request_book() and _hud.get_node("Bite").visible, "Cycle %d: bite cue / modal guard" % number)
-			_touch(Vector2(560, 180))
-			_touch(Vector2(560, 180), 0, false)
+			_touch(_hud.get_node("HookButton").get_global_rect().get_center())
+			_touch(_hud.get_node("HookButton").get_global_rect().get_center(), 0, false)
 			_check(_flow.state == FLOW.State.HOOKED and not _flow.request_hook(), "Cycle %d: broad hook / duplicate guard" % number)
 		if _flow.state == FLOW.State.FIGHTING:
 			fight_time += 1.0 / 60

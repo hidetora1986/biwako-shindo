@@ -161,7 +161,7 @@ func _run() -> void:
 		_flow.configure_water(_lake.water_bounds, _lake.surface_y, 100)
 		_flow.request_cast()
 		_step(25)
-		_check(is_equal_approx(_flow.lure.depth_m, gear["line"][1][line_level - 1]) and _flow.lure.state == LureController.State.WAITING, "Depth Limit: line Lv%d caps metres, extensible 100m lake" % line_level)
+		_check(is_equal_approx(_flow.lure.depth_m, minf(gear["line"][1][line_level - 1], LakeAreas.DATA[_flow.progress.current_area].max_depth)) and _flow.lure.state == LureController.State.WAITING, "Depth Limit: area and line Lv%d cap metres, extensible 100m lake" % line_level)
 	# Visible shop MAX state and the second depth reward use the same purchase path.
 	_new_scene()
 	_flow.progress.money = 100000 # Boundary fixture, separate from real economy above.
@@ -174,8 +174,9 @@ func _run() -> void:
 	_check(shop._buy("line") and _hud.get_node("DepthUnlock/Label").text == "DEPTH UNLOCKED\n25m → 50m", "Depth Unlock: Lv3 big 25m -> 50m banner")
 	_hud.get_node("DepthUnlock")._process(1.3)
 	shop._process(0.3)
-	_check(shop._buttons["line"].text == "MAX" and shop._buttons["line"].disabled and not shop._buy("line") and _flow.lure.max_depth_m == 50, "Shop MAX: disabled row, no extra purchase, equipped 50m line")
+	_check(shop._buttons["line"].text == "MAX" and shop._buttons["line"].disabled and not shop._buy("line") and _flow.progress.current("line").effect_value == 50 and _flow.lure.max_depth_m == 30, "Shop MAX: disabled row, no extra purchase, equipped 50m line")
 	shop.close_shop()
+	_check(_travel_for_band(2) and _flow.lure.max_depth_m == 50, "North Shore uses equipped 50m line")
 	# Safe-area shop/catch/depth notices at all supported and small physical views.
 	for spec in [[1280, 720, "16:9"], [1560, 720, "19.5:9"], [320, 180, "320px"]]:
 		root.size = Vector2i(spec[0], spec[1])

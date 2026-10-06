@@ -102,7 +102,7 @@ func telemetry() -> Dictionary:
 	if is_instance_valid(flow):
 		var caught := 0
 		for value: Dictionary in flow.progress.fish_records.values(): caught += int(value.caught_count)
-		result.merge({"money": flow.progress.money, "total_fish_caught": caught, "rod_level": flow.progress.levels.rod, "reel_level": flow.progress.levels.reel, "line_level": flow.progress.levels.line, "sonar_level": flow.progress.levels.sonar, "current_depth": flow.lure.depth_m, "depth_band": flow.selected_band})
+		result.merge({"money": flow.progress.money, "total_fish_caught": caught, "rod_level": flow.progress.levels.rod, "reel_level": flow.progress.levels.reel, "line_level": flow.progress.levels.line, "sonar_level": flow.progress.levels.sonar, "current_depth": flow.lure.depth_m, "depth_band": flow.selected_band, "current_area": flow.progress.current_area})
 	return result
 
 func record(milestone: String, extra: Dictionary = {}, once: bool = true) -> void:

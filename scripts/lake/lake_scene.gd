@@ -14,6 +14,7 @@ var surface_y: float = 0.0
 var depth_band: int = 0
 var depth_origin_m: float = 0.0
 var depth_span_m: float = 15.0
+var current_area: String = LakeAreas.SOUTH
 var _previous_width: float = 0.0
 
 func _ready() -> void:
@@ -64,13 +65,13 @@ func _spawn_fish() -> void:
 		$Underwater/FishContainer.add_child(fish)
 		fish.configure_water(water_bounds, depth_span_m, depth_origin_m)
 
-func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> void:
-	if not DepthBands.available(band, line_depth):
+func populate_depth_band(band: int, line_depth: float, cast_number: int = 0, cinematic: bool = false) -> void:
+	if not DepthBands.available(band, line_depth) or (not cinematic and not LakeAreas.band_available(current_area, band, line_depth)):
 		return
 	depth_band = band
 	depth_origin_m = DepthBands.STARTS[band]
 	depth_span_m = DepthBands.ENDS[band] - depth_origin_m
-	var pool := DepthBands.pool(band, line_depth)
+	var pool := DepthBands.pool(band, line_depth) if cinematic else LakeAreas.pool(current_area, band, line_depth)
 	if band == 6:
 		# No normal species lives below 100m. Boundary silhouettes leave on encounter.
 		var fishes := $Underwater/FishContainer.get_children()
@@ -80,6 +81,10 @@ func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> 
 			fish.swim_speed = 8
 			fish.configure_water(water_bounds,depth_span_m,depth_origin_m)
 			fish.visible = i < 3
+		layout_for_size(view_size)
+		return
+	if band != 6 and pool.is_empty():
+		for fish: FishController in $Underwater/FishContainer.get_children(): fish.visible = false
 		layout_for_size(view_size)
 		return
 	if band == 4:
@@ -97,9 +102,19 @@ func populate_depth_band(band: int, line_depth: float, cast_number: int = 0) -> 
 		var depth := lerpf(lo, hi, 0.18 + 0.64 * float((i + cast_number) % 7) / 6)
 		fish.swim_direction = 1 if i % 2 == 0 else -1
 		fish.repopulate(entry, depth, view_size.x * (0.10 + 0.80 * float(i) / maxf(1, fishes.size() - 1)))
-		fish.swim_speed = 10 if entry.rarity >= 5 and entry.min_depth >= 50 else (12 if entry.id == "No.06" else (29 if entry.id == "No.07" else (14 if entry.id == "No.08" else 18)))
+		if band > 0:
+			fish.swim_speed = 10 if entry.rarity >= 5 and entry.min_depth >= 50 else (12 if entry.id == "No.06" else (29 if entry.id == "No.07" else (14 if entry.id == "No.08" else 18)))
+		else:
+			fish.swim_speed = (30.0 if entry.placeholder_kind == "minnow" else (13.0 if entry.placeholder_kind == "bass" else 19.0)) + float(i) * 0.3
 		fish.sprite.speed_scale = clampf(fish.swim_speed / 18.0, 0.7, 1.8)
 		fish.bite_detection_radius = 280 if band > 2 else (240 if band > 0 else 130)
 		fish.approach_speed = 85 if entry.id in ["No.07", "No.10"] else 72
 		fish.configure_water(water_bounds, depth_span_m, depth_origin_m)
 	layout_for_size(view_size)
+
+func set_area(id: String) -> void:
+	current_area = id
+	# Only shore geometry changes. Time of day and depth palettes retain their logic.
+	for layer in $Background/BackgroundMountains.get_children():
+		layer.shore_factor = LakeAreas.DATA[id].shore
+		layer.configure(view_size, profile)

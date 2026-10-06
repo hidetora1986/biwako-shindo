@@ -6,7 +6,16 @@ with sync_playwright() as p:
  c=b.new_context(viewport={'width':844,'height':390},has_touch=True,is_mobile=True,device_scale_factor=1)
  page=c.new_page();logs=[];page.on('console',lambda m:logs.append({'type':m.type,'text':m.text}));page.on('pageerror',lambda e:logs.append({'type':'pageerror','text':str(e)}))
  page.goto('http://127.0.0.1:8765/');page.locator('#start').tap();page.wait_for_function("!document.getElementById('start-screen')",timeout=90000)
- page.touchscreen.tap(420,345)
+ page.touchscreen.tap(700,345)
+ # Shared CAST/HOOK/REEL position: wait for the rendered action, never tap to retrieve mid-cast.
+ def wait_action(word):
+  for attempt in range(100):
+   page.screenshot(path='/tmp/biwako-web-action.png',clip={'x':600,'y':295,'width':180,'height':80})
+   text=subprocess.check_output(['tesseract','/tmp/biwako-web-action.png','stdout','--psm','6'],stderr=subprocess.DEVNULL,text=True)
+   if word in text:return
+   page.wait_for_timeout(100)
+  raise AssertionError('Missing primary action: '+word)
+ wait_action('HOOK');page.touchscreen.tap(700,345);wait_action('REEL')
  cdp=c.new_cdp_session(page)
  for i in range(18):
   cdp.send('Input.dispatchTouchEvent',{'type':'touchStart','touchPoints':[{'x':700,'y':345,'id':5}]})
@@ -14,6 +23,8 @@ with sync_playwright() as p:
   cdp.send('Input.dispatchTouchEvent',{'type':'touchEnd','touchPoints':[]})
   page.wait_for_timeout(250)
   if i in [6,10,14]:page.screenshot(path=f'/tmp/biwako-web-fish-{i}.png')
+  page.screenshot(path='/tmp/biwako-web-current.png')
+  if 'CATCH' in subprocess.check_output(['tesseract','/tmp/biwako-web-current.png','stdout','--psm','6'],stderr=subprocess.DEVNULL,text=True):break
  page.wait_for_timeout(4000)
  print('DBS',page.evaluate('async()=>await indexedDB.databases()'))
  print('ENGINE',page.evaluate('Object.getOwnPropertyNames(Object.getPrototypeOf(engine))'))

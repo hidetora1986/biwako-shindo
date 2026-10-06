@@ -10,7 +10,7 @@ func begin_cast() -> void:
 	boss = null
 
 func try_spawn(lake: Node2D, progress: GameProgress, lure_depth: float) -> bool:
-	if spawned or not progress.can_encounter_boss() or lure_depth < 100 or lure_depth > 120 or lake.depth_band != 6:
+	if lake.current_area != LakeAreas.CENTER or spawned or not progress.can_encounter_boss() or lure_depth < 100 or lure_depth > 120 or lake.depth_band != 6:
 		return false
 	boss = lake.get_node("Underwater/FishContainer").get_child(0)
 	boss.repopulate(GameProgress.FISH_PROFILES[14],112,lake.view_size.x * 0.7)

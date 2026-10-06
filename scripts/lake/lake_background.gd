@@ -3,6 +3,7 @@ extends Node2D
 @export_enum("Sky", "Mountains", "Underwater", "FarMountains", "MiddleMountains", "NearShore") var layer: String = "Sky"
 var view_size := Vector2(640, 360)
 var profile: LakeProfile
+var shore_factor: float = 1.0
 var time_of_day: float = 0.0
 var depth_origin_m: float = 0.0
 var depth_span_m: float = 15.0
@@ -27,7 +28,7 @@ func _ridge(height: float, phase: float) -> PackedVector2Array:
 	points.append(Vector2(0, horizon + 6))
 	for x in range(0, int(view_size.x) + 5, 4):
 		var rolling := sin(x * 0.012 + phase) * 0.42 + sin(x * 0.027 + phase) * 0.18 + 0.65
-		points.append(Vector2(x, floorf((horizon - height * rolling) / 2) * 2))
+		points.append(Vector2(x, floorf((horizon - height * rolling * shore_factor) / 2) * 2))
 	points.append(Vector2(view_size.x + 4, horizon + 6))
 	return points
 
@@ -73,6 +74,7 @@ func _draw_mountain_layer() -> void:
 		color = profile.mountain_middle
 	elif layer == "NearShore":
 		color = profile.mountain_near
+	if layer == "NearShore" and shore_factor < 0.2: return
 	draw_colored_polygon(_ridge_points, color)
 	for i in range(2, _ridge_points.size() - 2):
 		var p := _ridge_points[i]

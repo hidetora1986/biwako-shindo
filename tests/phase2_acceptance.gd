@@ -141,8 +141,8 @@ func _run() -> void:
 	_check(_until_bite(), "Bite: natural detection reaches the bite window")
 	_check(_hud.get_node("Bite").visible and _flow.lure.state == LureController.State.BITTEN and _flow.active_fish.state == FishController.SwimState.BITE, "Bite: exclamation and matching states")
 	_step(1.35)
-	_touch(Vector2(600, 180))
-	_check(_flow.state == FLOW.State.HOOKED and _flow.active_fish.state == FishController.SwimState.HOOKED and _hud.get_node("Result").text == "HIT!", "Hook Success: wide-area touch near the 1.5s deadline")
+	_touch(_hud.get_node("HookButton").get_global_rect().get_center())
+	_check(_flow.state == FLOW.State.HOOKED and _flow.active_fish.state == FishController.SwimState.HOOKED and _hud.get_node("Result").text == "HIT!", "Hook Success: HOOK button touch near the 1.5s deadline")
 	var frozen: Vector2 = _flow.active_fish.position
 	var frozen_lure: Vector2 = _flow.lure.position
 	_touch(Vector2(20, 180), 1)
@@ -164,7 +164,7 @@ func _run() -> void:
 	_step(1.0)
 	_check(not _hud.get_node("Result").visible and _flow.active_fish == null, "MISS: feedback clears and retry waits")
 	_check(_until_bite(12.0) and _flow.active_fish != missed_fish, "MISS: another fish bites without recasting")
-	_mouse(Vector2(50, 220))
+	_mouse(_hud.get_node("HookButton").get_global_rect().get_center())
 	_check(_flow.state == FLOW.State.HOOKED, "Hook Success: PC left click also hooks")
 	_finish_fight()
 	_check(get_node_count() == node_count and _fishes.size() == 7, "Reuse: two casts and retry add no nodes or fish")
@@ -206,8 +206,8 @@ func _run() -> void:
 		_touch(_hud.get_node("CastButton").get_global_rect().get_center())
 		_check(_until_bite(), spec[2] + ": touch cast, flight, approach and bite work")
 		_check(_hud.safe_rect.encloses(_hud.get_node("Bite").get_global_rect()), spec[2] + ": exclamation inside safe area")
-		_touch(Vector2(_lake.view_size.x - 10, 180))
-		_check(_flow.state == FLOW.State.HOOKED, spec[2] + ": broad-area touch hooks")
+		_touch(_hud.get_node("HookButton").get_global_rect().get_center())
+		_check(_flow.state == FLOW.State.HOOKED, spec[2] + ": HOOK button touch hooks")
 	# Resize while sinking, and again during the hook window, without changing metres.
 	root.size = Vector2i(1280, 720)
 	_new_scene()
@@ -225,7 +225,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(_flow.state == FLOW.State.BITTEN and is_equal_approx(_flow.lure.depth_m, preserved_depth) and _hud.safe_rect.encloses(_hud.get_node("Bite").get_global_rect()), "Resize: active bite and indicator remain usable")
-	_touch(Vector2(300, 100))
+	_touch(_hud.get_node("HookButton").get_global_rect().get_center())
 	_check(_flow.state == FLOW.State.HOOKED, "Resize: resized cast can hook")
 	# Several fresh seeds/delayed starts and repeated casts expose long waits and leaks.
 	root.size = Vector2i(1280, 720)
@@ -253,3 +253,14 @@ func _run() -> void:
 	_main.queue_free()
 	await process_frame
 	quit(0 if _failures.is_empty() else 1)
+
+func _travel_for_band(band: int) -> bool:
+	# Regression journeys use the same player-facing travel gate, never bypass it.
+	var destination := LakeAreas.SOUTH if band == 0 or (band == 1 and _flow.progress.levels.line < 3) else (LakeAreas.NORTH if band <= 2 else LakeAreas.CENTER)
+	if _flow.progress.current_area == destination: return true
+	for tick in range(600):
+		if _flow.can_open_area(): break
+		_step(1.0 / 60)
+	if not _flow.request_travel(destination): return false
+	_step(1.5)
+	return _flow.state == FLOW.State.READY and _flow.progress.current_area == destination

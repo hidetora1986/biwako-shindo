@@ -4,6 +4,25 @@ extends Control
 const BASE_MARGIN := 16.0
 var safe_rect := Rect2()
 var core_rect := Rect2()
+var _notice_remaining := 0.0
+var _pulse_time := 0.0
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+func _process(delta: float) -> void:
+	if $HookButton.visible:
+		_pulse_time += delta
+		$HookButton.modulate = Color.WHITE.lerp(Color("fff1b0"), (sin(_pulse_time * 8) + 1) * 0.25)
+	if _notice_remaining > 0:
+		_notice_remaining = maxf(0, _notice_remaining - delta)
+		$SaveNotice.visible = _notice_remaining > 0
+
+func save_feedback(message: String, duration: float = 1.0) -> void:
+	$SaveNotice.text = message
+	$SaveNotice.visible = true
+	_notice_remaining = duration
+
 var _area_depth_m: float = 15.0
 var _area_origin_m: float = 0.0
 
@@ -31,6 +50,14 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$BookButton.size = Vector2(136, $ShopButton.size.y)
 	$BookButton.position = $ShopButton.position + Vector2($ShopButton.size.x + 8, 0)
 	$BookButton.add_theme_font_size_override("font_size", maxi(14, int(ceil(11.0 * view_size.y / maxf(get_window().size.y, 1)))))
+	$AreaButton.size = Vector2(112, $ShopButton.size.y)
+	$SaveButton.size = Vector2(136, $ShopButton.size.y)
+	$AreaButton.position = $ShopButton.position + Vector2(0, $ShopButton.size.y + 6)
+	$SaveButton.position = $BookButton.position + Vector2(0, $BookButton.size.y + 6)
+	$AreaLabel.position = core_rect.position + Vector2(120, 26)
+	$AreaLabel.size = Vector2(maxf(150, core_rect.size.x - 314), 22)
+	$AreaMap.configure(core_rect, view_size)
+	$SaveNotice.position = core_rect.get_center() + Vector2(-135, 30)
 	$FishBook.configure(core_rect, view_size)
 	$NextUpgrade.position = Vector2(core_rect.position.x, core_rect.end.y - $NextUpgrade.size.y)
 	$DepthUnlock.position = core_rect.get_center() - $DepthUnlock.size * 0.5
@@ -43,7 +70,7 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$Subtitle.size.x = title_width
 	$Title.position = Vector2((title_left + title_right - title_width) * 0.5, core_rect.position.y)
 	$Subtitle.position = $Title.position + Vector2(0, 20)
-	$Depth.position = Vector2(core_rect.get_center().x - $Depth.size.x * 0.5, clampf(surface_y + 9, safe_rect.position.y, safe_rect.end.y - $Depth.size.y))
+	$Depth.position = Vector2(core_rect.position.x, clampf(maxf(surface_y + 9, $SaveButton.position.y + $SaveButton.size.y + 8), safe_rect.position.y, safe_rect.end.y - $Depth.size.y))
 	# Preserve a physical 44px target even in a small 320px-wide PC preview.
 	var window_size := Vector2(get_window().size)
 	var pixel_scale := maxf(0.1, minf(window_size.x / view_size.x, window_size.y / view_size.y))
@@ -54,6 +81,13 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$DepthBandButton.position = $CastButton.position - Vector2(0, $DepthBandButton.size.y + 8)
 	$ReelButton.size = Vector2(maxf(152.0, 44.0 / pixel_scale), maxf(72.0, 44.0 / pixel_scale))
 	$ReelButton.position = core_rect.end - $ReelButton.size
+	# CAST -> HOOK -> REEL share the right-thumb primary action footprint.
+	$CastButton.size = $ReelButton.size
+	$CastButton.position = $ReelButton.position
+	$HookButton.size = $ReelButton.size
+	$HookButton.position = $ReelButton.position
+	$HookButton.add_theme_font_size_override("font_size", 24)
+	$DepthBandButton.position = $CastButton.position - Vector2(0, $DepthBandButton.size.y + 8)
 	$FightHUD.size = Vector2(minf(320.0, core_rect.size.x - $ReelButton.size.x - 16.0), 72)
 	$FightHUD.position = Vector2(core_rect.position.x, core_rect.end.y - $FightHUD.size.y)
 	$CatchPanel.position = core_rect.get_center() - $CatchPanel.size * 0.5

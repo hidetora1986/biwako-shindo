@@ -105,6 +105,7 @@ func _run() -> void:
 	progress.levels = {"rod":4,"reel":4,"line":4,"sonar":4}
 	progress.anomaly_seen = true
 	progress.changed.emit()
+	_check(_travel_for_band(3), "Travel to unlocked North Center")
 	_check(_flow.lure.max_depth_m == 85 and not _flow.select_depth_band(5), "LINE4 allows 85m, blocks >85m band before Lv5")
 	_check(_hud.get_node("NextUpgrade").text == "NEXT UPGRADE LOCKED" and _hud.get_node("Shop")._buttons.line.text == "LOCKED", "Locked Lv5 never mislabeled as MAX")
 	var nodes: int = get_node_count()

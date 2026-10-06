@@ -25,7 +25,7 @@ func _run() -> void:
 	_check(not saved.anonymous_lure_obtained and hidden.night_button.visible and not hidden.lure_button.visible,"NIGHT available without anonymous lure")
 	_check(hidden.toggle_night(),"Postgame night selectable")
 	_step(12.1)
-	_check(_flow.environment.value >= 1.95 and _flow.select_depth_band(3),"Night / first missing depth area accessible")
+	_check(_travel_for_band(3) and _flow.environment.value >= 1.95 and _flow.select_depth_band(3),"Night / first missing depth area accessible")
 	_check(_catch_real() and _flow.progress.fish_records["No.11"].discovered,"No.11 genuinely recaught after main ending")
 	_step(8)
 	_check(_flow.progress.hull_knock_count == 2,"Missed first two knock sequences complete in postgame")

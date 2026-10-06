@@ -6,6 +6,7 @@ signal changed
 signal depth_unlocked(previous_depth: float, next_depth: float)
 const CATEGORIES := ["rod", "reel", "line", "sonar"]
 var catalog: EquipmentCatalog = preload("res://data/equipment/mvp.tres")
+var current_area: String = "south_shore"
 var money: int = 0
 var levels: Dictionary = {"rod": 1, "reel": 1, "line": 1, "sonar": 1}
 const FISH_PROFILES := [preload("res://data/fish/bluegill-fight.tres"), preload("res://data/fish/bass-fight.tres"), preload("res://data/fish/crucian-fight.tres"), preload("res://data/fish/catfish-fight.tres"), preload("res://data/fish/biwamasu-fight.tres"), preload("res://data/fish/giant-catfish-fight.tres"), preload("res://data/fish/pale-biwamasu-fight.tres"), preload("res://data/fish/long-eel-fight.tres"), preload("res://data/fish/blind-isaza-fight.tres"), preload("res://data/fish/unknown-a-fight.tres"), preload("res://data/fish/thread-jaw-fight.tres"), preload("res://data/fish/split-belly-fight.tres"), preload("res://data/fish/reverse-scale-fight.tres"), preload("res://data/fish/unknown-b-fight.tres"), preload("res://data/fish/lake-master-fight.tres")]

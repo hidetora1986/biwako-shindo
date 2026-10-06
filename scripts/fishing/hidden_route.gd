@@ -117,8 +117,8 @@ func layout() -> void:
 	var middle := safe.get_center().x
 	depth_label.position = Vector2(safe.position.x+10,safe.position.y+40)
 	depth_label.size = Vector2(110,32)
-	night_button.size = Vector2(164,44)
-	night_button.position = Vector2(safe.end.x-168,safe.end.y-60)
+	night_button.size = Vector2(maxf(112,flow._hud.get_node("SonarPlaceholder").position.x - flow._hud.core_rect.position.x - 280),44)
+	night_button.position = Vector2(flow._hud.core_rect.position.x+272,safe.position.y+50)
 	message.position = Vector2(middle-230,safe.position.y+90)
 	message.size = Vector2(460,156)
 	meters.position = Vector2(middle-210,safe.end.y-140)
@@ -133,8 +133,8 @@ func layout() -> void:
 	lift.size = Vector2(180,60)
 	lift.position = Vector2(middle-192,safe.end.y-80)
 	cut.position = Vector2(middle+12,safe.end.y-80)
-	lure_button.size = Vector2(164,44)
-	lure_button.position = Vector2(safe.end.x-168,safe.end.y-120)
+	lure_button.size = night_button.size
+	lure_button.position = Vector2(flow._hud.core_rect.position.x+272,safe.position.y+100)
 
 func refresh_lure() -> void:
 	if lure_button == null: return
@@ -142,7 +142,7 @@ func refresh_lure() -> void:
 	if OS.has_feature("web"): layout()
 	var postgame_night: bool = flow.progress.main_ending_seen and flow.progress.night_unlocked
 	if not flow.progress.anonymous_lure_obtained and not lure_button.visible and not night_button.visible and not postgame_night: return
-	var idle: bool = stage == Stage.INACTIVE and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open
+	var idle: bool = stage == Stage.INACTIVE and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open and not flow._area_open and not flow._save_pending
 	lure_button.visible = flow.progress.anonymous_lure_obtained and idle
 	lure_button.text = ("無名ルアー ✓" if flow.progress.anonymous_lure_equipped else "無名ルアー") + "\n所持品に入っていた。"
 	night_button.visible = postgame_night and idle
@@ -150,7 +150,7 @@ func refresh_lure() -> void:
 	lure_button.tooltip_text = "所持品に入っていた。"
 
 func toggle_lure() -> bool:
-	if flow.state != flow.State.READY or flow._book_open or flow._shop_open or not flow.progress.anonymous_lure_obtained: return false
+	if flow.state != flow.State.READY or flow._book_open or flow._area_open or flow._save_pending or flow._shop_open or not flow.progress.anonymous_lure_obtained: return false
 	flow.progress.anonymous_lure_equipped = not flow.progress.anonymous_lure_equipped
 	_night_selected = flow.progress.anonymous_lure_equipped
 	flow.progress.changed.emit()
@@ -158,14 +158,14 @@ func toggle_lure() -> bool:
 	return true
 
 func toggle_night() -> bool:
-	if flow.state != flow.State.READY or flow._shop_open or flow._book_open or not flow.progress.night_unlocked: return false
+	if flow.state != flow.State.READY or flow._shop_open or flow._book_open or flow._area_open or flow._save_pending or not flow.progress.night_unlocked: return false
 	_night_selected = not _night_selected
 	flow.environment.target = 2 if _night_selected else 0
 	refresh_lure()
 	return true
 
 func can_start() -> bool:
-	return stage == Stage.INACTIVE and flow.progress.hidden_eligible() and not flow.progress.hidden_finished() and flow.progress.anonymous_lure_obtained and flow.progress.anonymous_lure_equipped and flow.environment.value >= 1.95 and flow.selected_band == 6 and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open
+	return stage == Stage.INACTIVE and flow.progress.current_area == LakeAreas.CENTER and flow.progress.hidden_eligible() and not flow.progress.hidden_finished() and flow.progress.anonymous_lure_obtained and flow.progress.anonymous_lure_equipped and flow.environment.value >= 1.95 and flow.selected_band == 6 and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open and not flow._area_open and not flow._save_pending
 
 func begin() -> bool:
 	if not can_start(): return false
@@ -298,7 +298,7 @@ func _restore(title: bool) -> void:
 	flow._boat.set_line_pull(0,false)
 	flow.selected_band = 0
 	flow.seek_depth_m = 0
-	flow.get_parent().populate_depth_band(0,flow.progress.current("line").effect_value)
+	flow.restore_area()
 	for fish: FishController in flow._fish_container.get_children(): fish.set_physics_process(true)
 	_night_selected = false
 	flow.environment.value = 0
@@ -327,7 +327,7 @@ func _restore(title: bool) -> void:
 
 func _input(event: InputEvent) -> void:
 	if stage == Stage.INACTIVE:
-		if flow._shop_open or flow._book_open: return
+		if flow._shop_open or flow._book_open or flow._area_open or flow._save_pending: return
 		if event is InputEventScreenTouch and event.pressed and lure_button.visible and lure_button.get_global_rect().has_point(event.position):
 			toggle_lure(); get_viewport().set_input_as_handled()
 		elif event is InputEventScreenTouch and event.pressed and night_button.visible and night_button.get_global_rect().has_point(event.position):
@@ -369,6 +369,8 @@ func debug_setup() -> bool:
 	flow.environment.value = 2
 	flow.environment.target = 2
 	flow.environment._apply()
+	flow.progress.current_area = LakeAreas.CENTER
+	flow.restore_area()
 	flow.select_depth_band(6)
 	return true
 

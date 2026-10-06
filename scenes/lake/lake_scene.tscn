@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
 [ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
@@ -19,6 +19,8 @@
 [ext_resource type="Script" path="res://scripts/visual/pixel_ui_visual.gd" id="12_ui_visual"]
 
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansJP.ttf" id="web_jp"]
+
+[ext_resource type="Script" path="res://scripts/ui/area_map.gd" id="13_area_map"]
 
 [sub_resource type="SystemFont" id="Font_catch"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
@@ -199,6 +201,42 @@ theme_override_styles/hover = SubResource("Style_cast")
 theme_override_styles/pressed = SubResource("Style_cast_pressed")
 theme_override_styles/disabled = SubResource("Style_cast_disabled")
 text = "CAST"
+
+[node name="HookButton" type="Button" parent="HUD/Root"]
+visible = false
+offset_right = 80.0
+offset_bottom = 44.0
+focus_mode = 0
+action_mode = 0
+theme_override_styles/normal = SubResource("Style_cast")
+theme_override_styles/hover = SubResource("Style_cast")
+theme_override_styles/pressed = SubResource("Style_cast_pressed")
+theme_override_styles/disabled = SubResource("Style_cast_disabled")
+text = "HOOK!"
+
+[node name="AreaButton" type="Button" parent="HUD/Root"]
+visible = true
+offset_right = 80.0
+offset_bottom = 44.0
+focus_mode = 0
+action_mode = 0
+theme_override_styles/normal = SubResource("Style_cast")
+theme_override_styles/hover = SubResource("Style_cast")
+theme_override_styles/pressed = SubResource("Style_cast_pressed")
+theme_override_styles/disabled = SubResource("Style_cast_disabled")
+text = "AREA"
+
+[node name="SaveButton" type="Button" parent="HUD/Root"]
+visible = true
+offset_right = 80.0
+offset_bottom = 44.0
+focus_mode = 0
+action_mode = 0
+theme_override_styles/normal = SubResource("Style_cast")
+theme_override_styles/hover = SubResource("Style_cast")
+theme_override_styles/pressed = SubResource("Style_cast_pressed")
+theme_override_styles/disabled = SubResource("Style_cast_disabled")
+text = "SAVE"
 
 [node name="Bite" type="Label" parent="HUD/Root"]
 visible = false
@@ -397,3 +435,27 @@ layout_mode = 0
 focus_mode = 0
 action_mode = 0
 text = "戻す"
+
+[node name="AreaLabel" type="Label" parent="HUD/Root"]
+offset_right = 150.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_fonts/font = SubResource("Font_catch")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.16, 0.32, 0.36, 1)
+text = "南湖沿岸 / SAVE POINT"
+
+[node name="SaveNotice" type="Label" parent="HUD/Root"]
+z_index = 50
+visible = false
+offset_right = 270.0
+offset_bottom = 28.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="AreaMap" type="Control" parent="HUD/Root"]
+process_mode = 3
+z_index = 30
+visible = false
+script = ExtResource("13_area_map")

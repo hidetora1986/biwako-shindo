@@ -95,6 +95,7 @@ func _run() -> void:
 		for event_tick in range(600):
 			if not _flow.anomaly.active and not _flow.hull_events.active: break
 			_step(1.0/60)
+		_check(_travel_for_band(band), "Travel to habitat for band %d" % band)
 		if _flow.selected_band != band:
 			_check(_flow.select_depth_band(band),"Selectable unlocked band %d" % band)
 		_step(3.0 + (cycle%7)*0.6)
@@ -113,11 +114,11 @@ func _run() -> void:
 		_check(_flow.request_continue(),"Main Continue")
 		_purchase_available()
 		_check(progress.hidden_eligible(),"All fifteen / returns / night / knocks / sonar5 from gameplay")
-		_flow.select_depth_band(0)
+		_check(_travel_for_band(0) and _flow.select_depth_band(0), "Postgame travel to South Shore")
 		for i in range(2): _check(_catch_real(),"Actual postgame lure grant cycle")
 		_check(progress.anonymous_lure_obtained,"Anonymous lure within2 catches")
 		_check(hidden.toggle_lure(),"Anonymous equip")
-		_step(12.1); _flow.select_depth_band(6)
+		_step(12.1); _check(_travel_for_band(6) and _flow.select_depth_band(6), "Hidden travel to North Center")
 		_check(_contact() and _survive(),"Natural hidden contact -> 50s survival")
 		var contact_ending := not ("--cut" in OS.get_cmdline_user_args())
 		_check(hidden.choose(contact_ending),"Hidden final choice")

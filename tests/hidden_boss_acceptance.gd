@@ -73,7 +73,7 @@ func _run() -> void:
 	_flow.environment.value = 2
 	_flow.select_depth_band(5)
 	_check(not hidden.can_start(),"No encounter below100m / ordinary band")
-	_flow.select_depth_band(6)
+	_travel_for_band(6) and _flow.select_depth_band(6)
 	var book: Control = _hud.get_node("FishBook")
 	progress.changed.emit()
 	_check(book.hidden_entry.visible and book.hidden_entry.text == "No.00" and not progress.no00_contacted,"Faint No.00 entry is not discovered")
@@ -86,7 +86,7 @@ func _run() -> void:
 	progress.anonymous_lure_obtained = false
 	progress.anonymous_lure_equipped = false
 	progress.hidden_postgame_sessions = 0
-	_flow.select_depth_band(0)
+	_travel_for_band(0) and _flow.select_depth_band(0)
 	for number in range(2):
 		_check(_flow.request_cast() and _until_bite() and _flow.request_hook() and _finish_fight(),"Actual postgame fishing cycle %d" % (number+1))
 		_check(progress.anonymous_lure_obtained == (number == 1),"Lure appears after second normal catch")
@@ -95,7 +95,7 @@ func _run() -> void:
 	var early_restore := GameProgress.new()
 	_check(_flow.save_manager.load_into(early_restore) and early_restore.anonymous_lure_obtained and early_restore.anonymous_lure_equipped and early_restore.hidden_postgame_sessions == 2,"Anonymous lure and two-session timing restored")
 	_step(12.1)
-	_flow.select_depth_band(6)
+	_travel_for_band(6) and _flow.select_depth_band(6)
 	_check(hidden.can_start() and _flow.lure.max_depth_m == 120,"Night anonymous >=100 gate with unchanged line120")
 	var money_before := progress.money
 	var record_before := progress.fish_records.duplicate(true)
@@ -121,13 +121,13 @@ func _run() -> void:
 	_step(3.1)
 	_check(_flow.state == FLOW.State.READY and progress.anonymous_lure_obtained and progress.money == money_before and progress.fish_records == record_before and _flow.environment.value == 0,"Failure returns dawn without loss / lure retained")
 	_check(hidden.toggle_night(),"Retry night selectable without recollecting flags")
-	_step(12.1); _flow.select_depth_band(6)
+	_step(12.1); _travel_for_band(6) and _flow.select_depth_band(6)
 	_check(_contact(),"Fresh CAST retries same unlocked route")
 	for tick in range(2100):
 		if hidden.stage == HiddenRoute.Stage.FAILURE: break
 		_step(1.0/60)
 	_check(hidden.stage == HiddenRoute.Stage.FAILURE and hidden.fight.failure == "PULL DEPTH","Release forever reaches critical boat depth")
-	_step(3.1); hidden.toggle_night(); _step(12.1); _flow.select_depth_band(6)
+	_step(3.1); hidden.toggle_night(); _step(12.1); _travel_for_band(6) and _flow.select_depth_band(6)
 	_check(_contact() and _survive(),"Hold/release survives 50s to silent final choice")
 	_check(phases_seen.size() == 3 and absf(hidden.fight.elapsed-50) < 0.02 and hidden.fight.tension == 0,"Three phases / 50s / stopped tension")
 	_check(hidden.cut.visible and hidden.lift.visible and not hidden.reel.visible and not hidden.set_reeling(true),"Two large choices only, REEL disabled")
@@ -135,7 +135,7 @@ func _run() -> void:
 	_step(3.2)
 	_check(progress.hidden_cut_ending_seen and not progress.no00_contacted and _flow.state == FLOW.State.TITLE and hidden.visual.title_shadow,"Cut ending dawn/title faint unbounded shadow, not caught")
 	_check(_flow.request_continue() and not hidden.visual.title_shadow,"Post-cut CONTINUE ordinary fishing")
-	_step(12.1); _flow.select_depth_band(6)
+	_step(12.1); _travel_for_band(6) and _flow.select_depth_band(6)
 	_check(not hidden.can_start() and progress.no00_record().caught_count == 0,"Cut no respawn / nonexistent entry remains")
 	# Independent contact-ending save/session, not a cut-save rewrite.
 	_new_scene(); await process_frame; await process_frame; _hidden_fixture()
@@ -151,8 +151,8 @@ func _run() -> void:
 	_check(progress.sell_catch(secret,1,9999) == 0 and not progress.record_catch(secret,1) and not progress.fish_records.has("00"),"No.00 unsellable / no normal records")
 	var restored := GameProgress.new()
 	_check(_flow.save_manager.load_into(restored) and restored.no00_contacted and restored.no00_record().caught_count == 2 and restored.anonymous_lure_obtained and restored.hidden_contact_ending_seen,"Save load hidden contact / lure / fixed count")
-	_check(_flow.request_continue() and _flow.select_depth_band(6) and not hidden.can_start(),"Post-contact continue / no refarm")
-	_check(_flow.select_depth_band(0) and _flow.request_cast() and _until_bite() and _flow.request_hook() and _finish_fight(),"After hidden ending real ordinary fishing still sells")
+	_check(_flow.request_continue() and _travel_for_band(6) and _flow.select_depth_band(6) and not hidden.can_start(),"Post-contact continue / no refarm")
+	_check(_travel_for_band(0) and _flow.select_depth_band(0) and _flow.request_cast() and _until_bite() and _flow.request_hook() and _finish_fight(),"After hidden ending real ordinary fishing still sells")
 	var old: Dictionary = _flow.save_manager.snapshot(progress)
 	for field in ["anonymous_lure_obtained","anonymous_lure_equipped","hidden_entry_seen","no00_contacted","hidden_cut_ending_seen","hidden_contact_ending_seen","hidden_postgame_sessions","second_playthrough_hooks"]: old.erase(field)
 	var path := "user://tests/hidden-migration.json"

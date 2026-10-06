@@ -58,7 +58,7 @@ func snapshot(progress: GameProgress) -> Dictionary:
 		discovered[id] = record.discovered
 		counts[id] = record.caught_count
 		best[id] = record.best_size_cm
-	return {"unknown_a_sold_first":progress.unknown_a_sold_first,"unknown_b_sold_first":progress.unknown_b_sold_first,"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
+	return {"current_area": progress.current_area, "unknown_a_sold_first":progress.unknown_a_sold_first,"unknown_b_sold_first":progress.unknown_b_sold_first,"anonymous_lure_obtained":progress.anonymous_lure_obtained, "anonymous_lure_equipped":progress.anonymous_lure_equipped, "hidden_entry_seen":progress.hidden_entry_seen, "no00_contacted":progress.no00_contacted, "hidden_cut_ending_seen":progress.hidden_cut_ending_seen, "hidden_contact_ending_seen":progress.hidden_contact_ending_seen, "hidden_postgame_sessions":progress.hidden_postgame_sessions, "second_playthrough_hooks":progress.second_playthrough_hooks, "save_version": VERSION, "money": progress.money, "rod_level": progress.levels.rod, "reel_level": progress.levels.reel, "line_level": progress.levels.line, "sonar_level": progress.levels.sonar, "fish_discovered": discovered, "fish_caught_count": counts, "fish_best_size": best, "anomaly_seen": progress.anomaly_seen, "sonar_sessions": progress.sonar_sessions, "returned_unknown_a": progress.returned_unknown_a, "returned_unknown_b": progress.returned_unknown_b, "night_unlocked": progress.night_unlocked, "boss15_defeated": progress.boss15_defeated, "main_ending_seen": progress.main_ending_seen, "hull_knock_count": progress.hull_knock_count, "zero_depth_contact_seen": progress.zero_depth_contact_seen, "max_depth_reached_m": progress.max_depth_reached_m}
 
 func load_into(progress: GameProgress) -> bool:
 	var raw: Variant = null
@@ -114,6 +114,8 @@ func load_into(progress: GameProgress) -> bool:
 	progress.no00_contacted = progress.hidden_contact_ending_seen
 	progress.hidden_postgame_sessions = _integer(data.get("hidden_postgame_sessions"),0,0,3)
 	progress.second_playthrough_hooks = {"first_record_count":2,"returning_dialogue":true,"sonar_depth_flash":120} if progress.hidden_finished() else {}
+	var area: Variant = data.get("current_area", LakeAreas.SOUTH)
+	progress.current_area = area if area is String and LakeAreas.unlocked(area, progress) else LakeAreas.SOUTH
 	return valid
 
 func _dictionary(value: Variant) -> Dictionary:

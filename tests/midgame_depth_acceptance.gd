@@ -44,13 +44,13 @@ func _run() -> void:
 		_check(progress.next_level(category) == null and not progress.can_purchase(category, 4), "Lv4 hidden before No.10: " + category)
 	progress.changed.emit()
 	progress.anomaly_seen = true # Deterministic stress fixture; existing event separately regressed.
-	var boat_anchor: Vector2 = _boat.position
+	var boat_anchor: Vector2 = _boat.anchor_position
 	var sky_color: Color = _lake.profile.sky_top
 	var background: Node2D = _lake.get_node("Underwater/WaterBackground")
 	_check(background.color_at_depth(15).get_luminance() > background.color_at_depth(30).get_luminance() and background.color_at_depth(30).get_luminance() > background.color_at_depth(50).get_luminance() and background.color_at_depth(50).get_luminance() > 0.02, "Depth visual: descending luminance without black / red")
 	for band in [1, 2, 0]:
-		_check(_flow.select_depth_band(band), "Select actual depth band %d" % band)
-		_check(_boat.position == boat_anchor and _lake.profile.sky_top == sky_color and is_equal_approx(_lake.surface_y, 136), "Surface / boat / sky fixed across depth bands")
+		_check(_travel_for_band(band) and _flow.select_depth_band(band), "Select actual depth band %d" % band)
+		_check(_boat.anchor_position == boat_anchor and _lake.profile.sky_top == sky_color and is_equal_approx(_lake.surface_y, 136), "Surface / boat / sky fixed across depth bands")
 		for fish: FishController in _fishes:
 			_check(fish.fight_profile.allows_depth(fish.depth_position) and fish.depth_position >= DepthBands.STARTS[band] and fish.depth_position <= DepthBands.ENDS[band], "Spawn restricted by habitat and band: " + fish.fight_profile.id)
 	var nodes: int = get_node_count()
@@ -61,7 +61,7 @@ func _run() -> void:
 	for cycle in range(24):
 		var band := 1 if cycle < 12 else 2
 		if cycle == 0 or cycle == 12:
-			_check(_flow.select_depth_band(band), "Stress: select band " + str(band))
+			_check(_travel_for_band(band) and _flow.select_depth_band(band), "Stress: select band " + str(band))
 		var money_before: int = progress.money
 		_check(_flow.request_cast(), "Deep %d: CAST" % cycle)
 		_check(not _flow.request_cast() and not _flow.select_depth_band(0), "Deep cast: duplicate / depth change rejected")
@@ -127,7 +127,7 @@ func _run() -> void:
 	var unlocked: Array = []
 	progress.depth_unlocked.connect(func(a: float,b: float): unlocked.append([a,b]))
 	_check(progress.purchase("line",4) and progress.money == old_money - 65000 and unlocked == [[50.0,85.0]], "LINE4 purchase: 50m → 85m reward and exact deduction")
-	_check(progress.current("line").effect_value == 85 and _flow.lure.max_depth_m == 85 and not _flow.select_depth_band(6), "85m equipment retained; out-of-range band rejected")
+	_check(_travel_for_band(2) and progress.current("line").effect_value == 85 and _flow.lure.max_depth_m == 85 and not _flow.select_depth_band(6), "85m equipment retained; out-of-range band rejected")
 	_check(not progress.purchase("line",4) and progress.next_level("line") == null, "No double purchase / level overflow")
 	for category: String in ["rod","reel","sonar"]:
 		var balance: int = progress.money
