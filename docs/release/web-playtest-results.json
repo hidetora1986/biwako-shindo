@@ -64,5 +64,23 @@
     "headless": true
   },
   "critical_errors": 0,
-  "font_sha256": "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f"
+  "font_sha256": "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f",
+  "github_actions_verification": [
+    {
+      "event": "push",
+      "run_id": 37397253943,
+      "url": "https://github.com/hidetora1986/biwako-shindo/actions/runs/37397253943",
+      "build_export": "PASS",
+      "pages_configuration": "FAIL",
+      "deployment": "SKIPPED"
+    },
+    {
+      "event": "workflow_dispatch",
+      "run_id": 37397395192,
+      "url": "https://github.com/hidetora1986/biwako-shindo/actions/runs/37397395192",
+      "build_export": "PASS",
+      "pages_configuration": "FAIL",
+      "deployment": "SKIPPED"
+    }
+  ]
 }

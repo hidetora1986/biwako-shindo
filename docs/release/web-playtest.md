@@ -12,7 +12,7 @@ On your smartphone, open https://github.com/hidetora1986/biwako-shindo then:
 
 1. **Settings → Pages → Build and deployment → Source → GitHub Actions**.
 2. Open **Actions → Smartphone Web Play Test**, select the run for `release/web-test`, then **Re-run all jobs** after enabling Pages.
-3. If manual **Run workflow** is available, select branch **release/web-test** before starting it. GitHub's `workflow_dispatch` discovery requires a workflow on the default branch; this change deliberately does not modify `main` or the repository default branch. The branch push trigger and rerun of an existing run are the available route until that GitHub limitation is resolved.
+3. If manual **Run workflow** is available, select branch **release/web-test** before starting it. API `workflow_dispatch` with this ref was also successfully accepted and ran the same import/export. No default-branch or `main` changes are needed for the tested API path; rerun an existing branch run from the phone if the manual button is unavailable.
 4. If `github-pages` environment deployment rules restrict branches, allow **release/web-test** in **Settings → Environments → github-pages**.
 5. Once Deploy succeeds, use the URL shown by the `deployment` step/environment. Confirm a successful page response and the actual game startup before sharing it as the Play URL.
 
@@ -60,3 +60,5 @@ Godot import/export and all 28 RC1 executions pass with no Godot/Script errors o
 16:9, 19.5:9 and 20:9 canvas fitting, portrait prompt and page scroll are checked. Desktop Native tests cover advanced Sell/Return and final-choice input; these advanced encounters have not been played on a physical phone browser. Safari/WebKit launch was blocked by missing host libraries. **Physical Safari, physical Chrome, haptics, audio feel and phone performance: NOT TESTED.** No actual Pages deployment is claimed before setup.
 
 RC1 still has its existing B01 pacing blocker. Preparing Web play does not resolve it or change the balance to inflate play time.
+
+GitHub Actions evidence: [push build](https://github.com/hidetora1986/biwako-shindo/actions/runs/37397253943) and [manual dispatch build](https://github.com/hidetora1986/biwako-shindo/actions/runs/37397395192) both completed official install, import and Web export successfully, then failed at Configure GitHub Pages. Artifact upload and deployment were skipped because Pages is disabled. Re-run after configuring Pages; no alternate hosting was used.
