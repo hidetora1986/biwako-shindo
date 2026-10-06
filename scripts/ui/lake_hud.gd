@@ -17,11 +17,21 @@ func _process(delta: float) -> void:
 	if _notice_remaining > 0:
 		_notice_remaining = maxf(0, _notice_remaining - delta)
 		$SaveNotice.visible = _notice_remaining > 0
+		_position_save_notice()
 
-func save_feedback(message: String, duration: float = 1.0) -> void:
+func save_feedback(message: String, duration: float = 0.7) -> void:
+	_position_save_notice()
 	$SaveNotice.text = message
 	$SaveNotice.visible = true
 	_notice_remaining = duration
+
+func _position_save_notice() -> void:
+	# A short edge notification, never a banner covering the fish or boat.
+	$SaveNotice.size = Vector2(150, 22)
+	if $AreaMap.visible:
+		$SaveNotice.position = $AreaMap.panel.position + Vector2(264, $AreaMap.panel.size.y - 37)
+	else:
+		$SaveNotice.position = $BookButton.position + Vector2(0, $BookButton.size.y + 17)
 
 var _area_depth_m: float = 15.0
 var _area_origin_m: float = 0.0
@@ -57,7 +67,7 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$AreaLabel.position = core_rect.position + Vector2(120, 26)
 	$AreaLabel.size = Vector2(maxf(150, core_rect.size.x - 314), 22)
 	$AreaMap.configure(core_rect, view_size)
-	$SaveNotice.position = core_rect.get_center() + Vector2(-135, 30)
+	_position_save_notice()
 	$FishBook.configure(core_rect, view_size)
 	$NextUpgrade.position = Vector2(core_rect.position.x, core_rect.end.y - $NextUpgrade.size.y)
 	$DepthUnlock.position = core_rect.get_center() - $DepthUnlock.size * 0.5
@@ -70,7 +80,7 @@ func layout_in_safe_area(view_size: Vector2, device_safe: Rect2, surface_y: floa
 	$Subtitle.size.x = title_width
 	$Title.position = Vector2((title_left + title_right - title_width) * 0.5, core_rect.position.y)
 	$Subtitle.position = $Title.position + Vector2(0, 20)
-	$Depth.position = Vector2(core_rect.position.x, clampf(maxf(surface_y + 9, $SaveButton.position.y + $SaveButton.size.y + 8), safe_rect.position.y, safe_rect.end.y - $Depth.size.y))
+	$Depth.position = Vector2(core_rect.position.x, clampf(maxf(surface_y + 9, $AreaButton.position.y + $AreaButton.size.y + 8), safe_rect.position.y, safe_rect.end.y - $Depth.size.y))
 	# Preserve a physical 44px target even in a small 320px-wide PC preview.
 	var window_size := Vector2(get_window().size)
 	var pixel_scale := maxf(0.1, minf(window_size.x / view_size.x, window_size.y / view_size.y))

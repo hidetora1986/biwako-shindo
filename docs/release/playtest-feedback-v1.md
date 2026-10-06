@@ -21,7 +21,7 @@ RC1 Human Playtest commit `a296c41e9835d1778a576b67c59a3e79e6a3aff9` is cherry-p
 
 ## セーブポイント
 
-各マップ行にSAVE POINT、湖HUDにSAVE。READY時にワンタップで保存。マップの現在地にもSAVEがある。到着時の自動保存に加え、捕獲・購入・Choice・Ending等の既存Auto Saveを維持する。
+湖HUDの常設SAVEボタンとSAVE POINT表記は非表示。手動保存はREADY時にAREAを開き、「セーブ」をタップする。保存完了は端に小さく0.7秒だけ表示し、湖・魚を覆わない。到着時の自動保存に加え、捕獲・購入・Choice・Ending等の既存Auto Saveを維持する。
 
 `save_version=1`へ`current_area`を追加。古いSaveは南湖沿岸で再開し、既存所持金・装備・図鑑・Boss／Hiddenフラグを維持。エリア解放を進行状態から再計算するため、深い進行の旧Saveでも北へ移動して続行できる。不正なエリア／未解放エリアは南湖へフォールバック。Loadだけではファイルを書き換えない。
 

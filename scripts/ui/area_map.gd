@@ -33,7 +33,7 @@ func _ready() -> void:
 		var button := _button("")
 		button.pressed.connect(_select.bind(id))
 		buttons[id] = button
-	save_button = _button("SAVE POINT / SAVE")
+	save_button = _button("セーブ")
 	save_button.pressed.connect(func(): save_requested.emit())
 
 func _button(text: String) -> Button:
@@ -76,7 +76,7 @@ func open_map() -> void:
 		var current: bool = id == flow.progress.current_area
 		var accessible := LakeAreas.unlocked(id, flow.progress)
 		var entry: Dictionary = LakeAreas.DATA[id]
-		buttons[id].text = "%s  %s  %d–%dm\nSAVE POINT / %s" % ["現在地" if current else ("移動する" if accessible else "LOCKED"), entry.name, entry.min_depth, entry.max_depth, "係留地点" if accessible else entry.gate]
+		buttons[id].text = "%s  %s  %d–%dm\n%s" % ["現在地" if current else ("移動する" if accessible else "LOCKED"), entry.name, entry.min_depth, entry.max_depth, "係留地点" if accessible else entry.gate]
 		buttons[id].disabled = true
 	# The opening tap may also produce an emulated mouse press at a destination.
 	# Arm rows only after that gesture; stale timers cannot arm a reopened map.

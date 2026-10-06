@@ -175,12 +175,10 @@ func _input(event: InputEvent) -> void:
 					return
 		return
 	if state == State.READY and event is InputEventScreenTouch and event.pressed:
-		for control in ["AreaButton", "SaveButton"]:
-			if _hud.get_node(control).get_global_rect().has_point(event.position):
-				if control == "AreaButton": request_area()
-				else: request_save()
-				get_viewport().set_input_as_handled()
-				return
+		if _hud.get_node("AreaButton").get_global_rect().has_point(event.position):
+			request_area()
+			get_viewport().set_input_as_handled()
+			return
 		if _hud.get_node("DepthBandButton").get_global_rect().has_point(event.position):
 			cycle_depth_band()
 			get_viewport().set_input_as_handled()
@@ -508,9 +506,10 @@ func _refresh_ui() -> void:
 	if state in [State.ENDING,State.TITLE,State.HIDDEN]:
 		return
 	_hud.get_node("AreaButton").visible = state not in [State.LANDED, State.CHOOSING]
-	_hud.get_node("SaveButton").visible = state not in [State.LANDED, State.CHOOSING]
+	# Manual save lives in the paused AREA map; keep the lake HUD clear.
+	_hud.get_node("SaveButton").visible = false
 	_hud.get_node("AreaButton").disabled = not can_open_area()
-	_hud.get_node("SaveButton").disabled = not can_save()
+	_hud.get_node("SaveButton").disabled = true
 	_hud.get_node("HookButton").visible = state == State.BITTEN
 	_hud.get_node("HookButton").disabled = state != State.BITTEN or _area_open or _save_pending
 	_hud.get_node("CastButton").disabled = (state != State.READY and not can_retrieve()) or _shop_open or _book_open or _area_open or _save_pending
@@ -727,7 +726,7 @@ func _confirm_web_save(expected: String) -> void:
 	_save_pending = false
 	if confirmed and _manual_confirmation: _playtest.record("FIRST_MANUAL_SAVE")
 	_manual_confirmation = false
-	_hud.save_feedback("SAVED" if confirmed else "SAVE FAILED", 1 if confirmed else 2)
+	_hud.save_feedback("SAVED" if confirmed else "SAVE FAILED", 0.7 if confirmed else 2)
 	_refresh_ui()
 
 func request_travel(destination: String) -> bool:
@@ -770,7 +769,7 @@ func restore_area() -> void:
 	_hud.get_node("SonarPlaceholder").lingering_contact.clear()
 	_hud.get_node("SonarPlaceholder").lingering_remaining = 0
 	_hud.get_node("SonarPlaceholder").refresh_contacts()
-	_hud.get_node("AreaLabel").text = LakeAreas.DATA[area].name + " / SAVE POINT"
+	_hud.get_node("AreaLabel").text = LakeAreas.DATA[area].name
 	_refresh_ui()
 
 func can_retrieve() -> bool:

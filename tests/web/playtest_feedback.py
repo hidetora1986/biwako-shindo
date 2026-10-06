@@ -16,9 +16,12 @@ with sync_playwright() as p:
   page.evaluate('''async ({key,data})=>{const d=await new Promise(ok=>{const r=indexedDB.open('/userfs');r.onsuccess=()=>ok(r.result);});const tx=d.transaction('FILE_DATA','readwrite');const s=tx.objectStore('FILE_DATA');const v=await new Promise(ok=>{const r=s.get(key);r.onsuccess=()=>ok(r.result);});v.contents=new TextEncoder().encode(JSON.stringify(data));v.timestamp=new Date();s.put(v,key);await new Promise(ok=>tx.oncomplete=ok);d.close();}''',{'key':saved['key'],'data':data})
  page.goto('http://127.0.0.1:8765/');start()
  # New primary at lower right; save confirms native->IndexedDB persistence.
- page.touchscreen.tap(275,145);page.wait_for_function('window.biwakoSaveConfirmed === true',timeout=12000)
+ page.touchscreen.tap(136,145);page.wait_for_timeout(400)
+ page.touchscreen.tap(250,345);page.wait_for_function('window.biwakoSaveConfirmed === true',timeout=12000)
  snap('saved') # Durability assertion is the browser DB confirmation above.
  saved=read();assert saved['data']['current_area']=='south_shore'
+ page.touchscreen.tap(679,55);page.wait_for_timeout(200)
+ assert 'SAVE POINT' not in snap('clean-hud')
  page.touchscreen.tap(700,342)
  def until_button(word,limit=100):
   for i in range(limit):

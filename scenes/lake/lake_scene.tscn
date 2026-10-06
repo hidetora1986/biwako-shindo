@@ -227,7 +227,8 @@ theme_override_styles/disabled = SubResource("Style_cast_disabled")
 text = "AREA"
 
 [node name="SaveButton" type="Button" parent="HUD/Root"]
-visible = true
+visible = false
+disabled = true
 offset_right = 80.0
 offset_bottom = 44.0
 focus_mode = 0
@@ -443,15 +444,16 @@ mouse_filter = 2
 theme_override_fonts/font = SubResource("Font_catch")
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.16, 0.32, 0.36, 1)
-text = "南湖沿岸 / SAVE POINT"
+text = "南湖沿岸"
 
 [node name="SaveNotice" type="Label" parent="HUD/Root"]
 z_index = 50
 visible = false
-offset_right = 270.0
-offset_bottom = 28.0
+offset_right = 150.0
+offset_bottom = 22.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.7, 0.88, 0.83, 1)
+theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 
 [node name="AreaMap" type="Control" parent="HUD/Root"]

@@ -99,12 +99,13 @@ func _run() -> void:
 	for ratio in [Vector2i(1280,720),Vector2i(1560,720),Vector2i(1600,720),Vector2i(640,360)]:
 		root.size = ratio
 		await process_frame; await process_frame
-		for name: String in ["HookButton","CastButton","ReelButton","AreaButton","SaveButton","ShopButton","BookButton"]:
+		for name: String in ["HookButton","CastButton","ReelButton","AreaButton","ShopButton","BookButton"]:
 			var button: Button = _hud.get_node(name)
 			_check(_hud.safe_rect.encloses(button.get_global_rect()) and button.size.y*float(ratio.y)/_lake.view_size.y >= 44, "Safe 44px touch control %s at %s" % [name,ratio])
 		_check(_hud.get_node("HookButton").get_global_rect() == _hud.get_node("ReelButton").get_global_rect() and _hud.get_node("CastButton").get_global_rect() == _hud.get_node("ReelButton").get_global_rect(), "Shared primary action area")
 		_check(not _hud.get_node("Depth").get_global_rect().intersects(_hud.get_node("SaveButton").get_global_rect()), "Depth readout clear of SAVE")
-		_check(not _hud.get_node("AreaButton").get_global_rect().intersects(_hud.get_node("SaveButton").get_global_rect()), "AREA and SAVE never overlap")
+		_check(not _hud.get_node("SaveButton").visible and _hud.get_node("SaveButton").disabled and not "SAVE POINT" in _hud.get_node("AreaLabel").text, "No persistent save clutter on lake HUD")
+		_check(_hud.get_node("SaveNotice").size.y <= 22 and not _hud.get_node("SaveNotice").get_global_rect().intersects(_hud.get_node("CastButton").get_global_rect()), "Small save toast clear of primary action")
 	print("PLAYTEST_FEEDBACK_ACCEPTANCE ",JSON.stringify({"result":"PASS" if _failures.is_empty() else "FAIL","checks":_checks,"failures":_failures}))
 	_main.free();DirAccess.remove_absolute(_test_save_path)
 	await process_frame
