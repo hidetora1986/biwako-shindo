@@ -1,0 +1,76 @@
+{
+  "cards": [
+    {
+      "stage": "lake",
+      "text": "",
+      "heading": "",
+      "seconds": 3
+    },
+    {
+      "stage": "record",
+      "text": "湖底まで行った。\nこれで全部や。",
+      "heading": "祖父の釣果帳",
+      "seconds": 3
+    },
+    {
+      "stage": "record",
+      "text": "……帰ろう。",
+      "heading": "祖父の釣果帳",
+      "seconds": 2
+    },
+    {
+      "stage": "turn",
+      "text": "",
+      "heading": "",
+      "seconds": 0.6
+    },
+    {
+      "stage": "sketch",
+      "text": "……？",
+      "heading": "",
+      "seconds": 1
+    },
+    {
+      "stage": "sketch",
+      "text": "最後のページには、\n見覚えのない絵が残っていた。",
+      "heading": "",
+      "seconds": 2.5
+    },
+    {
+      "stage": "sketch",
+      "text": "地図にも、\n魚にも見えた。",
+      "heading": "",
+      "seconds": 2.5
+    },
+    {
+      "stage": "sketch",
+      "text": "けれど、\n祖父が何を見たのかは分からない。",
+      "heading": "",
+      "seconds": 2.5
+    },
+    {
+      "stage": "sketch",
+      "text": "ただ、\nこれで終わりではない気がした。",
+      "heading": "",
+      "seconds": 2.5
+    },
+    {
+      "stage": "fade",
+      "text": "",
+      "heading": "",
+      "seconds": 0.6
+    },
+    {
+      "stage": "lake",
+      "text": "",
+      "heading": "",
+      "seconds": 1.4
+    },
+    {
+      "stage": "lake",
+      "text": "琵琶湖深度\nMAIN END",
+      "heading": "",
+      "seconds": 2.5
+    }
+  ]
+}

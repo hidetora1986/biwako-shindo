@@ -14,3 +14,5 @@
 有料・出所不明アセット、外部Monster画像、外部BGMは追加していない。
 
 秘密情報監査は追跡ファイルとRC追加ファイルのPrivate Key header、GitHub Token、AWS Key ID、API Key形状を検査し該当0。署名鍵・証明書・Tokenを追加していない。`.godot/`、`.env*`、keystore／jks／p12／pem／key／cer／mobileprovision等をgitignore対象にする。パターン検査はあらゆる秘密情報形式の不在を保証するものではない。
+
+Main Ending journal: `assets/story/main_ending_mysterious_sketch.png`, original OpenAI-generated placeholder (2026-10-06); provenance and replacement details in `assets/story/README.md`. No external image download.

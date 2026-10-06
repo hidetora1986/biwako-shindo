@@ -56,7 +56,7 @@ func _run() -> void:
 	_flow.save_manager.save_progress(_flow.progress)
 	_reload_scene();await process_frame;await process_frame;story = _flow.story
 	_check(story.active and story.mode == "main" and _flow.progress.money == money and _flow.progress.fish_records["No.15"].caught_count == 1, "Interrupted Main Story reload / no duplicate boss reward")
-	_step(48)
+	_step(60)
 	_check(_flow.state == FLOW.State.TITLE and _flow.progress.main_ending_seen and _flow.progress.main_story_ending_seen and _flow.progress.money == money, "Main closure / natural credits / saved reward unchanged")
 	_check(_flow.ending_screen.get_node("Clear").text == "MAIN END" and _flow.request_continue(), "Main END / Continue")
 	_check("postgame" in NarrativeData.pages(_flow.progress), "Postgame unreadable fragment")

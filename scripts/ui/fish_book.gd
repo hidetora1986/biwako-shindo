@@ -10,6 +10,10 @@ var fish_tab: Button
 var journal_tab: Button
 var journal_mode := false
 var _owns_pause: bool = false
+var sketch_review: MysteriousSketch
+var sketch_close: Button
+var sketch_button: Button
+var sketch_image: TextureRect
 
 func _ready() -> void:
 	$Panel/Close.pressed.connect(close_book)
@@ -32,6 +36,25 @@ func _ready() -> void:
 		page.add_theme_font_override("normal_font",preload("res://assets/fonts/NotoSansJP.ttf"))
 		page.add_theme_font_size_override("normal_font_size",18)
 		rows.add_child(page);journal_entries[id] = page
+	sketch_image = TextureRect.new();sketch_image.texture = MysteriousSketch.TEXTURE
+	sketch_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sketch_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	sketch_image.custom_minimum_size = Vector2(0,240);sketch_image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sketch_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rows.move_child(journal_entries.sketch,rows.get_child_count()-1)
+	rows.add_child(sketch_image)
+	sketch_button = Button.new();sketch_button.text = "絵を見る";sketch_button.custom_minimum_size.y = 44
+	sketch_button.add_theme_font_override("font",preload("res://assets/fonts/NotoSansJP.ttf"))
+	rows.add_child(sketch_button)
+	# Keep the special page immediately after the final ordinary record.
+	rows.move_child(journal_entries.sketch,8);rows.move_child(sketch_image,9);rows.move_child(sketch_button,10)
+	sketch_review = preload("res://scenes/story/mysterious_sketch.tscn").instantiate();add_child(sketch_review)
+	sketch_review.mouse_filter = Control.MOUSE_FILTER_STOP
+	sketch_close = Button.new();sketch_close.text = "×";sketch_review.add_child(sketch_close)
+	sketch_close.add_theme_font_override("font",preload("res://assets/fonts/NotoSansJP.ttf"))
+	sketch_close.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+	sketch_close.pressed.connect(close_sketch)
+	sketch_button.pressed.connect(open_sketch)
 	journal_scroll.visible = false
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES:
 		var label := Label.new()
@@ -77,6 +100,9 @@ func configure(core_rect: Rect2, view_size: Vector2) -> void:
 	$Panel/Scroll.size = $Panel.size - Vector2(28, top + 14)
 	journal_scroll.position = $Panel/Scroll.position
 	journal_scroll.size = $Panel/Scroll.size
+	sketch_review.configure(view_size,core_rect)
+	sketch_close.size = $Panel/Close.size
+	sketch_close.position = Vector2(core_rect.end.x-sketch_close.size.x,core_rect.position.y)
 	for label: Label in entries.values():
 		label.add_theme_font_size_override("font_size", maxi(14, int(ceil(11.0 / scale))))
 
@@ -96,9 +122,18 @@ func show_journal(enabled: bool) -> void:
 	fish_tab.disabled = not enabled;journal_tab.disabled = enabled
 	_refresh()
 
+func open_sketch() -> void:
+	if not visible or not journal_mode or not progress.main_ending_seen:return
+	sketch_review.show_card({"stage":"sketch","text":"最後のページには、\n見覚えのない絵が残っていた。"})
+	sketch_review.step(0.5)
+
+func close_sketch() -> void:
+	sketch_review.finish()
+
 func close_book() -> void:
 	if not visible:
 		return
+	close_sketch()
 	visible = false
 	if _owns_pause:
 		get_tree().paused = false
@@ -110,11 +145,22 @@ func _exit_tree() -> void:
 		get_tree().paused = false
 
 func _input(event: InputEvent) -> void:
+	if visible and sketch_review.visible:
+		if event is InputEventScreenTouch and event.pressed:
+			if sketch_close.get_global_rect().has_point(event.position):close_sketch()
+			get_viewport().set_input_as_handled()
+		elif event is InputEventMouseButton and event.pressed:
+			if sketch_close.get_global_rect().has_point(event.position):close_sketch()
+			get_viewport().set_input_as_handled()
+		return
 	if visible and event is InputEventScreenTouch and event.pressed and $Panel/Close.get_global_rect().has_point(event.position):
 		close_book()
 		get_viewport().set_input_as_handled()
 	elif visible and event is InputEventScreenTouch and event.pressed and (fish_tab.get_global_rect().has_point(event.position) or journal_tab.get_global_rect().has_point(event.position)):
 		show_journal(journal_tab.get_global_rect().has_point(event.position))
+		get_viewport().set_input_as_handled()
+	elif visible and journal_mode and sketch_button.visible and event is InputEventScreenTouch and event.pressed and sketch_button.get_global_rect().has_point(event.position) and journal_scroll.get_global_rect().has_point(event.position):
+		open_sketch()
 		get_viewport().set_input_as_handled()
 	elif visible and not journal_mode and event is InputEventScreenTouch and event.pressed and hidden_entry.visible and hidden_entry.get_global_rect().has_point(event.position) and $Panel/Scroll.get_global_rect().has_point(event.position):
 		progress.mark_hidden_entry()
@@ -138,6 +184,8 @@ func _refresh() -> void:
 	if progress.no00_contacted or progress.hidden_entry_seen:
 		_show_no00()
 	var pages := NarrativeData.pages(progress)
+	sketch_image.visible = "sketch" in pages
+	sketch_button.visible = "sketch" in pages
 	for id: String in NarrativeData.PAGE_IDS:
 		var entry: RichTextLabel = journal_entries[id]
 		entry.visible = id in pages

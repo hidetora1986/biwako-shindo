@@ -18,12 +18,15 @@ var skip_button: Button
 var old_mark: Line2D
 var new_mark: Line2D
 var safe := Rect2()
+var mysterious_sketch: MysteriousSketch
 var _font: Font = preload("res://assets/fonts/NotoSansJP.ttf")
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 120
 	theme = preload("res://assets/ui/pixel_theme.tres")
+	mysterious_sketch = preload("res://scenes/story/mysterious_sketch.tscn").instantiate()
+	add_child(mysterious_sketch)
 	panel = Panel.new(); add_child(panel)
 	heading = Label.new();panel.add_child(heading)
 	heading.add_theme_font_override("font",_font)
@@ -50,6 +53,7 @@ func setup(controller: Node2D) -> void:
 
 func configure(view_size: Vector2, safe_area: Rect2) -> void:
 	size = view_size;safe = safe_area
+	mysterious_sketch.configure(view_size,safe_area)
 	panel.size = Vector2(minf(540,safe.size.x),150)
 	panel.position = Vector2(safe.get_center().x-panel.size.x/2,safe.get_center().y-35)
 	heading.position = Vector2(12,10);heading.size = Vector2(panel.size.x-24,24)
@@ -67,7 +71,7 @@ func begin(kind: String) -> void:
 	if kind == "opening":
 		for line: String in NarrativeData.content().opening: steps.append({"text":line,"seconds":5.0,"heading":""})
 	elif kind == "main":
-		steps = [{"text":"","seconds":3.0,"heading":""},{"text":"湖底まで行った。\nこれで全部や。","seconds":5.0,"heading":"祖父の釣果帳"},{"text":"……帰ろう。","seconds":3.0,"heading":""},{"text":"","seconds":2.0,"heading":""},{"text":"琵琶湖深度","seconds":3.0,"heading":"MAIN END"}]
+		for page: Dictionary in JSON.parse_string(FileAccess.get_file_as_string(MysteriousSketch.CARDS_PATH)).cards:steps.append(page)
 	elif kind == "cut":
 		steps = [{"text":"","seconds":2.0,"heading":""},{"text":"","seconds":4.0,"heading":"祖父の釣果帳"},{"text":"もう、来ない。","seconds":3.0,"heading":""},{"text":"","seconds":1.0,"heading":""}]
 	else:
@@ -88,6 +92,10 @@ func _shore() -> void:
 
 func _render() -> void:
 	var page: Dictionary = steps[section]
+	if mode == "main" and not credits:
+		mysterious_sketch.show_card(page)
+	else:
+		mysterious_sketch.finish()
 	var paper: bool = page.heading == "祖父の釣果帳"
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color("bec5ab") if paper else Color(0.06,0.15,0.19,0.94)
@@ -97,7 +105,7 @@ func _render() -> void:
 	text.add_theme_color_override("font_color",Color("314845") if paper else Color("e0eee1"))
 	heading.add_theme_color_override("font_color",Color("51605b") if paper else Color("c4d3c9"))
 	heading.text = page.heading;text.text = page.text
-	panel.visible = not page.text.is_empty() or not page.heading.is_empty()
+	panel.visible = (not page.text.is_empty() or not page.heading.is_empty()) and not (mode == "main" and not credits)
 	_update_marks()
 	queue_redraw()
 
@@ -115,6 +123,7 @@ func step(delta: float) -> void:
 		shadow_remaining = maxf(0,shadow_remaining-delta)
 		if shadow_remaining == 0:flow.hidden_route.visual.title_shadow = false;flow.hidden_route.visual.queue_redraw()
 	if not active: return
+	mysterious_sketch.step(delta)
 	elapsed += delta
 	while active and elapsed >= float(steps[section].seconds):
 		elapsed -= float(steps[section].seconds)
@@ -131,6 +140,7 @@ func skip() -> void:
 	else: _finish_content()
 
 func _finish_content() -> void:
+	mysterious_sketch.finish()
 	var progress: GameProgress = flow.progress
 	if mode == "opening":
 		progress.opening_seen = true;progress.changed.emit()
@@ -152,6 +162,7 @@ func _finish_content() -> void:
 
 func _finish() -> void:
 	active = false;panel.visible = false;skip_button.visible = false
+	mysterious_sketch.finish()
 	_update_marks();queue_redraw()
 	flow.state = flow.State.TITLE;flow.ending_screen.show_title()
 	flow.ending_screen.get_node("Clear").visible = mode == "main"
