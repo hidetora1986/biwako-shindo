@@ -5,6 +5,7 @@
 | 対象 | 出所・扱い |
 | --- | --- |
 | 魚No.01〜15、船、空、湖、山、湖底、UIアイコン | Repository内GDScriptによる自作プロシージャル／Placeholder。外部画像を取得していない |
+| Opening専用背景4シーン | OpenAI画像生成による新規Placeholderイラスト。既存魚/HUDの流用や外部著作物のダウンロードなし。詳細: `assets/opening/README.md` |
 | No.00の水中曲線・ソナー反応 | 自作Control描画。全身素材はない |
 | 音 | 自作WAV生成。94Hzの短いノックと低音量ライン音。正式BGMはない |
 | 日本語フォント | 既存Web版の`assets/fonts/NotoSansJP.ttf`を物語UIにも利用。SIL Open Font License 1.1（同ディレクトリのOFL.txt参照）。CreditsにNoto Sans JPを記載。OSのSystemFont Fallbackも維持 |

@@ -17,8 +17,8 @@ func _run() -> void:
 	var story: NarrativeScreen = _flow.story
 	_check(story.active and story.mode == "opening" and _flow.state == FLOW.State.NARRATIVE, "New Game Opening")
 	_check(not _flow.request_cast() and not _flow.request_shop() and not _flow.request_book(), "Opening blocks underlying input")
-	_check(NarrativeData.content().opening.size() == 4 and story.steps.size()*5 == 20, "Four quiet cards / 20 seconds")
-	_step(20.1)
+	_check(story.opening.backgrounds.size() == 4 and is_equal_approx(story.steps.reduce(func(sum, card):return sum+float(card.seconds),0.0),23.6), "Four image scenes / 23.6 seconds")
+	_step(23.7)
 	_check(_flow.state == FLOW.State.READY and _flow.progress.opening_seen and not story.active, "Opening naturally finishes and saves")
 	var loaded := GameProgress.new()
 	_check(_flow.save_manager.load_into(loaded) and loaded.opening_seen, "Opening flag reload")

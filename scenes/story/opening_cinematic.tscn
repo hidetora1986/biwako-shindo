@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/story/opening_cinematic.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/opening/room.tres" id="2"]
+[ext_resource type="Texture2D" path="res://assets/opening/journal.tres" id="3"]
+[ext_resource type="Texture2D" path="res://assets/opening/mystery.tres" id="4"]
+[ext_resource type="Texture2D" path="res://assets/opening/decision.tres" id="5"]
+
+[node name="OpeningCinematic" type="Control"]
+mouse_filter = 2
+script = ExtResource("1")
+backgrounds = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
+
+[node name="Matte" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.10,0.12,0.11,1)
+
+[node name="Art" type="Control" parent="."]
+clip_contents = true
+mouse_filter = 2
+
+[node name="Previous" type="TextureRect" parent="Art"]
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Current" type="TextureRect" parent="Art"]
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="ColorRect" parent="."]
+mouse_filter = 2
+color = Color(0.08,0.10,0.09,0)
+
+[node name="SubtitleBand" type="ColorRect" parent="."]
+mouse_filter = 2
+color = Color(0,0,0,0.70)
+
+[node name="Subtitle" type="Label" parent="SubtitleBand"]
+mouse_filter = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 0

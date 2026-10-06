@@ -5,7 +5,7 @@ Working branch: `feature/narrative-ending-v1`. Public Web deployment is unchange
 
 ## Presentation
 
-The unnamed protagonist has come to clear their grandfather's unused boat. Four quiet cards introduce one final fishing trip, without anticipating the horror. A fresh save shows the Opening once (20 seconds); SKIP begins ordinary fishing immediately. Established v1 saves retain their progress and skip the added Opening.
+The unnamed protagonist has come to clear their grandfather's unused boat. The refreshed four-scene cinematic introduces the supplied journal-to-lake investigation, without identifying the mystery. A fresh save shows the Opening once (23.6 seconds); SKIP begins ordinary fishing immediately. See `opening-cinematic-v1/README.md` for the exact sequence and subtitle layout. Established v1 saves retain their progress and skip the added Opening.
 
 The Fish Book contains a separate **記録** tab. Journal entries are short, data-driven in `data/story/narrative-v1.json`, and unlock from existing discoveries and progression. There is no additional persistent lake HUD button, tutorial overlay, or hidden-route checklist. First night turns one small page near the boat; knocks never open the book automatically.
 

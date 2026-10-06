@@ -15,6 +15,7 @@ var panel: Panel
 var text: Label
 var heading: Label
 var skip_button: Button
+var opening: OpeningCinematic
 var old_mark: Line2D
 var new_mark: Line2D
 var safe := Rect2()
@@ -24,6 +25,8 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 120
 	theme = preload("res://assets/ui/pixel_theme.tres")
+	opening = preload("res://scenes/story/opening_cinematic.tscn").instantiate()
+	add_child(opening)
 	panel = Panel.new(); add_child(panel)
 	heading = Label.new();panel.add_child(heading)
 	heading.add_theme_font_override("font",_font)
@@ -50,6 +53,7 @@ func setup(controller: Node2D) -> void:
 
 func configure(view_size: Vector2, safe_area: Rect2) -> void:
 	size = view_size;safe = safe_area
+	opening.configure(view_size,safe_area)
 	panel.size = Vector2(minf(540,safe.size.x),150)
 	panel.position = Vector2(safe.get_center().x-panel.size.x/2,safe.get_center().y-35)
 	heading.position = Vector2(12,10);heading.size = Vector2(panel.size.x-24,24)
@@ -65,7 +69,7 @@ func begin(kind: String) -> void:
 	mode = kind;active = true;credits = false;section = 0;elapsed = 0
 	steps = []
 	if kind == "opening":
-		for line: String in NarrativeData.content().opening: steps.append({"text":line,"seconds":5.0,"heading":""})
+		for card: Dictionary in opening.script_data.cards:steps.append({"text":card.text,"seconds":card.seconds,"heading":""})
 	elif kind == "main":
 		steps = [{"text":"","seconds":3.0,"heading":""},{"text":"湖底まで行った。\nこれで全部や。","seconds":5.0,"heading":"祖父の釣果帳"},{"text":"……帰ろう。","seconds":3.0,"heading":""},{"text":"","seconds":2.0,"heading":""},{"text":"琵琶湖深度","seconds":3.0,"heading":"MAIN END"}]
 	elif kind == "cut":
@@ -88,6 +92,10 @@ func _shore() -> void:
 
 func _render() -> void:
 	var page: Dictionary = steps[section]
+	if mode == "opening" and not credits:
+		panel.visible = false;opening.show_card(section);_update_marks();queue_redraw()
+		return
+	opening.finish()
 	var paper: bool = page.heading == "祖父の釣果帳"
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color("bec5ab") if paper else Color(0.06,0.15,0.19,0.94)
@@ -115,6 +123,7 @@ func step(delta: float) -> void:
 		shadow_remaining = maxf(0,shadow_remaining-delta)
 		if shadow_remaining == 0:flow.hidden_route.visual.title_shadow = false;flow.hidden_route.visual.queue_redraw()
 	if not active: return
+	if mode == "opening":opening.step(delta)
 	elapsed += delta
 	while active and elapsed >= float(steps[section].seconds):
 		elapsed -= float(steps[section].seconds)
@@ -135,6 +144,7 @@ func _finish_content() -> void:
 	if mode == "opening":
 		progress.opening_seen = true;progress.changed.emit()
 		active = false;panel.visible = false;skip_button.visible = false
+		opening.finish()
 		flow._set_cinematic(false);flow.state = flow.State.READY;flow._refresh_ui()
 		return
 	if mode == "main":
