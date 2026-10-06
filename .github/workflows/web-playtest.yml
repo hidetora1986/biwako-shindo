@@ -19,9 +19,9 @@ jobs:
     if: github.ref == 'refs/heads/release/web-test'
     runs-on: ubuntu-latest
     env:
-      XDG_DATA_HOME: ${{ runner.temp }}/godot-data
-      XDG_CACHE_HOME: ${{ runner.temp }}/godot-cache
-      XDG_CONFIG_HOME: ${{ runner.temp }}/godot-config
+      XDG_DATA_HOME: /tmp/biwako-godot-data
+      XDG_CACHE_HOME: /tmp/biwako-godot-cache
+      XDG_CONFIG_HOME: /tmp/biwako-godot-config
     steps:
       - uses: actions/checkout@v4
       - name: Install official Godot 4.6.3 and templates
