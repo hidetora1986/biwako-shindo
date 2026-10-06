@@ -124,3 +124,7 @@ godot --headless --path . --script tests/full_game_stress.gd
 godot --headless --path . --script tests/rc1_save_stress.gd
 godot --headless --path . --script tests/rc1_postgame_recovery.gd
 ```
+
+## Smartphone Web Play Test
+
+`release/web-test`では指定RC1のWeb Release ExportとGitHub Pages Workflowを用意しています。Pages設定は連携権限不足で未完了です。公開状態・スマホ設定・保存制限は[Web Play Test手順](docs/release/web-playtest.md)を確認してください。

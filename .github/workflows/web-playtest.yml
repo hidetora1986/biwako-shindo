@@ -1,0 +1,54 @@
+name: Smartphone Web Play Test
+
+on:
+  push:
+    branches: [release/web-test]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: biwako-pages-web-test
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/release/web-test'
+    runs-on: ubuntu-latest
+    env:
+      XDG_DATA_HOME: ${{ runner.temp }}/godot-data
+      XDG_CACHE_HOME: ${{ runner.temp }}/godot-cache
+      XDG_CONFIG_HOME: ${{ runner.temp }}/godot-config
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install official Godot 4.6.3 and templates
+        run: bash tools/install-godot-web.sh "$RUNNER_TEMP/godot"
+      - name: Import project
+        run: '"$RUNNER_TEMP/godot/godot" --headless --editor --path . --import --quit'
+      - name: Export release single-thread Web build
+        run: |
+          mkdir -p build/web
+          "$RUNNER_TEMP/godot/godot" --headless --path . --export-release "Web Playtest" build/web/index.html
+          test -s build/web/index.html
+          test -s build/web/index.wasm
+          test -s build/web/index.pck
+          touch build/web/.nojekyll
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

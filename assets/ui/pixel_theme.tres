@@ -1,7 +1,10 @@
-[gd_resource type="Theme" load_steps=9 format=3]
+[gd_resource type="Theme" load_steps=10 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansJP.ttf" id="web_jp"]
 
 [sub_resource type="SystemFont" id="Font_jp"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
+fallbacks = Array[Font]([ExtResource("web_jp")])
 
 [sub_resource type="StyleBoxFlat" id="Panel"]
 bg_color = Color(0.055, 0.13, 0.20, 0.95)

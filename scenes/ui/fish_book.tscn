@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/fish_book.gd" id="1_shop"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansJP.ttf" id="web_jp"]
+
 [sub_resource type="SystemFont" id="Font_jp"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
+fallbacks = Array[Font]([ExtResource("web_jp")])
 [sub_resource type="Theme" id="Theme_shop"]
 default_font = SubResource("Font_jp")
 default_font_size = 15

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
 [ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
@@ -18,8 +18,11 @@
 
 [ext_resource type="Script" path="res://scripts/visual/pixel_ui_visual.gd" id="12_ui_visual"]
 
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansJP.ttf" id="web_jp"]
+
 [sub_resource type="SystemFont" id="Font_catch"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
+fallbacks = Array[Font]([ExtResource("web_jp")])
 
 [sub_resource type="StyleBoxFlat" id="Style_money"]
 bg_color = Color(0.055, 0.13, 0.20, 0.92)

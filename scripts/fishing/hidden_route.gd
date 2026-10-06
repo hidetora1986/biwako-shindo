@@ -138,6 +138,8 @@ func layout() -> void:
 
 func refresh_lure() -> void:
 	if lure_button == null: return
+	# Browser viewport changes must also reposition the postgame controls.
+	if OS.has_feature("web"): layout()
 	var postgame_night: bool = flow.progress.main_ending_seen and flow.progress.night_unlocked
 	if not flow.progress.anonymous_lure_obtained and not lure_button.visible and not night_button.visible and not postgame_night: return
 	var idle: bool = stage == Stage.INACTIVE and flow.state == flow.State.READY and not flow._shop_open and not flow._book_open
