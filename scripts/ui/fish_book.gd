@@ -90,6 +90,7 @@ func open_book() -> void:
 	_refresh()
 
 func show_journal(enabled: bool) -> void:
+	$Panel.add_theme_stylebox_override("panel",ProductionSkin.panel("journal" if enabled else "paper"))
 	journal_mode = enabled
 	$Panel/Scroll.visible = not enabled;journal_scroll.visible = enabled
 	$Panel/Title.text = "祖父の釣果帳" if enabled else "FISH BOOK"

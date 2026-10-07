@@ -27,6 +27,27 @@ func _ready() -> void:
 		lake.populate_depth_band(band,120,0,true)
 	flow._hud.get_node("AreaLabel").text=LakeAreas.DATA[lake.current_area].name
 	lake.layout_for_size(lake.view_size)
+	if target=="fish_mid":lake.populate_depth_band(2,120,3,true)
+	if target=="fish_late":lake.populate_depth_band(4,120,3,true)
+	if target=="boss":
+		flow.progress.levels={"rod":5,"reel":5,"line":5,"sonar":5}
+		flow.progress.night_unlocked=true
+		flow.progress.fish_records["No.14"].discovered=true
+		lake.current_area=LakeAreas.CENTER;flow.progress.current_area=LakeAreas.CENTER
+		lake.populate_depth_band(6,120,0,true)
+		flow.boss_encounter.try_spawn(lake,flow.progress,112)
+		flow.boss_encounter.reserve(flow._fish_container)
+		flow.environment.value=2;flow.environment.target=2;flow.environment._apply()
+	if target.begins_with("hidden_"):
+		var stage:String=target.trim_prefix("hidden_").to_upper()
+		flow.hidden_route.debug_stage(HiddenRoute.Stage[stage])
+		flow.hidden_route.step(0)
+	if target in ["shop","book","journal","map"]:
+		if target=="shop":flow.request_shop()
+		elif target=="map":flow.request_area()
+		else:
+			flow.request_book()
+			if target=="journal":flow._hud.get_node("FishBook").show_journal(true)
 	flow.set_physics_process(false)
 	for i in range(20):await get_tree().process_frame
 	if OS.has_feature("web"):JavaScriptBridge.eval("window.fullVisualReady=true",true)

@@ -16,7 +16,7 @@ func _build() -> void:
 	backdrop = Node2D.new();backdrop.name = "ProductionBackdrop";backdrop.set_script(preload("res://scripts/visual/production/production_backdrop.gd"));backdrop.lake=lake;backdrop.flow=flow;lake.add_child(backdrop)
 	# Move the raster planes before existing boat/fish, preserving their draw order.
 	lake.move_child(backdrop,0)
-	water = Node2D.new();water.name="ProductionWater";water.set_script(preload("res://scripts/visual/golden/golden_water.gd"));water.lake=lake;water.boat=lake.get_node("Lake/Boat");lake.add_child(water)
+	water = Node2D.new();water.name="ProductionWater";water.set_script(preload("res://scripts/visual/production/production_water.gd"));water.lake=lake;water.flow=flow;water.boat=lake.get_node("Lake/Boat");lake.add_child(water)
 	backdrop.visible=false;water.visible=false
 func _process(delta: float) -> void:
 	timer -= delta

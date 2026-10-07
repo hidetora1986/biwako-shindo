@@ -53,6 +53,8 @@ func _decorate() -> void:
 		var label: Label = shop._labels[category]
 		label.add_theme_stylebox_override("normal", PIXEL_THEME.get_stylebox("panel", "PanelContainer"))
 
+	ProductionSkin.decorate(hud)
+
 func _refresh_icons() -> void:
 	var book: Control = get_parent().get_node("FishBook")
 	for fish: FishFightProfile in GameProgress.FISH_PROFILES:

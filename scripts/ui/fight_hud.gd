@@ -19,7 +19,7 @@ func display(fight: FishingFight) -> void:
 
 func _draw() -> void:
 	var font := ThemeDB.fallback_font
-	draw_style_box(_panel(), Rect2(Vector2.ZERO, size))
+	draw_style_box(ProductionSkin.panel("instrument"), Rect2(Vector2.ZERO, size))
 	var tone := Color("a2dacb").lerp(Color("e7cf7c"), clampf((tension - 45.0) / 40.0, 0.0, 1.0))
 	if tension >= 90:
 		tone = Color("e7cf7c").lerp(Color("f4e3a3"), clampf((tension - 85.0) / 15.0, 0.0, 1.0))

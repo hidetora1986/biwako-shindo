@@ -64,6 +64,8 @@ func configure(core: Rect2, view_size: Vector2) -> void:
 	save_button.size = Vector2(236, 44)
 	save_button.position = Vector2(14, panel.size.y - 48)
 
+	ProductionSkin.layout_map(self)
+
 func open_map() -> void:
 	_opening_generation += 1
 	var generation := _opening_generation
