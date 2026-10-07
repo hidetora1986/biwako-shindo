@@ -12,7 +12,7 @@ South: inhabited, inviting, shore details. North shore: wider water, cooler, tal
 
 ## Depth
 
-0–15 clear cyan, grass/gravel/driftwood. 15–30 cool green, fewer plants. 30–50 blue-green, weak light and scattered bed. 50–65 dark blue, silt silhouettes. 65–85 cold navy, almost no rays. 85–100 near-black blue, No.14 most readable. 100–120 muddy rock/old structural fragments, never total black. Read existing depth/time continuously; crossfade art layers, do not change unlock/spawn/depth physics.
+0–15 clear cyan, grass/gravel/driftwood. 15–30 cool green, fewer plants. 30–50 blue-green, weak light and scattered bed. 50–65 dark blue, silt silhouettes. 65–85 cold navy, almost no rays. 85–100 near-black blue, No.14 most readable. 100–120 muddy rock/submerged wood silhouettes, never total black. Deep packs crop the original central mud/gravel area to exclude shallow reed beds and surface caustic detail. Read existing depth/time continuously; crossfade art layers, do not change unlock/spawn/depth physics.
 
 ## Boat / fish
 

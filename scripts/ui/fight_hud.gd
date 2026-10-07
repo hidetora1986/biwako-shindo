@@ -7,8 +7,10 @@ var resistance: int = 0
 var zone: String = "SAFE"
 var holding: bool = false
 var boss_hint: String = ""
+var distance_fraction: float = 1.0
 
 func display(fight: FishingFight) -> void:
+	distance_fraction = fight.fish_distance
 	tension = fight.tension
 	stamina_fraction = fight.stamina / maxf(fight.profile.max_stamina, 1.0)
 	resistance = fight.resistance
@@ -50,6 +52,8 @@ func _draw() -> void:
 	draw_string(font, Vector2(size.x - 135, 49), hint, HORIZONTAL_ALIGNMENT_RIGHT, 125, 12, tone)
 	draw_rect(Rect2(10, 55, size.x - 20, 6), Color("142f39"))
 	draw_rect(Rect2(10, 55, (size.x - 20) * stamina_fraction, 6), Color("9cb9ab"))
+
+	draw_string(font,Vector2(142,17),"DIST %d%%" % int(distance_fraction*100),HORIZONTAL_ALIGNMENT_LEFT,-1,9,Color("8caead"))
 
 var _style: StyleBoxFlat
 func _panel() -> StyleBoxFlat:

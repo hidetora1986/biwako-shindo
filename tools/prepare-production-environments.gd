@@ -26,17 +26,22 @@ func _initialize() -> void:
 				layer.blit_rect(graded,Rect2i(0,bands[i],1280,bands[i+1]-bands[i]),Vector2i(0,bands[i]))
 				if time=="night" and i==0:
 					# Small moon and fixed star pattern, not a gameplay weather/time system.
-					layer.fill_rect(Rect2i(354,27,14,14),Color("d5dec6"))
+					layer.fill_rect(Rect2i(850,27,14,14),Color("d5dec6"))
 					for n in range(48):layer.set_pixel(posmod(n*197,1274)+3,posmod(n*37,42)+3,Color("62838f"))
 				assert(layer.save_png("res://assets/visual/v2/environment/%s/%s/%s.png" % [area,time,names[i]])==OK)
 		if area=="north_shore":
 			for i in range(7):
 				var band=["shallow","mid","lower_mid","deep","cold","dark","abyss"][i]
 				var water:=under.duplicate()
+				# Deep water excludes the shallow reed beds / caustic surface pattern.
+				# Reuse the original central mud, gravel and submerged wood at a closer scale.
+				if i>=3:
+					water=under.get_region(Rect2i(384,80+i*8,512,300-i*8))
+					water.resize(1280,448,Image.INTERPOLATE_NEAREST)
 				var tone:Color=[Color("ffffff"),Color("a3c9d0"),Color("6f9da9"),Color("456a86"),Color("294b66"),Color("16334e"),Color("102c40")][i]
 				for y in range(448):
 					for x in range(1280):
-						var c:Color=water.get_pixel(x,y);var depth_fog:float=i*.075
+						var c:Color=water.get_pixel(x,y);var depth_fog:float=i*.095
 						c=(c*tone).lerp(Color("0d2536"),depth_fog)
 						water.set_pixel(x,y,c)
 				assert(water.save_png("res://assets/visual/v2/depth/%s/water.png" % band)==OK)

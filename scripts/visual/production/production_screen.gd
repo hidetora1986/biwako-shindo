@@ -33,11 +33,19 @@ func _process(delta: float) -> void:
 		if not was_active or last_size != lake.view_size:
 			golden._skin();golden.active=true;golden.apply_layout();golden.active=false
 			last_size = lake.view_size
+			golden.time_label.add_theme_color_override("font_color",Color("a3bcb9"))
 			golden.hud.get_node("AreaLabel").add_theme_color_override("font_color",Color("dae7d4"))
 			var badge:=StyleBoxFlat.new();badge.bg_color=Color(0.05,.13,.16,.75);badge.content_margin_left=5
 			golden.hud.get_node("AreaLabel").add_theme_stylebox_override("normal",badge)
-		golden.time_label.visible=true
+		golden.time_label.visible=flow.state not in [flow.State.TITLE,flow.State.ENDING,flow.State.NARRATIVE] and not flow.story.active
 		golden.time_label.text="NIGHT" if flow.environment.value>1.5 else ("SUNSET" if flow.environment.value>.65 else "MORNING")
 		golden.hud.get_node("SonarPlaceholder").golden_visual=true
+		if flow.state==flow.State.READY:golden.hud.set_area_range(lake.depth_origin_m,lake.depth_span_m)
 
+	if not active and was_active and not golden.active:
+		for path in ["Background/BackgroundSky","Background/BackgroundMountains","Underwater/WaterBackground","Lake/LakeSurface"]:lake.get_node(path).visible=true
+	if golden.active:
+		if was_active or golden.time_label.text!="MORNING":
+			golden.time_label.text="MORNING"
+			golden.time_label.add_theme_color_override("font_color",Color("365451"))
 	was_active=active

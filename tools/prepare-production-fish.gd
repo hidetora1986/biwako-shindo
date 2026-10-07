@@ -18,6 +18,19 @@ func _initialize() -> void:
 			var scale_factor:=minf(float(w-8)/art.get_width(),float(h-4)/art.get_height())
 			art.resize(maxi(1,int(art.get_width()*scale_factor)),maxi(1,int(art.get_height()*scale_factor)),Image.INTERPOLATE_NEAREST)
 			sheet.blit_rect(art,Rect2i(0,0,art.get_width(),art.get_height()),Vector2i(w-5-art.get_width(),col*h+(h-art.get_height())/2))
+		# Original contour accents keep unusual anatomy readable after tiny nearest packing.
+		if row==6:
+			for phase in range(3):
+				for x in range(w/3,w-17):
+					for y in range(h/2+5,h/2+8):sheet.set_pixel(x,phase*h+y,Color.TRANSPARENT)
+		if row==7:
+			for phase in range(3):
+				for x in range(18,w-18,7):
+					for y in [h/2-4,h/2+1]:
+						for step in range(3):
+							var point:=Vector2i(x+step,phase*h+y+step)
+							var c:Color=sheet.get_pixelv(point)
+							if c.a>.5:sheet.set_pixelv(point,c.lerp(Color("c1c7bd"),.22))
 		var category:String="midgame" if row<5 else "lategame"
 		assert(sheet.save_png("res://assets/visual/v2/fish/%s/%s.png" % [category,species[row]])==OK)
 	print("PRODUCTION_FISH_PACK PASS");quit()

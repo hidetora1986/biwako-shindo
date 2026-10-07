@@ -24,11 +24,12 @@ static func decorate(hud:Control) -> void:
 	shop.get_node("Panel").add_theme_stylebox_override("panel",panel("catalog"))
 	for category:String in shop._labels:
 		var row:HBoxContainer=shop._labels[category].get_parent()
-		var icon:=TextureRect.new();icon.texture=load("res://assets/visual/v2/hud/icons/%s.png" % category)
+		var icon:=TextureRect.new();icon.name="EquipmentIcon";icon.texture=load("res://assets/visual/v2/hud/icons/%s.png" % category)
 		icon.custom_minimum_size=Vector2(28,24);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;icon.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		row.add_child(icon);row.move_child(icon,0)
 		shop._labels[category].add_theme_stylebox_override("normal",panel("catalog"))
 		button(shop._buttons[category])
+	shop.progress.changed.connect(refresh_shop.bind(shop));refresh_shop(shop)
 	button(shop.get_node("Panel/Close"))
 	var book:Control=hud.get_node("FishBook")
 	book.get_node("Panel").add_theme_stylebox_override("panel",panel("paper"))
@@ -57,3 +58,9 @@ static func layout_map(map:Control) -> void:
 	if chart==null:return
 	chart.position=Vector2(14,58);chart.size=Vector2(156,map.panel.size.y-110)
 	for node:Button in map.buttons.values():node.position.x=180;node.size.x=map.panel.size.x-194
+
+static func refresh_shop(shop:Control) -> void:
+	var tiers := [Color("91a79d"),Color("c8e4d8"),Color("e6d28b"),Color("93b5c5"),Color("adc8bf")]
+	for category:String in shop._labels:
+		var icon:TextureRect=shop._labels[category].get_parent().get_node("EquipmentIcon")
+		icon.self_modulate=tiers[clampi(int(shop.progress.levels[category])-1,0,4)]

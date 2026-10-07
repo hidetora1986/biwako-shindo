@@ -36,8 +36,14 @@ func _process(_delta: float) -> void:
 	if _last_size != fish.size_cm:
 		_last_size = fish.size_cm
 		var size_ratio := 0.5 if fish.size_cm <= 0 else inverse_lerp(fish.fight_profile.min_size_cm, fish.fight_profile.max_size_cm, fish.size_cm)
-		# Nearest sampling; never extend outside the AI's configured frame bounds.
+		# Nearest visual sampling; controller frame bounds and collision are unchanged.
 		var factor := clampf(_base_scale * lerpf(0.94, 1.0, clampf(size_ratio, 0, 1)), 0.7, 1.0)
-		scale = Vector2.ONE * snappedf(factor * (1.35 if golden_enabled else 1.0), 0.025)
+		var silhouette_scale:float = 1.35 if golden_enabled or _species=="giant_catfish" else (1.15 if _species=="unknown_b" else 1.0)
+		scale = Vector2.ONE * snappedf(factor * silhouette_scale, 0.025)
 	var depth_tint := clampf(fish.depth_position / 50.0, 0, 1)
 	self_modulate = Color(1.0 - depth_tint * 0.12, 1.0 - depth_tint * 0.05, 1.0, 1.0)
+
+	if fish.depth_position > 50:
+		var shade:float = lerpf(1.0,0.56,clampf((fish.depth_position-50)/50,0,1))
+		if _species in ["unknown_b","lake_master"]:shade=maxf(shade,0.88)
+		self_modulate *= Color(shade,lerpf(shade,1.0,0.25),lerpf(shade,1.0,0.4),1.0)

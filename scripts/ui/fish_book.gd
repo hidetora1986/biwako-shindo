@@ -144,6 +144,6 @@ func _refresh() -> void:
 		entry.visible = id in pages
 		entry.text = "\n".join(NarrativeData.content().journal[id])
 		if id == "last":
-			entry.text = "日付なし\n\n[color=#84938b]│[/color]" + ("  [color=#dae4d3]│[/color]" if progress.hidden_contact_ending_seen else "")
+			entry.text = "日付なし\n\n[color=#675f4e]│[/color]" + ("  [color=#344841]│[/color]" if progress.hidden_contact_ending_seen else "")
 		if id == "deep":entry.modulate = Color(0.82,0.86,0.82,0.9)
 	$Panel/Wallet.text = "記録　%dページ" % pages.size() if journal_mode else "%d / %d 種 発見" % [found, GameProgress.FISH_PROFILES.size()]
