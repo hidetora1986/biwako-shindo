@@ -44,6 +44,7 @@ func _ready() -> void:
 		flow.active_fish=flow.boss_encounter.boss
 		flow.active_fish.hook()
 		flow.active_fish.position=Vector2(lake.view_size.x*.68,lake.surface_y+(lake.view_size.y-lake.surface_y)*.46)
+		flow._fight_origin_fraction=Vector2(.68,.46)
 		flow.fight=BossFishingFight.new();flow.fight.start(flow.active_fish.fight_profile,1.3,500,400)
 		flow.state=flow.State.FIGHTING
 		flow.environment.value=2;flow.environment.target=2;flow.environment._apply()

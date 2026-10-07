@@ -549,5 +549,16 @@
       "after_pck_bytes": 19719268
     },
     "physical_mobile_and_art": "MANUAL REVIEW REQUIRED"
+  },
+  "boss_capture_ratios": {
+    "result": "PASS",
+    "ratios": [
+      "16:9",
+      "19.5:9",
+      "20:9",
+      "640x360"
+    ],
+    "console_errors": [],
+    "fixture_note": "Boss capture initializes the existing hooked state and fight origin so resizing uses the ordinary fight pose. Production gameplay is unchanged."
   }
 }
