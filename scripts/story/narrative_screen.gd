@@ -61,6 +61,7 @@ func configure(view_size: Vector2, safe_area: Rect2) -> void:
 	var scale := maxf(0.1,float(get_window().size.y)/view_size.y)
 	skip_button.size = Vector2(maxf(96,44/scale),maxf(44,44/scale))
 	skip_button.position = Vector2(safe.end.x-skip_button.size.x,safe.position.y)
+	ProductionStory.caption(self)
 	_update_marks()
 	queue_redraw()
 
@@ -106,6 +107,7 @@ func _render() -> void:
 	heading.add_theme_color_override("font_color",Color("51605b") if paper else Color("c4d3c9"))
 	heading.text = page.heading;text.text = page.text
 	panel.visible = not page.text.is_empty() or not page.heading.is_empty()
+	ProductionStory.caption(self)
 	_update_marks()
 	queue_redraw()
 
@@ -113,7 +115,7 @@ func _update_marks() -> void:
 	if old_mark == null:return
 	old_mark.visible = active and not credits and ((mode == "cut" and section == 1) or (mode == "contact" and section == 0))
 	new_mark.visible = old_mark.visible and mode == "contact"
-	var center := panel.position + Vector2(panel.size.x*0.5,95)
+	var center := Vector2(size.x*0.58,size.y*.55)
 	old_mark.points = PackedVector2Array([center+Vector2(-10,-20),center+Vector2(-12,16)])
 	new_mark.points = PackedVector2Array([center+Vector2(12,-22),center+Vector2(12,18)])
 
@@ -177,13 +179,14 @@ func sync_progress(delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	if active and mode == "contact":draw_rect(Rect2(Vector2.ZERO,size),Color(0.015,0.025,0.04,0.98))
+	ProductionStory.paint(self)
+	if active and mode == "contact" and (credits or section != 0):draw_rect(Rect2(Vector2.ZERO,size),Color(0.015,0.025,0.04,0.98))
 	if flip_remaining > 0 and not active:
 		var boat: Vector2 = flow._boat.position
 		var width := 100 * absf(cos((1-flip_remaining)*PI))
 		draw_rect(Rect2(boat+Vector2(-50,-55),Vector2(maxf(2,width),38)),Color("cbd1b5"))
 		if width > 85:draw_string(_font,boat+Vector2(-47,-31),"北湖中央",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("374e50"))
-	if active and mode in ["main","cut"] and not credits:
+	if active and mode in ["main","cut"] and not credits and not (mode=="main" and section in [1,3]) and not (mode=="cut" and section==1):
 		var dock: Vector2 = flow._boat.position + Vector2(-100,7)
 		draw_rect(Rect2(dock,Vector2(84,6)),Color("766956"))
 		for x in [4,68]:draw_rect(Rect2(dock+Vector2(x,6),Vector2(5,22)),Color("4d5955"))

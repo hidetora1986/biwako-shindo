@@ -4,6 +4,8 @@ extends Control
 signal continued
 
 func _ready() -> void:
+	var english:=Label.new();english.text="BIWAKO SHINDO";english.position=Vector2(0,52);english.size=Vector2(500,22);english.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;english.add_theme_font_size_override("font_size",14);$Title.add_child(english)
+	ProductionSkin.button($Continue,true)
 	$Continue.pressed.connect(func():continued.emit())
 
 func configure(view_size: Vector2, safe: Rect2) -> void:

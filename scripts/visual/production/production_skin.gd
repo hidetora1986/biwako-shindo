@@ -39,6 +39,7 @@ static func decorate(hud:Control) -> void:
 	for id:String in book.journal_entries:
 		book.journal_entries[id].add_theme_color_override("default_color",Color("3e4940"))
 	for node:Button in [book.fish_tab,book.journal_tab,book.get_node("Panel/Close"),book.hidden_entry]:button(node)
+	ProductionStory.book_sketch(book)
 	var map:Control=hud.get_node("AreaMap")
 	map.panel.add_theme_stylebox_override("panel",panel("chart"))
 	var chart:=TextureRect.new();chart.name="NavigationChart";chart.texture=preload("res://assets/visual/v2/area_map/chart.png");chart.mouse_filter=Control.MOUSE_FILTER_IGNORE
