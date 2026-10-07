@@ -23,3 +23,7 @@ Original generated background: `assets/visual/golden/south_shore/south-shore-mor
 ## No.15 visual v2
 
 `assets/visual/boss/no15/`: original OpenAI-generated transparent pixel sprite sheet and offline nearest-neighbor preparation via `tools/prepare-boss-sprites.gd`. No external game assets. Runtime references shared raster atlas textures instead of generating pixels. Only No.15 art changes; no audio, story, progression or Save changes.
+
+## No.00 reference visual v2
+
+`assets/visual/hidden/no00/`: OpenAI image edit based on the user-provided No.00 night-lake reference. UI/boat/fish removed; original project boat and live instruments are drawn independently. High-resolution source is excluded from export via `.gdignore`; original offline Godot RGBA / nearest band preparation produces the runtime 640×360 PNG. No external asset download or new audio.
