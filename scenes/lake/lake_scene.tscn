@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/lake/lake_scene.gd" id="1_lake"]
 [ext_resource type="Script" path="res://scripts/lake/lake_background.gd" id="2_background"]
@@ -23,6 +23,8 @@
 [ext_resource type="Script" path="res://scripts/ui/area_map.gd" id="13_area_map"]
 
 [ext_resource type="Script" path="res://scripts/visual/golden/golden_screen.gd" id="golden"]
+
+[ext_resource type="Script" path="res://scripts/visual/production/production_screen.gd" id="production"]
 
 [sub_resource type="SystemFont" id="Font_catch"]
 font_names = PackedStringArray("Noto Sans CJK JP", "Hiragino Sans", "sans-serif")
@@ -466,3 +468,6 @@ script = ExtResource("13_area_map")
 
 [node name="GoldenVisual" type="Node" parent="."]
 script = ExtResource("golden")
+
+[node name="ProductionVisual" type="Node" parent="."]
+script = ExtResource("production")
