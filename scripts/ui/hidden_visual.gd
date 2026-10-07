@@ -89,12 +89,12 @@ func _process(_delta: float) -> void:
 func _draw_boat(alpha: float) -> void:
 	if not is_instance_valid(_boat):return
 	var point: Vector2 = _boat.position
-	draw_texture_rect(GoldenAssets.BOAT,Rect2(point+Vector2(-77,-61)*0.8,Vector2(154,64)*0.8),false,Color(0.65,0.72,0.77,alpha))
-	var grip := point+Vector2(-25,-30)*0.8
+	draw_texture_rect(GoldenAssets.BOAT,Rect2(point+Vector2(-77,-61)*0.55,Vector2(154,64)*0.55),false,Color(0.65,0.72,0.77,alpha))
+	var grip := point+Vector2(-25,-30)*0.55
 	var tip: Vector2 = _boat.rod_tip_position()
 	draw_line(grip,(grip+tip)*0.5+Vector2(0,3),Color(0.5,0.6,0.6,alpha),1)
 	draw_line((grip+tip)*0.5+Vector2(0,3),tip,Color(0.75,0.66,0.42,alpha),1)
-	var lamp := point+Vector2(16,-31)*0.8
+	var lamp := point+Vector2(16,-31)*0.55
 	draw_rect(Rect2(lamp-Vector2(3,2),Vector2(9,12)),Color(0.9,0.55,0.19,alpha*0.2))
 	draw_rect(Rect2(lamp,Vector2(3,7)),Color(1,0.8,0.4,alpha))
 	for i in range(4):draw_line(point+Vector2(11-i,5+i*4),point+Vector2(24+i,5+i*4),Color(0.9,0.63,0.26,alpha*(0.6-i*0.1)),1)
