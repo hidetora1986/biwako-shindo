@@ -17,6 +17,8 @@ static func fish_frames(species: String) -> SpriteFrames:
 	return frames
 
 static func fish_texture(species: String, phase: int = 1) -> Texture2D:
+	if GoldenAssets.FISH.has(species):return GoldenAssets.FISH[species].get_frame_texture("swim",posmod(phase,3))
+	if ProductionFish.SHEETS.has(species):return ProductionFish.texture(species,phase)
 	if species == "lake_master":
 		return BossPixelArt.texture(phase)
 	if species in ["thread_jaw","split_belly","reverse_scale","unknown_b"]:
