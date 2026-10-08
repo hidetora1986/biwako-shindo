@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#080d16">
+<title>見ないで。| 60秒ホラー</title>
+<style>
+:root{color-scheme:dark;--milk:#f3e9df;--mist:#9faebc;--pink:#e1b4b7}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#050a10;color:var(--milk);font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}body{display:flex;justify-content:center;align-items:center;min-height:100dvh;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#1b2935,#05080e 75%)}button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid #e8bec8;outline-offset:3px}.game{width:min(100%,1120px);position:relative;aspect-ratio:16/10;overflow:hidden;background:#111923;isolation:isolate;box-shadow:0 20px 100px #000e;touch-action:manipulation}canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}.game:after{content:"";inset:0;position:absolute;pointer-events:none;z-index:7;background:repeating-linear-gradient(0deg,transparent 0 3px,#000 4px 5px);opacity:.035}.shade{pointer-events:none;position:absolute;inset:0;z-index:5;box-shadow:inset 0 0 120px 45px #030508bf}.grain{position:absolute;inset:0;pointer-events:none;z-index:8;opacity:.17;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");mix-blend-mode:soft-light}.topbar{position:absolute;inset:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;padding:24px 28px;z-index:10;pointer-events:none}.topbar>*{pointer-events:auto}.topbar[hidden],.bottom[hidden],.scene-text[hidden],.overlay[hidden]{display:none}.stat-label{font-size:9px;letter-spacing:.28em;color:#a0adb7;font-weight:700}.stat-value{font-family:Georgia,serif;font-size:30px;line-height:1.25;letter-spacing:.08em;color:#e0d5cb;font-variant-numeric:tabular-nums}.clock{display:flex;gap:16px;align-items:center}.clock .stat-value{text-align:right}.mute{border:1px solid #e1e1d93b;color:#e7d4c8;background:#1018229a;border-radius:50%;width:42px;height:42px;font-size:19px;display:grid;place-items:center}.bottom{position:absolute;bottom:23px;left:0;right:0;z-index:10;text-align:center;pointer-events:none;font-size:11px;letter-spacing:.17em;color:#d1c5ba;text-shadow:0 1px 12px black;padding:0 12px}.scene-text{position:absolute;z-index:11;left:0;right:0;top:71%;text-align:center;font-size:clamp(18px,3.3vw,35px);font-weight:800;letter-spacing:.22em;text-shadow:0 1px 1px #000,0 0 15px #000;white-space:nowrap;pointer-events:none;transition:opacity .2s}.scene-text.horror{color:#f4e0dd;font-size:clamp(30px,5vw,66px);letter-spacing:.15em;animation:shake .12s infinite alternate}.overlay{position:absolute;inset:0;z-index:15;display:grid;place-items:center;text-align:center;background:radial-gradient(ellipse at center,#08121ccf 0%,#05070ef0 79%);padding:20px}.intro-content,.end-content{width:min(100%,590px);margin:auto;animation:appear .6s ease-out both}.eyemark{display:inline-grid;place-items:center;width:72px;height:72px;border:1px solid #cbaba873;border-radius:50%;margin-bottom:18px;position:relative}.eyemark:before{content:"";width:30px;height:15px;border:2px solid #e3b6b4;border-radius:100% 0/100% 0;transform:rotate(45deg)}.eyemark:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#e3b6b4}.kicker{font-size:10px;font-weight:700;letter-spacing:.38em;color:#bba49e}.game-title{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:600;font-size:clamp(48px,7vw,84px);letter-spacing:.22em;margin:13px 0 22px;text-shadow:0 5px 35px #000}.desc{font-size:clamp(12px,1.35vw,15px);line-height:2.15;letter-spacing:.08em;color:#e7d9cf}.desc strong{color:white;font-weight:800}.thin-rule{height:1px;width:56px;background:#bc9c98;margin:27px auto}.action{margin-top:28px;padding:14px 38px;background:#e5d0c5;color:#1b1e24;border:none;letter-spacing:.16em;font-weight:800;font-size:14px;min-height:50px;transition:background .2s,transform .2s}.action:hover{background:#fff3e9;transform:translateY(-2px)}.help{margin-top:16px;font-size:10px;color:#a7a2a6;letter-spacing:.14em}.end .game-title{font-size:clamp(48px,8vw,92px);color:#f3dcd6;animation:shiver 2s infinite}.end .desc{color:#c0b2b4}.flash{position:absolute;inset:0;z-index:12;background:#fff;pointer-events:none;opacity:0;transition:opacity .09s}.credits{position:absolute;z-index:1;bottom:10px;left:12px;color:#7e8b8f;font-size:8px;letter-spacing:.15em}@keyframes shake{from{transform:translate(-2px,-1px)}to{transform:translate(3px,2px)}}@keyframes shiver{0%,97%,100%{transform:translateX(0)}98%{transform:translateX(-3px)}99%{transform:translateX(3px)}}@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@media(max-width:650px){body{align-items:stretch}.game{width:100vw;height:100dvh;aspect-ratio:auto;box-shadow:none}.shade{box-shadow:inset 0 0 60px 12px #020508ad}.topbar{padding:calc(env(safe-area-inset-top) + 22px) 18px 14px}.clock{gap:8px}.stat-value{font-size:24px}.mute{width:39px;height:39px}.bottom{bottom:calc(env(safe-area-inset-bottom) + 26px);font-size:10px}.eyemark{width:58px;height:58px;margin-bottom:14px}.game-title{font-size:49px}.desc{line-height:2.05;font-size:13px}.action{margin-top:21px}.scene-text{top:69%}}
+@media(prefers-reduced-motion:reduce){.scene-text.horror{animation:none}.end .game-title{animation:none}}
+</style>
+</head>
+<body>
+<main class="game" id="game" aria-label="見ないで。60秒のタップ式ホラーゲーム">
+<canvas id="screen" aria-label="暗い部屋の女の子と現れる目"></canvas><div class="shade"></div><div class="grain"></div>
+<div class="topbar" id="hud" hidden><div><div class="stat-label">CLOSED EYES</div><div class="stat-value" id="count">00</div></div><div class="clock"><div><div class="stat-label" style="text-align:right">REMAINING</div><div class="stat-value" id="clock">01:00</div></div><button class="mute" id="mute" aria-label="音声を切り替える" title="音声を切り替える">♪</button></div></div>
+<div class="bottom" id="hint" hidden>現れた「目」をタップして、消してください。</div><div id="message" class="scene-text" hidden></div><div id="flash" class="flash"></div>
+<div class="overlay" id="startScreen"><div class="intro-content"><div class="eyemark" aria-hidden="true"></div><div class="kicker">A 60-SECOND HORROR EXPERIENCE</div><h1 class="game-title">見ないで。</h1><div class="desc">この女の子は、<strong>見られること</strong>を<br>ひどく怖がっています。<br><br>部屋のあちこちに現れる「目」を<br>タップして消してください。<br><strong>彼女を、助けてあげて。</strong></div><button class="action" id="start">彼女を助ける　→</button><div class="help">タップ・クリックで遊べます ｜ 音あり・イヤホン推奨</div></div></div>
+<div class="overlay end" id="endScreen" hidden><div class="end-content"><div class="kicker">THE END</div><h2 class="game-title">見ないで。</h2><div class="desc" id="endingLine">あなたが消していたのは、誰の目？</div><div class="thin-rule"></div><div class="kicker" id="result">CLOSED EYES — 00</div><button class="action" id="restart">もう一度、助ける　↻</button></div></div><div class="credits">A LITTLE HORROR GAME</div>
+</main>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('screen'),ctx=canvas.getContext('2d',{alpha:false});
+const stage=document.getElementById('game'),startScreen=document.getElementById('startScreen'),endScreen=document.getElementById('endScreen'),hud=document.getElementById('hud'),countEl=document.getElementById('count'),clockEl=document.getElementById('clock'),hint=document.getElementById('hint'),message=document.getElementById('message'),flash=document.getElementById('flash'),muteBtn=document.getElementById('mute');
+const VW=960,VH=600,DURATION=60,EMPTY_AT=45.6,RISE_AT=55.6,RUSH_AT=57.2;
+let state='intro',elapsed=0,startTime=0,lastFrame=0,eyes=[],particles=[],count=0,spawnAt=1.0,eyesId=1,viewX=0,viewW=VW,cssW=960,cssH=600,dpr=1,soundOn=true,sound=null,lastStage=-1,shake=0,tapFlash=0,history=[];
+const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.min(b,Math.max(a,n)),smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+function resize(){const r=stage.getBoundingClientRect();cssW=Math.max(1,r.width);cssH=Math.max(1,r.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(cssW*dpr);canvas.height=Math.round(cssH*dpr);viewW=VH*cssW/cssH;viewX=(VW-viewW)/2;}
+window.addEventListener('resize',resize,{passive:true});resize();
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function line(points,color,width=1){ctx.beginPath();ctx.moveTo(...points[0]);for(let i=1;i<points.length;i++)ctx.lineTo(...points[i]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke()}
+function ellipse(x,y,rx,ry,fill,stroke=null,lw=1){ctx.beginPath();ctx.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),0,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()}}
+function path(points,fill,stroke=null,lw=1){ctx.beginPath();ctx.moveTo(...points[0]);for(let i=1;i<points.length;i++)ctx.lineTo(...points[i]);ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke()}}
+function grad(x,y,r,inner,outer){let g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,inner);g.addColorStop(1,outer);return g}
+function room(t){
+ const wall=ctx.createLinearGradient(0,0,0,490);wall.addColorStop(0,'#172633');wall.addColorStop(.6,'#28323a');wall.addColorStop(1,'#161c28');ctx.fillStyle=wall;ctx.fillRect(-500,0,2000,600);
+ // aged wallpaper + corner geometry
+ for(let x=-480;x<1480;x+=46){ctx.fillStyle=(Math.round(x/46)%2)?'#d9dae005':'#070d1608';ctx.fillRect(x,30,20,421);line([[x,34],[x,454]],'#a7bcc20a',1)}
+ path([[0,0],[94,65],[90,440],[0,530]],'#101b25');path([[960,0],[869,62],[870,441],[960,538]],'#101820');
+ path([[0,0],[960,0],[868,64],[93,64]],'#101c25');line([[93,64],[867,64]],'#70818a27',3);line([[0,443],[960,443]],'#070e19',11);line([[0,450],[960,450]],'#a6a9a524',2);
+ const floor=ctx.createLinearGradient(0,446,0,600);floor.addColorStop(0,'#27272e');floor.addColorStop(1,'#121a25');ctx.fillStyle=floor;ctx.fillRect(0,451,960,149);
+ for(let i=-9;i<20;i++){let x=i*92;line([[480+(x-480)*.7,450],[x*1.9-380,600]],'#7d645632',2)}for(let y=475;y<=590;y+=(y-430)*.18)line([[0,y],[960,y]],'#050c1799',3);
+ // window with cold night light
+ ctx.fillStyle='#0a131f';ctx.fillRect(102,131,214,230);let wg=ctx.createLinearGradient(105,146,308,354);wg.addColorStop(0,'#52677e');wg.addColorStop(.5,'#203447');wg.addColorStop(1,'#0d1928');ctx.fillStyle=wg;ctx.fillRect(116,146,186,199);ellipse(253,190,26,26,'#c8cdcb33');line([[211,143],[211,345]],'#101821',9);line([[113,237],[309,237]],'#101821',9);ctx.strokeStyle='#425666';ctx.lineWidth=9;ctx.strokeRect(108,139,200,213);ctx.strokeStyle='#9aabb052';ctx.lineWidth=2;ctx.strokeRect(113,145,190,203);
+ path([[98,130],[151,130],[170,340],[136,354],[103,359]],'#34414c');path([[320,130],[286,130],[278,352],[305,352],[325,360]],'#34404d');for(let y=135;y<355;y+=35){line([[110,y],[125+(y%3)*3,y+18]],'#70829218',3);line([[305,y],[292,y+19]],'#8ca4b420',3)}
+ // light spill across the floor
+ path([[150,354],[282,354],[395,600],[35,600]],'#98b8d40d');
+ // closed door
+ ctx.fillStyle='#101821';ctx.fillRect(745,132,123,317);ctx.strokeStyle='#586470';ctx.lineWidth=7;ctx.strokeRect(748,137,118,308);ctx.strokeStyle='#59616b65';ctx.lineWidth=2;ctx.strokeRect(762,151,90,281);ctx.strokeRect(778,169,60,100);ctx.strokeRect(778,282,60,129);ellipse(837,310,4,4,'#b89b81');
+ // painting (haunted hint)
+ ctx.fillStyle='#0a101a';ctx.fillRect(590,130,95,107);ctx.strokeStyle='#6e625e';ctx.lineWidth=8;ctx.strokeRect(589,129,95,108);ctx.fillStyle='#172632';ctx.fillRect(599,138,76,88);line([[636,146],[625,192],[666,222]],'#5e657344',2);
+ // overhead hanging lamp
+ line([[479,0],[480,119]],'#657076',2);path([[442,121],[518,121],[538,147],[421,147]],'#202b32','#687582',3);ellipse(480,151,32,5,'#7d8c8470');
+ ctx.fillStyle=grad(480,240,280,'#b8c1aa12','#b8c1aa00');ctx.fillRect(200,60,560,510);
+ // fine imperfections
+ line([[322,82],[325,110],[317,139]],'#050e193b',2);line([[734,203],[722,225],[735,241]],'#6c777620',1);
+ const v=ctx.createRadialGradient(480,296,70,480,300,635);v.addColorStop(0,'#00000000');v.addColorStop(.62,'#03070942');v.addColorStop(1,'#000b15dc');ctx.fillStyle=v;ctx.fillRect(-300,-100,1500,800);
+}
+function chair(){
+ ellipse(481,522,118,25,'#00071194');ctx.fillStyle='#2a2731';roundRect(421,350,118,137,16);ctx.fill();ctx.strokeStyle='#69606a';ctx.lineWidth=6;ctx.stroke();
+ ctx.fillStyle='#1a1c25';roundRect(401,448,157,34,12);ctx.fill();ctx.fillStyle='#3e3339';ctx.fillRect(415,478,13,68);ctx.fillRect(531,478,13,68);
+}
+function girl(t,horror=0,standing=0){
+ ctx.save();const breath=Math.sin(t*3)*2*(1-standing);ctx.translate(0,breath);
+ const h=smooth(horror);
+ // shoulder-length hair behind face
+ ctx.fillStyle=h>.35?'#090b12':'#252530';
+ ctx.beginPath();ctx.moveTo(-52,-33);ctx.bezierCurveTo(-67,5,-69,57,-54,79);ctx.quadraticCurveTo(-40,95,-26,74);ctx.lineTo(28,74);ctx.quadraticCurveTo(57,95,57,73);ctx.bezierCurveTo(69,41,59,-15,46,-41);ctx.closePath();ctx.fill();
+ // legs & socks
+ ctx.fillStyle='#e8c4b6';roundRect(-35,158,28,58,10);ctx.fill();roundRect(8,158,28,58,10);ctx.fill();ctx.fillStyle='#d7d7ce';ctx.fillRect(-35,195,28,24);ctx.fillRect(8,195,28,24);
+ ellipse(-23,220,20,12,'#242530');ellipse(24,220,20,12,'#242530');
+ // dress, frill and cardigan
+ ctx.fillStyle='#d3c7be';path([[-39,65],[41,65],[62,181],[-58,181]],'#d5c5bb');ctx.fillStyle='#f2d9cd';ctx.fillRect(-56,170,114,9);
+ path([[-29,54],[-70,77],[-60,146],[-35,149],[-29,113]],'#b4c9c4');path([[29,54],[69,77],[60,146],[35,149],[28,113]],'#b4c9c4');
+ path([[-32,52],[0,80],[32,52],[37,151],[-37,151]],'#e0cfbc');
+ line([[0,78],[0,149]],'#b8aa9b',1);for(let y=89;y<149;y+=19)ellipse(0,y,2,2,'#a78e81');
+ // arms/hands resting on knees
+ ctx.strokeStyle='#b7c5bc';ctx.lineWidth=24;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-54,88);ctx.lineTo(-44,157);ctx.lineTo(-24,163);ctx.moveTo(54,88);ctx.lineTo(44,157);ctx.lineTo(24,163);ctx.stroke();ellipse(-25,168,13,9,'#e8bcb2');ellipse(25,168,13,9,'#e8bcb2');
+ // neck
+ ctx.fillStyle='#e4b6a7';roundRect(-15,42,30,33,8);ctx.fill();
+ // face shape
+ const skin=ctx.createLinearGradient(-49,-36,49,54);skin.addColorStop(0,h>.5?'#d5b3a6':'#f6daca');skin.addColorStop(1,h>.5?'#a17d7b':'#dda99c');
+ ctx.fillStyle=skin;ctx.beginPath();ctx.moveTo(-49,-19);ctx.bezierCurveTo(-50,16,-38,49,-8,59);ctx.quadraticCurveTo(0,64,9,59);ctx.bezierCurveTo(38,50,50,17,49,-19);ctx.bezierCurveTo(46,-73,-46,-72,-49,-19);ctx.fill();
+ // hair cap / bangs
+ ctx.fillStyle=h>.55?'#090b10':'#282936';ctx.beginPath();ctx.moveTo(-51,-21);ctx.bezierCurveTo(-64,-89,-11,-93,21,-77);ctx.bezierCurveTo(59,-69,58,-34,49,-16);ctx.lineTo(44,-29);ctx.lineTo(31,-36);ctx.lineTo(19,-33);ctx.lineTo(11,-40);ctx.lineTo(-1,-32);ctx.lineTo(-14,-38);ctx.lineTo(-29,-31);ctx.lineTo(-47,-13);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#68606b3b';path([[-29,-65],[-18,-72],[-11,-46]],'#5a535b62');path([[8,-70],[18,-65],[23,-46]],'#5a535b50');
+ // hair lock
+ path([[-52,-32],[-42,-31],[-35,38],[-58,65]],'#252630');path([[52,-32],[40,-29],[34,40],[58,65]],'#23242d');
+ // face: soft anime eyes vs entirely hollow
+ const blink=h<.1&&Math.sin(t*.35+1.6)>.993;
+ if(h<.38){
+ ellipse(-20,9,12,4,'#d7928b55');ellipse(21,9,12,4,'#d7928b55');
+ for(const xx of [-19,19]){
+ if(blink){line([[xx-10,-1],[xx+9,0]],'#59444d',2)}else{ellipse(xx,1,10,11,'#f1e7df');ellipse(xx,3,5.1,8.5,'#46424f');ellipse(xx+1,4,2.7,5.5,'#171926');ellipse(xx-2,-1,2,2.3,'#fff8f5');line([[xx-10,-7],[xx+9,-6]],'#4b3640',2)}
+ }
+ line([[-7,26],[7,26]],'#c78d8a',1.3);
+ }else{
+ const hp=smooth((h-.35)/.35);
+ for(const xx of [-20,20]){ellipse(xx,2,12+hp*7,13+hp*9,'#130b14');ellipse(xx,2,3,4,'#c84e5d');ctx.fillStyle='#380b19aa';path([[xx-7,13],[xx+1,14],[xx-4,33+hp*23]],'#4f121f9c')}
+ const mw=12+hp*35;ctx.beginPath();ctx.moveTo(-mw,29);ctx.quadraticCurveTo(0,40+hp*29,mw,29);ctx.quadraticCurveTo(0,39,mw*-1,29);ctx.fillStyle='#1b0b12';ctx.fill();if(hp>.7){for(let i=-3;i<=3;i++){const x=i*mw/4;line([[x,39],[x,46+hp*6]],'#eadcce',2)}}
+ }
+ // hair shine/shadow on jaw
+ ctx.restore();
+}
+function drawEye(eye,t){const life=clamp((t-eye.born)/.28,0,1);if(life<=0)return;
+ const p=smooth(life),pulse=1+Math.sin(t*2.2+eye.phase)*.042;ctx.save();ctx.translate(eye.x,eye.y);ctx.rotate(eye.angle);ctx.scale(p*pulse,p*pulse);let r=eye.r;
+ ctx.shadowColor='#02010a';ctx.shadowBlur=14;ctx.fillStyle='#100e1b';ellipse(0,0,r*1.6,r*.85,'#17101b');ctx.shadowBlur=0;
+ ctx.beginPath();ctx.moveTo(-r*1.35,0);ctx.bezierCurveTo(-r*.68,-r*.96,r*.75,-r*.96,r*1.35,0);ctx.bezierCurveTo(r*.7,r*.95,-r*.7,r*.95,-r*1.35,0);ctx.closePath();ctx.fillStyle='#eadfd6';ctx.fill();ctx.strokeStyle='#754951';ctx.lineWidth=2.4;ctx.stroke();
+ for(let i=0;i<8;i++){let a=i*Math.PI/4+eye.phase;let cr=r*.85;line([[Math.cos(a)*cr,Math.sin(a)*cr*.55],[Math.cos(a)*r*1.22,Math.sin(a)*r*.63]],'#c08b8a80',1)}
+ let px=clamp((480-eye.x)*.022,-r*.2,r*.2),py=clamp((273-eye.y)*.016,-r*.14,r*.14);ellipse(px,py,r*.46,r*.5,'#844452');ellipse(px,py,r*.35,r*.39,'#45202c');ellipse(px,py,r*.23,r*.34,'#0a0c17');ellipse(px-r*.13,py-r*.18,r*.1,r*.1,'#ffffffd5');
+ line([[-r*1.25,-r*.08],[-r*.68,-r*.44],[r*.4,-r*.46],[r*1.28,-r*.07]],'#4a252f',2.4);ctx.restore();}
+function makeEye(){let margin=38;let lo=Math.max(105,viewX+margin),hi=Math.min(855,viewX+viewW-margin);if(hi-lo<90){lo=viewX+20;hi=viewX+viewW-20}let x=0,y=0;for(let i=0;i<65;i++){x=rand(lo,hi);y=rand(85,535);if(Math.abs(x-480)<100&&y>176&&y<535)continue;if(eyes.some(e=>Math.hypot(e.x-x,e.y-y)<95))continue;break}
+ return {id:eyesId++,x,y,r:rand(22,33),born:elapsed,phase:rand(0,6.28),angle:rand(-.16,.16),dieAt:null};}
+function spawnEye(){if(eyes.length>=5)return;eyes.push(makeEye());tone('appear')}
+function splat(eye){for(let i=0;i<18;i++){const a=rand(0,Math.PI*2),v=rand(60,230);particles.push({x:eye.x,y:eye.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:rand(.3,.7),max:.7,r:rand(1.7,4.2)})}}
+function drawParticles(dt){for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.96;p.vy*=.96;p.life-=dt;if(p.life<=0){particles.splice(i,1);continue}ellipse(p.x,p.y,p.r*p.life/.7,p.r*p.life/.7,`rgba(128,32,51,${Math.min(.88,p.life*1.5)})`)}}
+let AC=window.AudioContext||window.webkitAudioContext;
+function initSound(){if(!AC)return;if(!sound){let ac=new AC(),master=ac.createGain();master.gain.value=0.33;master.connect(ac.destination);let amb=ac.createOscillator(),amb2=ac.createOscillator(),g=ac.createGain();amb.type='sine';amb.frequency.value=55;amb2.type='sine';amb2.frequency.value=56.9;g.gain.value=.045;amb.connect(g);amb2.connect(g);g.connect(master);amb.start();amb2.start();sound={ac,master,amb,amb2,g}}if(sound.ac.state==='suspended')sound.ac.resume().catch(()=>{});sound.master.gain.setTargetAtTime(soundOn?.30:0,sound.ac.currentTime,.05)}
+function tone(type){if(!sound||!soundOn)return;const a=sound.ac,osc=a.createOscillator(),gain=a.createGain(),now=a.currentTime;osc.connect(gain);gain.connect(sound.master);let f=200,d=.2,v=.25;
+ if(type==='pop'){f=120;d=.22;v=.55;osc.type='triangle'}if(type==='appear'){f=460;d=.35;v=.1;osc.type='sine'}if(type==='scare'){f=90;d=1.2;v=1.1;osc.type='sawtooth'}if(type==='quiet'){f=360;d=.8;v=.09;osc.type='sine'}
+ osc.frequency.setValueAtTime(f,now);osc.frequency.exponentialRampToValueAtTime(Math.max(25,f*(type==='scare'?2.3:.25)),now+d);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(v,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+d);osc.start(now);osc.stop(now+d+.01);
+}
+function setMessage(txt,horror=false){message.textContent=txt;message.hidden=!txt;message.classList.toggle('horror',horror)}
+function start(){state='play';elapsed=0;startTime=performance.now();lastFrame=startTime;eyes=[];particles=[];count=0;spawnAt=.35;eyesId=1;lastStage=-1;shake=0;countEl.textContent='00';clockEl.textContent='01:00';startScreen.hidden=true;endScreen.hidden=true;hud.hidden=false;hint.hidden=false;setMessage('');initSound();}
+function finish(){if(state==='done')return;state='done';endScreen.hidden=false;hud.hidden=true;hint.hidden=true;message.hidden=true;document.getElementById('result').textContent=`CLOSED EYES — ${String(count).padStart(2,'0')}`;if(sound){sound.master.gain.setTargetAtTime(0,sound.ac.currentTime,.5)}}
+function poke(clientX,clientY){if(state!=='play'||elapsed>=EMPTY_AT)return;const r=canvas.getBoundingClientRect(),x=viewX+(clientX-r.left)/r.width*viewW,y=(clientY-r.top)/r.height*VH;let chosen=-1,best=1e6;for(let i=0;i<eyes.length;i++){let e=eyes[i],d=Math.hypot((e.x-x)*.85,e.y-y);if(d<Math.max(40,e.r*1.5)&&d<best){best=d;chosen=i}}if(chosen>=0){const e=eyes.splice(chosen,1)[0];splat(e);count++;countEl.textContent=String(count).padStart(2,'0');shake=2.5;tapFlash=.1;tone('pop')}}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();poke(e.clientX,e.clientY)},{passive:false});
+function tick(now){requestAnimationFrame(tick);let dt=Math.min(.05,(now-lastFrame)/1000||.016);lastFrame=now;
+ if(state==='play'){
+ elapsed=Math.min(DURATION,(now-startTime)/1000);clockEl.textContent=`00:${String(Math.max(0,Math.ceil(DURATION-elapsed))).padStart(2,'0')}`;let stageId=elapsed<EMPTY_AT?0:elapsed<RISE_AT?1:elapsed<RUSH_AT?2:3;
+ if(stageId!==lastStage){lastStage=stageId;if(stageId===1){eyes=[];hint.textContent='……静かになった。';tone('quiet')}if(stageId===2){hint.textContent='';tone('quiet')}if(stageId===3){hint.textContent='';tone('scare');shake=10}}
+ if(elapsed<EMPTY_AT&&elapsed>=spawnAt){spawnEye();spawnAt=elapsed+rand(elapsed<20?1.5:.8,elapsed<20?2.2:1.5)}
+ if(stageId===1){if(elapsed<49)setMessage('');else if(elapsed<52)setMessage('……');else if(elapsed<55)setMessage('もう、いない……？');else setMessage('……ありがとう。')}
+ else if(stageId===2)setMessage('み な い で',true);
+ else if(stageId===3)setMessage(elapsed<59.2?'見ないで！':'見　な　い　で',true);
+ else setMessage('');
+ if(elapsed>=DURATION)finish();}
+ shake=Math.max(0,shake-dt*14);tapFlash=Math.max(0,tapFlash-dt*2);
+ render(dt,now/1000);
+}
+function render(dt,now){const sx=canvas.width/(cssW),sy=canvas.height/(cssH);ctx.setTransform(sx,0,0,sy,0,0);ctx.fillStyle='#050b12';ctx.fillRect(0,0,cssW,cssH);
+ ctx.save();let sc=cssH/VH;ctx.scale(sc,sc);ctx.translate(-viewX,0);
+ if(state==='play'&&shake>0){ctx.translate(rand(-shake,shake),rand(-shake,shake))}
+ room(now);chair();
+ let stand=state==='play'?smooth((elapsed-RISE_AT)/1.4):0;
+ let rush=state==='play'?smooth((elapsed-RUSH_AT)/2.8):0;
+ let scale=1+rush*7.6;
+ ctx.save();ctx.translate(480,266+stand*(-26)+rush*54);ctx.scale(scale,scale);girl(now,clamp((elapsed-55.5)/2.4,0,1),stand);ctx.restore();
+ if(state==='play')for(const e of eyes)drawEye(e,elapsed);
+ if(state==='play')drawParticles(dt);
+ if(state==='play'&&elapsed>=RUSH_AT){let p=smooth((elapsed-RUSH_AT)/2.8);ctx.fillStyle=`rgba(84,0,16,${p*.46})`;ctx.fillRect(viewX,0,viewW,VH);if(elapsed>59.4){ctx.fillStyle=`rgba(255,241,223,${smooth((elapsed-59.4)/.4)*.7})`;ctx.fillRect(viewX,0,viewW,VH)}}
+ if(state==='play'&&elapsed>=EMPTY_AT&&elapsed<RISE_AT){ctx.fillStyle=`rgba(6,12,20,${.15*smooth((elapsed-EMPTY_AT)/3)})`;ctx.fillRect(viewX,0,viewW,VH)}
+ ctx.restore();flash.style.opacity=String(Math.max(tapFlash*.9,state==='play'&&elapsed>=59.5?smooth((elapsed-59.5)/.35)*.7:0));}
+ document.getElementById('start').addEventListener('click',start);document.getElementById('restart').addEventListener('click',start);muteBtn.addEventListener('click',()=>{soundOn=!soundOn;muteBtn.textContent=soundOn?'♪':'×';muteBtn.setAttribute('aria-label',soundOn?'音声をオフにする':'音声をオンにする');if(sound){sound.master.gain.setTargetAtTime(soundOn?.3:0,sound.ac.currentTime,.07)}});
+ window.__eyeGame={getState:()=>({state,elapsed,count,eyes:eyes.map(e=>({x:e.x,y:e.y,r:e.r}))}),skipTo:(s)=>{if(state==='play')startTime=performance.now()-s*1000},start};requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
