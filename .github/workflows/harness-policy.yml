@@ -1,0 +1,35 @@
+name: AI Harness Policy
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout PR with base history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run harness regression tests
+        run: python -m unittest discover -s scripts/harness -p 'test_*.py' -v
+      - name: Check policy for PR changes
+        run: python scripts/harness/check.py gate --base origin/release/web-test
+      - name: Upload policy evidence (not deployment approval)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-policy-evidence
+          path: artifacts/harness-report.json
+          if-no-files-found: warn
+          retention-days: 14
