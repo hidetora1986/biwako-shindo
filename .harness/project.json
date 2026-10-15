@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "project": "biwako-shindo",
+  "harness_version": "1.0.0",
+  "forbidden_paths": [
+    ".env",
+    ".env.*",
+    "**/.env",
+    "**/.env.*",
+    "**/*.pem",
+    "**/*.p12",
+    "**/*credentials*.json"
+  ],
+  "allow_paths": [
+    ".env.example",
+    "**/.env.example"
+  ],
+  "review_required_paths": [
+    "scripts/**",
+    "scenes/**",
+    "assets/**",
+    ".github/workflows/**",
+    "project.godot"
+  ],
+  "native_ci_checks": [
+    "Godot 4.6.3 headless import; manually run relevant tests",
+    "mobile browser/gameplay acceptance separate"
+  ],
+  "notes": "This PR targets release/web-test but does not push there. Existing web-playtest workflow only publishes on direct release branch push."
+}
